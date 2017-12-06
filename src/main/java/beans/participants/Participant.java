@@ -23,6 +23,7 @@ public class Participant {
 	public static final String JSON_VERA = "vera";
 	public static final String JSON_TCAPSA = "tcapsa";
 	public static final String JSON_INSTALL = "install";
+	public static final String JSON_ACTIVITIES = "activities";
 	public static final String ROUTINE_BREAKFAST = "breakfast";
 	public static final String ROUTINE_LUNCH = "lunch";
 	public static final String ROUTINE_DINNER = "dinner";
@@ -82,24 +83,27 @@ public class Participant {
 			throw new IllegalArgumentException("Malformed date: " + e.getMessage());
 		}
 
-		if (infos.has(ROUTINE_BREAKFAST)) {
-			this.routines.put(ROUTINE_BREAKFAST, new BreakfastRoutine(infos.getJSONObject(ROUTINE_BREAKFAST)));
-		}
+		if (infos.has(JSON_ACTIVITIES)) {
+			infos = infos.getJSONObject(JSON_ACTIVITIES);
+			if (infos.has(ROUTINE_BREAKFAST)) {
+				this.routines.put(ROUTINE_BREAKFAST, new BreakfastRoutine(infos.getJSONObject(ROUTINE_BREAKFAST)));
+			}
 
-		if (infos.has(ROUTINE_LUNCH)) {
-			this.routines.put(ROUTINE_LUNCH, new LunchRoutine(infos.getJSONObject(ROUTINE_LUNCH)));
-		}
+			if (infos.has(ROUTINE_LUNCH)) {
+				this.routines.put(ROUTINE_LUNCH, new LunchRoutine(infos.getJSONObject(ROUTINE_LUNCH)));
+			}
 
-		if (infos.has(ROUTINE_DINNER)) {
-			this.routines.put(ROUTINE_DINNER, new DinnerRoutine(infos.getJSONObject(ROUTINE_DINNER)));
-		}
+			if (infos.has(ROUTINE_DINNER)) {
+				this.routines.put(ROUTINE_DINNER, new DinnerRoutine(infos.getJSONObject(ROUTINE_DINNER)));
+			}
 
-		if (infos.has(ROUTINE_WAKEUP)) {
-			this.routines.put(ROUTINE_WAKEUP, new WakeUpRoutine(infos.getJSONObject(ROUTINE_WAKEUP)));
-		}
+			if (infos.has(ROUTINE_WAKEUP)) {
+				this.routines.put(ROUTINE_WAKEUP, new WakeUpRoutine(infos.getJSONObject(ROUTINE_WAKEUP)));
+			}
 
-		if (infos.has(ROUTINE_GOBED)) {
-			this.routines.put(ROUTINE_GOBED, new GoBedRoutine(infos.getJSONObject(ROUTINE_GOBED)));
+			if (infos.has(ROUTINE_GOBED)) {
+				this.routines.put(ROUTINE_GOBED, new GoBedRoutine(infos.getJSONObject(ROUTINE_GOBED)));
+			}
 		}
 
 	}

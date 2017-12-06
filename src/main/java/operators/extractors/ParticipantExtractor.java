@@ -2,6 +2,8 @@ package operators.extractors;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,28 +40,41 @@ public class ParticipantExtractor extends FileExtractor {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	public static List<Participant> extractParticipants(File pParticipantsFile) throws Exception {
+		List<Participant> participants = new ArrayList<>();
+		JSONObject jsonParticipants = extractJSON(pParticipantsFile);
+		jsonParticipants.keys().forEachRemaining((name) -> {
+			Participant participant = new Participant(name.toString());
+			try {
+				participant.fillWithJSON(jsonParticipants.getJSONObject(name.toString()));
+				participants.add(participant);
+			} catch (Exception exception) {
+				System.out.println("Unable to collect info for: " + name.toString() + "\n" + exception);
+			}
+		});
+		return participants;
+	}
+
 	/**
 	 * Get JSON representation of the specified participant
 	 * 
-	 * @param extractedFile
+	 * @param pParticipantFile
 	 *            the file
-	 * @param participantName
+	 * @param pParticipantName
 	 *            the name of the participant
 	 * @return the JSON representation
 	 * @throws Exception
 	 *             The file is not found, its content can not be format to JSON
 	 *             or the participant is not in the JSON
 	 */
-	public static Participant extractParticipant(File extractedFile, String participantName) throws Exception {
-		JSONObject jsonFile = extractJSON(extractedFile);
-		if (jsonFile.has(participantName)) {
-			Participant participant = new Participant(participantName);
-			participant.fillWithJSON(jsonFile.getJSONObject(participantName));
-			return participant;
-		}
-
-		else
+	public static Participant extractParticipant(File pParticipantFile, String pParticipantName) throws Exception {
+		try {
+			return extractParticipants(pParticipantFile).stream()
+					.filter(participant -> participant.getName().equals(pParticipantName)).findFirst().get();
+		} catch (Exception e) {
 			throw new IllegalArgumentException("Participant not found");
+		}
 	}
 
 }

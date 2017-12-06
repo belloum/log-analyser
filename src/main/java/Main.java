@@ -1,3 +1,4 @@
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -9,26 +10,25 @@ import operators.csv.CSVCleaner;
 import operators.extractors.HistogramsExtractor;
 import operators.extractors.LogExtractor;
 import operators.extractors.ParticipantExtractor;
+import operators.extractors.ReportExtractor;
+import operators.extractors.ReportExtractor.ReportType;
 
 public class Main {
 
-	//Bzt - month by month from june
-	// REFAIRE BZT
-	
 	/* CONFIG */
-	public static final String PARTICIPANT = "117";
-	public static final String[] PERIODS = new String[] { "2017.09.*"};
-	//public static final String[] PERIODS = new String[] { "2017.04.*" };
-	//public static final String[] PERIODS = new String[] { "2017.05.*"};
-	//public static final String[] PERIODS = new String[] { "2017.06.*"};
-	//public static final String[] PERIODS = new String[] { "2017.07.*"};
-	//public static final String[] PERIODS = new String[] { "2017.08.*" };
+	public static final String PARTICIPANT = "116";
+	public static final String[] PERIODS = new String[] { "2017.10.11" };
+	// public static final String[] PERIODS = new String[] { "2017.04.*" };
+	// public static final String[] PERIODS = new String[] { "2017.05.*"};
+	// public static final String[] PERIODS = new String[] { "2017.06.*"};
+	// public static final String[] PERIODS = new String[] { "2017.07.*"};
+	// public static final String[] PERIODS = new String[] { "2017.08.*" };
 	public static final Integer ELEC_THRESHOLD = 10;
 	public static final Integer HISTO_SLOT = 60;
 	public static final boolean SILENT_REQUESTS = false;
 
 	/* EXECUTION */
-	public static final boolean STOP_AFTER_PARTICIPANT = true;
+	public static final boolean STOP_AFTER_PARTICIPANT = false;
 	public static final boolean SAVE_ALL_DAYS = true;
 	public static final boolean STOP_AFTER_REQUEST = false;
 	public static final boolean DRAW_HISTOGRAMS = false;
@@ -45,7 +45,7 @@ public class Main {
 
 	/* FILE NAMES */
 	public static final String PARTICIPANTS_ROUTINE = "participant.json";
-	public static String EXTRACTED_FILE = "logs.json";
+	public static String EXTRACTED_FILE = "2017_09.json";
 	public static final String GLOBAL_JSON_FILE = EXTRACTED_FILE.replace(".json", "") + "_" + PARTICIPANT + ".json";
 	public static final String CSV_SENSOR_USE_FILE = PARTICIPANT + "_Sensors.csv";
 	public static final String CSV_BILAN_FILE = PARTICIPANT + "_Bilan_" + PARTICIPANT + ".csv";
@@ -55,11 +55,19 @@ public class Main {
 		File routines = new File(ROOT_PATH, PARTICIPANTS_ROUTINE);
 		Participant participant = ParticipantExtractor.extractParticipant(routines, PARTICIPANT);
 
+		System.out.println(participant.getRoutine(Participant.ROUTINE_DINNER).getServerRequest(SCRIPT_PATH,
+				new File(LOG_FOLDER, EXTRACTED_FILE), new File(PARTICIPANT_FOLDER, "score.txt")));
+
+		System.out.println(
+				"/Users/ariche/Desktop/DomAssist/2017/Scripts/indoor-post.pl -1 /Users/ariche/Desktop/DomAssist/2017/Logs/Participants/"
+						+ PARTICIPANT + "/logs/" + EXTRACTED_FILE
+						+ ">> /Users/ariche/Desktop/DomAssist/2017/Logs/Participants/" + PARTICIPANT + "/score.txt");
+
 		/*
 		 * 1) Extraction des rapports
 		 */
-		//System.out.println("\n> Extract reports");
-		//System.out.println(ReportExtractor.getRequests(PERIODS[5], ReportType.DAILY, false));
+		System.out.println("\n> Extract reports");
+		System.out.println(ReportExtractor.getRequests(PERIODS[0], ReportType.DAILY, false));
 
 		/*
 		 * 2) Création des requetes

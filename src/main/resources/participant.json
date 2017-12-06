@@ -1,0 +1,460 @@
+{
+    "5006": {
+        "vera" : "45107798",
+        "install" : "29/05/17",
+        "tcapsa" : "Pauline",
+        "activities" : {
+            "wakeup": {
+                "activity" : "Lever",
+                "start" : "07:30",
+                "end":"08:30",
+                "delay" : 10,
+                "motionI" : "MotionD_B",
+                "motionII" : "MotionD_K",
+                "motionIII":["MotionD_L","MotionD_E","MotionD_S"]
+            },
+            "breakfast": {
+                "activity" : "Petit dejeuner",
+                "start" : "07:30",
+                "end":"09:00",
+                "elec_threshold" : 20,
+                "markerI" : ["EMeter_Microwave","ContactS_Fridge"],
+                "markerII" : ["ContactS_Cupboard"]
+            },
+            "lunch": {
+                "activity" : "Dejeuner",
+                "start" : "11:30",
+                "end":"13:30",
+                "elec_threshold" : 20,
+                "markerI" : ["EMeter_Microwave","ContactS_Fridge"],
+                "markerII" : ["ContactS_Cupboard"]
+            },
+            "dinner": {
+                "activity" : "Diner",
+                "start" : "19:00",
+                "end":"20:00",
+                "elec_threshold" : 20,
+                "markerI" : ["ContactS_Fridge"],
+                "markerII" : ["ContactS_Cupboard"]
+            },
+            "gobed": {
+                "activity" : "Coucher",
+                "start" : "22:00",
+                "end":"00:30",
+                "delay_rules" : 10,
+                "delay_without_motion" : 30,
+                "motionI" : "MotionD_B",
+                "motionII" : "MotionD_S"
+            }
+        },
+        "sensors" : {
+            "contact" : ["ContactS_Cupboard", "ContactS_E", "ContactS_Fridge"],
+            "emeter" : ["EMeter_Coffeemaker", "EMeter_Microwave"],
+            "motion" : ["MotionD_L", "MotionD_K", "MotionD_T", "MotionD_B", "MotionD_E", "MotionD_Ba"]
+        }
+    },
+    "Bzt": {
+        "vera" : "45109767",
+        "install" : "29/05/17",
+        "tcapsa" : "Flora",
+        "activities" : {
+            "breakfast": {
+                "activity" : "Petit dejeuner",
+                "start" : "07:30",
+                "end":"09:30",
+                "elec_threshold" : 20,
+                "markerI" : ["EMeter_Juicer","ContactS_Fridge"],
+                "markerII" : ["ContactS_Cupboard"]
+            },
+            "lunch": {
+                "activity" : "Dejeuner",
+                "start" : "11:00",
+                "end":"13:30",
+                "elec_threshold" : 20,
+                "markerI" : ["EMeter_Meatcleaver","ContactS_Fridge"],
+                "markerII" : ["ContactS_Cupboard"]
+            },
+            "dinner": {
+                "activity" : "Diner",
+                "start" : "18:00",
+                "end":"21:00",
+                "elec_threshold" : 20,
+                "markerI" : ["EMeter_Meatcleaver","ContactS_Fridge"],
+                "markerII" : ["ContactS_Cupboard"]
+            },
+            "gobed": {
+                "activity" : "Coucher",
+                "start" : "18:00",
+                "end":"22:00",
+                "delay_rules" : 45,
+                "delay_without_motion" : 30,
+                "motionI" : "MotionD_B",
+                "motionII" : "MotionD_S"
+            }
+        },
+        "sensors" : {
+            "contact" : ["ContactS_Cupboard", "ContactS_E", "ContactS_Fridge"],
+            "emeter" : ["EMeter_Juicer", "EMeter_Meatcleaver"],
+            "motion" : ["MotionD_B", "MotionD_E", "MotionD_L", "MotionD_S", "MotionD_T", "MotionD_K"]
+        }
+    },
+    "13005": {
+        "vera" : "45109619",
+        "install" : "29/05/17",
+        "tcapsa" : "Amandine",
+        "activities" : {
+            "wakeup": {
+                "activity" : "Lever",
+                "start" : "06:00",
+                "end":"09:30",
+                "delay" : 10,
+                "motionI" : "MotionD_B",
+                "motionII" : "MotionD_K",
+                "motionIII":["MotionD_L","MotionD_E","MotionD_S"]
+            },
+            "breakfast": {
+                "activity" : "Petit dejeuner",
+                "start" : "06:00",
+                "end":"09:30",
+                "elec_threshold" : 20,
+                "markerI" : ["EMeter_Kettle","ContactS_Fridge"],
+                "markerII" : ["ContactS_Cupboard"]
+            },
+            "lunch": {
+                "activity" : "Dejeuner",
+                "start" : "11:00",
+                "end":"13:30",
+                "elec_threshold" : 20,
+                "markerI" : ["EMeter_Microwave","ContactS_Fridge"],
+                "markerII" : ["EMeter_Kettle","ContactS_Cupboard"]
+            },
+            "dinner": {
+                "activity" : "Diner",
+                "start" : "18:00",
+                "end":"21:30",
+                "elec_threshold" : 20,
+                "markerI" : ["EMeter_Microwave","ContactS_Fridge"],
+                "markerII" : ["EMeter_Kettle","ContactS_Cupboard"]
+            },
+            "gobed": {
+                "activity" : "Coucher",
+                "start" : "20:00",
+                "end":"00:00",
+                "delay_rules" : 10,
+                "delay_without_motion" : 30,
+                "motionI" : "MotionD_B",
+                "motionII" : "MotionD_S"
+            }
+        },
+        "sensors" : {
+            "contact" : ["ContactS_Cupboard", "ContactS_E", "ContactS_Fridge", "ContactS_B"],
+            "emeter" : ["EMeter_Kettle", "EMeter_Microwave"],
+            "motion" : ["MotionD_E", "MotionD_S", "MotionD_B", "MotionD_L", "MotionD_T", "MotionD_K"]
+        }
+    },
+    "116": {
+        "vera" : "45109775",
+        "install" : "29/05/17",
+        "tcapsa" : "Camille",
+        "activities" : {
+            "wakeup": {
+                "activity" : "Lever",
+                "start" : "06:00",
+                "end":"07:30",
+                "delay" : 10,
+                "motionI" : "MotionD_B",
+                "motionII" : "MotionD_K",
+                "motionIII":["MotionD_L","MotionD_E","MotionD_S"]
+            },
+            "breakfast": {
+                "activity" : "Petit dejeuner",
+                "start" : "07:30",
+                "end":"09:30",
+                "elec_threshold" : 20,
+                "markerI" : ["ContactS_Fridge"],
+                "markerII" : ["ContactS_Cupboard"]
+            },
+            "lunch": {
+                "activity" : "Dejeuner",
+                "start" : "11:00",
+                "end":"13:30",
+                "elec_threshold" : 20,
+                "markerI" : ["ContactS_Fridge"],
+                "markerII" : ["ContactS_Cupboard"]
+            },
+            "dinner": {
+                "activity" : "Diner",
+                "start" : "19:00",
+                "end":"20:30",
+                "elec_threshold" : 20,
+                "markerI" : ["ContactS_Fridge"],
+                "markerII" : ["ContactS_Cupboard"]
+            },
+            "gobed": {
+                "activity" : "Coucher",
+                "start" : "22:00",
+                "end":"23:00",
+                "delay_rules" : 10,
+                "delay_without_motion" : 30,
+                "motionI" : "MotionD_B",
+                "motionII" : "MotionD_S"
+            }
+        },
+        "sensors" : {
+            "contact" : ["ContactS_Cupboard", "ContactS_E", "ContactS_Fridge", "ContactS_B"],
+            "motion" : ["MotionD_K", "MotionD_T", "MotionD_B", "MotionD_S", "MotionD_L", "MotionD_E"]
+        }
+    },
+    "117": {
+        "vera" : "45109400",
+        "install" : "29/05/17",
+        "tcapsa" : "Camille",
+        "activities" : {
+            "wakeup": {
+                "activity" : "Lever",
+                "start" : "06:00",
+                "end":"09:00",
+                "delay" : 10,
+                "motionI" : "MotionD_B",
+                "motionII" : "MotionD_K",
+                "motionIII":["MotionD_L","MotionD_E","MotionD_S"]
+            },
+            "breakfast": {
+                "activity" : "Petit déjeuner",
+                "start" : "06:00",
+                "end":"10:00",
+                "elec_threshold" : 20,
+                "markerI" : ["ContactS_Fridge"],
+                "markerII" : ["ContactS_Cupboard"]
+            },
+            "lunch": {
+                "activity" : "Déjeuner",
+                "start" : "11:00",
+                "end":"13:30",
+                "elec_threshold" : 20,
+                "markerI" : ["EMeter_Microwave","ContactS_Fridge"],
+                "markerII" : ["ContactS_Cupboard"]
+            },
+            "dinner": {
+                "activity" : "Diner",
+                "start" : "17:30",
+                "end":"22:00",
+                "elec_threshold" : 20,
+                "markerI" : ["EMeter_Microwave","ContactS_Fridge"],
+                "markerII" : ["ContactS_Cupboard"]
+            },
+            "gobed": {
+                "activity" : "Coucher",
+                "start" : "22:00",
+                "end":"01:30",
+                "delay_rules" : 10,
+                "delay_without_motion" : 30,
+                "motionI" : "MotionD_B",
+                "motionII" : "MotionD_S"
+            }
+        },
+        "sensors" : {
+            "contact" : ["ContactS_Cupboard", "ContactS_E", "ContactS_Fridge"],
+            "emeter" : ["EMeter_Microwave"],
+            "motion" : ["MotionD_E", "MotionD_T", "MotionD_B", "MotionD_L", "MotionD_K", "MotionD_S"]
+        }
+    },
+    "4022": {
+        "vera" : "45107820",
+        "install" : "12/07/17",
+        "tcapsa" : "Pauline",
+        "activities" : {
+            "wakeup": {
+                "activity" : "Lever",
+                "start" : "06:30",
+                "end":"08:00",
+                "delay" : 20,
+                "motionI" : "MotionD_B",
+                "motionII" : "MotionD_K",
+                "motionIII":["MotionD_L","MotionD_E","MotionD_Ba"]
+            },
+            "breakfast": {
+                "activity" : "Petit déjeuner",
+                "start" : "07:00",
+                "end":"08:30",
+                "elec_threshold" : 20,
+                "markerI" : ["EMeter_Microwave","ContactS_Fridge"],
+                "markerII" : ["ContactS_Cupboard"]
+            },
+            "lunch": {
+                "activity" : "Déjeuner",
+                "start" : "12:00",
+                "end":"13:00",
+                "elec_threshold" : 20,
+                "markerI" : ["EMeter_Microwave","ContactS_Fridge"],
+                "markerII" : ["EMeter_Cafetiere","ContactS_Cupboard"]
+            },
+            "dinner": {
+                "activity" : "Diner",
+                "start" : "18:00",
+                "end":"20:00",
+                "elec_threshold" : 20,
+                "markerI" : ["EMeter_Microwave","ContactS_Fridge"],
+                "markerII" : ["ContactS_Cupboard"]
+            },
+            "gobed": {
+                "activity" : "Coucher",
+                "start" : "21:30",
+                "end":"23:00",
+                "delay_rules" : 10,
+                "delay_without_motion" : 30,
+                "motionI" : "MotionD_B",
+                "motionII" : "MotionD_T"
+            }
+        },
+        "sensors" : {
+            "contact" : ["ContactS_Cupboard", "ContactS_E", "ContactS_Fridge"],
+            "emeter" : ["EMeter_Microwave", "EMeter_Cafetiere"],
+            "motion" : ["MotionD_K", "MotionD_L", "MotionD_T", "MotionD_E", "MotionD_B", "MotionD_Ba"]
+        }
+    },
+    "5": {
+        "vera" : "45107803",
+        "install" : "11/08/17",
+        "tcapsa" : "Camille",
+        "activities" : {
+            "breakfast": {
+                "activity" : "Petit déjeuner",
+                "start" : "07:30",
+                "end":"10:00",
+                "elec_threshold" : 20,
+                "markerI" : ["ContactS_Fridge"],
+                "markerII" : ["ContactS_Cupboard"]
+            },
+            "lunch": {
+                "activity" : "Déjeuner",
+                "start" : "11:00",
+                "end":"14:00",
+                "elec_threshold" : 20,
+                "markerI" : ["EMeter_Microwave","ContactS_Fridge"],
+                "markerII" : ["ContactS_Cupboard"]
+            },
+            "dinner": {
+                "activity" : "Diner",
+                "start" : "19:00",
+                "end":"21:00",
+                "elec_threshold" : 20,
+                "markerI" : ["EMeter_Microwave","ContactS_Fridge"],
+                "markerII" : ["ContactS_Cupboard"]
+            }
+        },
+        "sensors" : {
+            "contact" : ["ContactS_Cupboard", "ContactS_E", "ContactS_Fridge"],
+            "emeter" : ["EMeter_Microwave"],
+            "motion" : ["MotionD_E", "MotionD_L", "MotionD_Ba", "MotionD_K", "MotionD_T", "MotionD_B"]
+        }
+    },
+    "4010": {
+        "vera" : "45109550",
+        "install" : "16/08/17",
+        "tcapsa" : "Pauline",
+        "activities" : {
+            "wakeup": {
+                "activity" : "Lever",
+                "start" : "06:00",
+                "end":"08:30",
+                "delay" : 30,
+                "motionI" : "MotionD_B",
+                "motionII" : "MotionD_S",
+                "motionIII":["MotionD_L","MotionD_E","MotionD_K"]
+            },
+            "breakfast": {
+                "activity" : "Petit déjeuner",
+                "start" : "07:00",
+                "end":"09:30",
+                "elec_threshold" : 20,
+                "markerI" : ["EMeter_Toaster","ContactS_Fridge"],
+                "markerII" : ["ContactS_Cupboard"]
+            },
+            "lunch": {
+                "activity" : "Déjeuner",
+                "start" : "11:00",
+                "end":"13:00",
+                "elec_threshold" : 20,
+                "markerI" : ["EMeter_Microwave","ContactS_Fridge"],
+                "markerII" : ["ContactS_Cupboard"]
+            },
+            "dinner": {
+                "activity" : "Diner",
+                "start" : "18:30",
+                "end":"21:00",
+                "elec_threshold" : 20,
+                "markerI" : ["EMeter_Microwave","ContactS_Fridge"],
+                "markerII" : ["ContactS_Cupboard"]
+            },
+            "gobed": {
+                "activity" : "Coucher",
+                "start" : "22:00",
+                "end":"23:30",
+                "delay_rules" : 10,
+                "delay_without_motion" : 30,
+                "motionI" : "MotionD_B",
+                "motionII" : "MotionD_S"
+            }
+        },
+        "sensors" : {
+            "contact" : ["ContactS_Cupboard", "ContactS_E", "ContactS_Fridge", "ContactS_Ba"],
+            "emeter" : ["EMeter_Microwave", "EMeter_Toaster"],
+            "motion" : ["MotionD_T", "MotionD_L", "MotionD_S", "MotionD_E", "MotionD_B", "MotionD_K"]
+        }
+    },
+    "4020": {
+        "vera" : "45109545",
+        "install" : "16/08/17",
+        "tcapsa" : "Pauline",
+        "activities" : {
+            "wakeup": {
+                "activity" : "Lever",
+                "start" : "08:30",
+                "end":"11:00",
+                "delay" : 30,
+                "motionI" : "MotionD_B",
+                "motionII" : "MotionD_K",
+                "motionIII":["MotionD_L","MotionD_E","MotionD_S"]
+            },
+            "breakfast": {
+                "activity" : "Petit déjeuner",
+                "start" : "09:00",
+                "end":"11:00",
+                "elec_threshold" : 20,
+                "markerI" : ["EMeter_Coffeemaker","EMeter_Microwave","ContactS_Fridge"],
+                "markerII" : ["ContactS_Cupboard"]
+            },
+            "lunch": {
+                "activity" : "Déjeuner",
+                "start" : "12:00",
+                "end":"14:00",
+                "elec_threshold" : 20,
+                "markerI" : ["EMeter_Microwave","ContactS_Fridge"],
+                "markerII" : ["ContactS_Cupboard"]
+            },
+            "dinner": {
+                "activity" : "Diner",
+                "start" : "20:00",
+                "end":"22:30",
+                "elec_threshold" : 20,
+                "markerI" : ["EMeter_Microwave","ContactS_Fridge"],
+                "markerII" : ["ContactS_Cupboard"]
+            },
+            "gobed": {
+                "activity" : "Coucher",
+                "start" : "22:00",
+                "end":"01:30",
+                "delay_rules" : 60,
+                "delay_without_motion" : 30,
+                "motionI" : "MotionD_B",
+                "motionII" : "MotionD_S"
+            }
+        },
+        "sensors" : {
+            "contact" : ["ContactS_Cupboard", "ContactS_E", "ContactS_Fridge", "ContactS_B"],
+            "emeter" : ["EMeter_Microwave", "EMeter_Coffeemaker"],
+            "motion" : ["MotionD_T", "MotionD_S", "MotionD_K", "MotionD_B", "MotionD_E", "MotionD_L"]
+        }
+    }
+}
