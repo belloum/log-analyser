@@ -77,4 +77,13 @@ public class ParticipantExtractor extends FileExtractor {
 		}
 	}
 
+	public static boolean validateFile(File pParticipantsFile) {
+		try {
+			return !extractParticipants(pParticipantsFile).isEmpty();
+		} catch (Exception exception) {
+			throw new IllegalArgumentException("Invalid file: " + exception.getMessage());
+		}
+
+	}
+
 }

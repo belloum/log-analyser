@@ -122,8 +122,8 @@ public class Participant {
 
 	@Override
 	public String toString() {
-		return "Participant [\n" + "name=" + name + ",\n" + "tcapsa=" + tcapsa + ",\n" + "install=" + install + ", \n"
-				+ "routines=" + routines + "]";
+		return "Participant [\nname=" + name + ", \nvera=" + vera + ", \ntcapsa=" + tcapsa + ", \ninstall=" + install
+				+ ", \nroutines=" + routines + "]";
 	}
 
 	public List<String> extractRoutineRequests(String scriptPath, File logFile, File scoreFile) {

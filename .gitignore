@@ -4,3 +4,4 @@
 
 # build folders
 bin
+/target/
