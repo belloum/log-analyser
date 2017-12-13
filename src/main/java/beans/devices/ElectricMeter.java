@@ -8,11 +8,11 @@ package beans.devices;
  *
  */
 
-public class ElectricMeter extends Sensor {
+public class ElectricMeter extends Device {
 
 	public ElectricMeter(String pId, String pLocation) {
 		super(pId, pLocation);
-		this.type = Type.ElectricMeter;
+		this.mType = DeviceType.ElectricMeter;
 	}
 
 }

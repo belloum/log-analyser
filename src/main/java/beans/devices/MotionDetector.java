@@ -8,11 +8,11 @@ package beans.devices;
  *
  */
 
-public class MotionDetector extends Sensor {
+public class MotionDetector extends Device {
 
 	public MotionDetector(String pId, String pLocation) {
 		super(pId, pLocation);
-		this.type = Type.MotionDetector;
+		this.mType = DeviceType.MotionDetector;
 	}
-	
+
 }

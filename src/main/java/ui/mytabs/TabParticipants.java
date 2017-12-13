@@ -38,7 +38,7 @@ public class TabParticipants extends AbstractTab {
 		mParticipantsPicker.addItem("Select a userbox");
 		ParticipantExtractor.extractParticipants(Configuration.PARTICIPANT_FILE)
 				.forEach((participant) -> mParticipantsPicker.addItem(participant.getName()));
-		mParticipantsPicker.setBounds(x, y, Configuration.LABEL_WIDTH, Configuration.ITEM_HEIGHT);
+		mParticipantsPicker.setBounds(x, y, Configuration.LABEL_WIDTH_LONG, Configuration.ITEM_HEIGHT);
 		mParticipantsPicker.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
@@ -56,7 +56,7 @@ public class TabParticipants extends AbstractTab {
 		});
 		add(mParticipantsPicker);
 
-		y += Configuration.ITEM_HEIGHT + Configuration.PADDING_RIGHT;
+		y += Configuration.ITEM_HEIGHT + Configuration.PADDING;
 		mParticipantInfos = initParticipantView();
 		mParticipantInfos.setBounds(x, y, mParticipantInfos.getSize().width, mParticipantInfos.getSize().height);
 		add(mParticipantInfos);
@@ -81,7 +81,7 @@ public class TabParticipants extends AbstractTab {
 		view.add(mParticipantVera);
 
 		x = 0;
-		y += Configuration.ITEM_HEIGHT + Configuration.PADDING_RIGHT;
+		y += Configuration.ITEM_HEIGHT + Configuration.PADDING;
 		label = new JLabel("Installed by: ");
 		label.setBounds(x, y, Configuration.LABEL_WIDTH_LITTLE, Configuration.ITEM_HEIGHT);
 		label.setFont(new Font(label.getFont().getName(), Font.BOLD, label.getFont().getSize()));
@@ -93,7 +93,7 @@ public class TabParticipants extends AbstractTab {
 		view.add(mParticipantInstalled);
 
 		x = 0;
-		y += Configuration.ITEM_HEIGHT + Configuration.PADDING_RIGHT;
+		y += Configuration.ITEM_HEIGHT + Configuration.PADDING;
 		label = new JLabel("Routines: ");
 		label.setBounds(x, y, Configuration.LABEL_WIDTH_LITTLE, Configuration.ITEM_HEIGHT);
 		label.setFont(new Font(label.getFont().getName(), Font.BOLD, label.getFont().getSize()));
@@ -105,7 +105,7 @@ public class TabParticipants extends AbstractTab {
 		view.add(mParticipantRoutines);
 
 		x = 0;
-		y += Configuration.ITEM_HEIGHT + Configuration.PADDING_RIGHT;
+		y += Configuration.ITEM_HEIGHT + Configuration.PADDING;
 		label = new JLabel("Sensors: ");
 		label.setBounds(x, y, Configuration.LABEL_WIDTH_LITTLE, Configuration.ITEM_HEIGHT);
 		label.setFont(new Font(label.getFont().getName(), Font.BOLD, label.getFont().getSize()));
@@ -116,7 +116,7 @@ public class TabParticipants extends AbstractTab {
 		mParticipantSensors.setBounds(x, y, Configuration.MAX_WIDTH / 2 - x, Configuration.ITEM_HEIGHT);
 		view.add(mParticipantSensors);
 
-		y += Configuration.ITEM_HEIGHT + Configuration.PADDING_RIGHT;
+		y += Configuration.ITEM_HEIGHT + Configuration.PADDING;
 
 		view.setSize(Configuration.MAX_WIDTH / 2, y);
 		view.setVisible(false);

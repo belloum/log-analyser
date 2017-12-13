@@ -40,7 +40,6 @@ public class ParticipantExtractor extends FileExtractor {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public static List<Participant> extractParticipants(File pParticipantsFile) throws Exception {
 		List<Participant> participants = new ArrayList<>();
 		JSONObject jsonParticipants = extractJSON(pParticipantsFile);

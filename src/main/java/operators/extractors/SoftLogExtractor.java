@@ -1,26 +1,27 @@
 package operators.extractors;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import beans.MyLog;
-import beans.devices.Sensor;
-import beans.devices.Sensor.Type;
+import beans.SoftLog;
+import beans.devices.Device;
+import beans.devices.Device.DeviceType;
 
 /**
  * LogExtractor enables to
@@ -36,7 +37,9 @@ import beans.devices.Sensor.Type;
  * @since 06/19/17
  *
  */
-public class LogExtractor extends FileExtractor {
+public class SoftLogExtractor extends FileExtractor {
+
+	private static final String INVALID_THRESHOLD = "Invalid threshold: ";
 
 	/**
 	 * Gets an elasticdump request which enables to extract logs of the date and
@@ -155,7 +158,7 @@ public class LogExtractor extends FileExtractor {
 
 		StringBuilder strB = new StringBuilder();
 		for (String period : periods) {
-			strB.append(LogExtractor.getRequests(period, outputFile, veraId, silent));
+			strB.append(SoftLogExtractor.getRequests(period, outputFile, veraId, silent));
 			strB.append(";");
 		}
 		strB.append("du -sh ");
@@ -185,55 +188,27 @@ public class LogExtractor extends FileExtractor {
 		return new JSONArray(content);
 	}
 
-	/**
-	 * Gets {@link MyLog} from a file extracted from production server
-	 * 
-	 * @param extractedFile
-	 *            The file extracted from Elastic Search
-	 * @return The list of {@link MyLog}
-	 * @throws Exception
-	 *             Exceptions are thrown if
-	 *             <ul>
-	 *             <li>Extracted file does not exist</li>
-	 *             <li>Content of the file can not be red</li>
-	 *             <li>File content can not be cast to JSONArray</li>
-	 *             </ul>
-	 */
-	public static List<MyLog> extractLogs(File extractedFile) throws Exception  {
-		List<MyLog> myLogs = new ArrayList<>();
-		JSONArray logs = extractJSON(extractedFile);
-		for (int i = 0; i < logs.length(); i++) {
-			JSONObject log = logs.getJSONObject(i);
-			if (MyLog.isAValidLog(log) && new MyLog(log).getDevice() != null) {
-				myLogs.add(new MyLog(log));
-			}
+	public static List<SoftLog> cleanUpLogs(List<SoftLog> pLogs, List<String> pDeviceIds, float pThreshold) {
+		if (pThreshold >= 0) {
+			List<SoftLog> cleanedList = ignoreLowConsumptionLogs(pLogs, pThreshold);
+			return sortLogsByDate(cleanedList.stream().filter(log -> pDeviceIds.contains(log.getDevice().getId()))
+					.collect(Collectors.toList()));
+		} else {
+			throw new IllegalArgumentException(
+					new StringBuffer(INVALID_THRESHOLD).append(" ").append(pThreshold).toString());
 		}
-
-		return sortLogsByDate(myLogs);
 	}
 
-	/**
-	 * Enables to set a minimal consumption threshold in order to ignore low
-	 * value for electric consumption.
-	 * 
-	 * @param listToSorted
-	 *            The list of logs to be sorted
-	 * @param consoTreshold
-	 *            The minimal electric consumption threshold
-	 * @return A list of logs cleaned with high enough electric consumption
-	 */
-	public static List<MyLog> ignoreLowConsumptionLogs(List<MyLog> listToSorted, float consumptionTreshold) {
-		List<MyLog> cleanedList = new ArrayList<>();
-		// int removed = 0;
-		// int oldSize = 0;
-		listToSorted = sortLogsByDate(listToSorted);
+	public static List<SoftLog> ignoreLowConsumptionLogs(List<SoftLog> pLogs, float pThreshold) {
+		List<SoftLog> cleanedList = new ArrayList<>();
+		pLogs = sortLogsByDate(pLogs);
 		boolean inUse = false;
-		for (MyLog log : listToSorted) {
-			if (!log.getDevice().getType().equals(Sensor.Type.ElectricMeter))
+		for (SoftLog log : pLogs) {
+			if (!log.getDevice().getType().equals(DeviceType.ElectricMeter))
 				cleanedList.add(log);
 			else {
 
-				if (log.getValue() >= consumptionTreshold) {
+				if (log.getValue() >= pThreshold) {
 					cleanedList.add(log);
 					inUse = true;
 				}
@@ -247,58 +222,39 @@ public class LogExtractor extends FileExtractor {
 		return sortLogsByDate(cleanedList);
 	}
 
-	/**
-	 * Gets all sensor types of a given list of logs
-	 * 
-	 * @param logs
-	 *            The list of logs to be treated
-	 * @return The list of all sensor types that appear in the given list
-	 */
-	public static List<Sensor.Type> getAllSensorTypes(List<MyLog> logs) {
-		List<Sensor.Type> types = new ArrayList<>();
-		for (MyLog log : logs) {
-			if (!types.contains(log.getDevice().getType()))
-				types.add(log.getDevice().getType());
-		}
+	public static List<DeviceType> getDeviceTypes(List<SoftLog> pLogs) {
+		List<DeviceType> types = new ArrayList<>();
+		pLogs.stream().filter(softLog -> !types.contains(softLog.getDevice().getType())).forEach(log -> {
+			types.add(log.getDevice().getType());
+		});
 		return types;
 	}
 
-	/**
-	 * Gets sensors id with a given type
-	 * 
-	 * @param logs
-	 *            The list of logs to be treated
-	 * @param type
-	 *            The type of device
-	 * @return The list of all sensor ids matching the given type
-	 */
-	public static List<String> getSensorsIdWithTypes(List<MyLog> logs, Sensor.Type type) {
-		List<String> sensorsId = new ArrayList<>();
-		for (MyLog log : logs) {
-			if (log.getDevice().getType().equals(type) && !sensorsId.contains(log.getDevice().getId()))
-				sensorsId.add(log.getDevice().getId());
-		}
-		return sensorsId;
+	public static int getDeviceTypeCount(List<SoftLog> pLogs) {
+		return getDeviceTypes(pLogs).size();
 	}
 
-	/**
-	 * Gets only logs sent by the given {@link Type}
-	 * 
-	 * @param logs
-	 *            The list of logs to be treated
-	 * @param sensorType
-	 *            the {@link Type} to be sorted
-	 * @return The list of logs sent by the given sensor {@link Type}
-	 */
-	public static List<MyLog> sortBySensorType(List<MyLog> logs, Sensor.Type sensorType) {
-		List<MyLog> sortedList = new ArrayList<>();
-		logs = sortLogsByDate(logs);
-		for (MyLog log : logs) {
-			if (log.getDevice().getType().equals(sensorType))
-				sortedList.add(log);
-		}
+	public static List<Device> getDeviceIds(List<SoftLog> pLogs) {
+		List<Device> devices = new ArrayList<>();
+		List<String> deviceIds = new ArrayList<>();
+		pLogs.stream().filter(softLog -> !deviceIds.contains(softLog.getDevice().getId())).forEach(log -> {
+			deviceIds.add(log.getDevice().getId());
+			devices.add(log.getDevice());
+		});
+		return devices;
+	}
 
-		return sortLogsByDate(sortedList);
+	public static int getDeviceCount(List<SoftLog> pLogs) {
+		return getDeviceIds(pLogs).size();
+	}
+
+	public static List<String> getDeviceIsdWithTypes(List<SoftLog> pLogs, DeviceType pType) {
+		List<String> sensorsId = new ArrayList<>();
+		pLogs.stream().filter(softLog -> pType.equals(softLog.getDevice().getType())
+				&& !sensorsId.contains(softLog.getDevice().getId())).forEach(log -> {
+					sensorsId.add(log.getDevice().getId());
+				});
+		return sensorsId;
 	}
 
 	/**
@@ -308,24 +264,13 @@ public class LogExtractor extends FileExtractor {
 	 *            The list of logs
 	 * @return The number of day in the list
 	 */
-	public static int getDayNumber(List<MyLog> logs) {
+	public static List<String> getDays(List<SoftLog> pLogs) {
 
-		int currentDay = -1;
-		int logDay = 0;
-		int total = 0;
-		Calendar calendar = Calendar.getInstance();
-
-		logs = sortLogsByDate(logs);
-
-		for (MyLog log : logs) {
-			calendar.setTimeInMillis(log.getTimestamp());
-			logDay = calendar.get(Calendar.DAY_OF_YEAR);
-			if (logDay != currentDay) {
-				currentDay = logDay;
-				total++;
-			}
-		}
-		return total;
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
+		List<String> dayLabels = new ArrayList<>();
+		pLogs.stream().filter(log -> !dayLabels.contains(sdf.format(log.getTimestamp())))
+				.forEach(log -> dayLabels.add(sdf.format(log.getTimestamp())));
+		return dayLabels;
 	}
 
 	/**
@@ -335,14 +280,14 @@ public class LogExtractor extends FileExtractor {
 	 *            The list to sort
 	 * @return The sorted list
 	 */
-	public static List<MyLog> sortLogsByDate(List<MyLog> logs) {
-		Collections.sort(logs, new Comparator<MyLog>() {
+	public static List<SoftLog> sortLogsByDate(List<SoftLog> pLogs) {
+		Collections.sort(pLogs, new Comparator<SoftLog>() {
 			@Override
-			public int compare(MyLog o1, MyLog o2) {
+			public int compare(SoftLog o1, SoftLog o2) {
 				return Long.compare(o1.getTimestamp(), o2.getTimestamp());
 			}
 		});
-		return logs;
+		return pLogs;
 	}
 
 	/**
@@ -364,7 +309,7 @@ public class LogExtractor extends FileExtractor {
 	 *             <li>the JSON-file can not be saved</li>
 	 *             </ul>
 	 */
-	public static boolean saveLogList(List<MyLog> pLogs, File pOutputFile) throws JSONException {
+	public static boolean saveLogList(List<SoftLog> pLogs, File pOutputFile) throws JSONException {
 		StringBuilder stringBuilder = new StringBuilder();
 		pLogs.forEach((log) -> {
 			JSONObject json = new JSONObject();
@@ -389,15 +334,15 @@ public class LogExtractor extends FileExtractor {
 	 * @return A map that contains for key an indicator of the month and logs as
 	 *         values.
 	 */
-	public static HashMap<String, List<MyLog>> sortLogsByMonth(List<MyLog> logs) {
-		HashMap<String, List<MyLog>> map = new HashMap<>();
-		List<MyLog> logsOfMonth = new ArrayList<>();
+	public static HashMap<String, List<SoftLog>> sortLogsByMonth(List<SoftLog> logs) {
+		HashMap<String, List<SoftLog>> map = new HashMap<>();
+		List<SoftLog> logsOfMonth = new ArrayList<>();
 		logs = sortLogsByDate(logs);
 		String key;
 		Calendar calendar = Calendar.getInstance();
 		int currentMonth = -1;
 		int logMonth;
-		for (MyLog log : logs) {
+		for (SoftLog log : logs) {
 			calendar.setTimeInMillis(log.getTimestamp());
 			logMonth = calendar.get(Calendar.MONTH);
 			if (logMonth != currentMonth) {
@@ -419,15 +364,15 @@ public class LogExtractor extends FileExtractor {
 		return map;
 	}
 
-	public static HashMap<String, List<MyLog>> sortLogsByDay(List<MyLog> logs) {
-		HashMap<String, List<MyLog>> map = new HashMap<>();
-		List<MyLog> logsOfDay = new ArrayList<>();
+	public static HashMap<String, List<SoftLog>> sortLogsByDay(List<SoftLog> logs) {
+		HashMap<String, List<SoftLog>> map = new HashMap<>();
+		List<SoftLog> logsOfDay = new ArrayList<>();
 		logs = sortLogsByDate(logs);
 		String key;
 		Calendar calendar = Calendar.getInstance();
 		int currentDay = -1;
 		int logDay;
-		for (MyLog log : logs) {
+		for (SoftLog log : logs) {
 			calendar.setTimeInMillis(log.getTimestamp());
 			logDay = calendar.get(Calendar.DAY_OF_YEAR);
 			if (logDay != currentDay) {
@@ -454,81 +399,4 @@ public class LogExtractor extends FileExtractor {
 		return map;
 	}
 
-	/**
-	 * Extract logs from files
-	 * 
-	 * @param files
-	 *            The files containing the logs
-	 * @return The list which contains all logs
-	 * @throws Exception
-	 *             Exception is thrown if a file is malformed
-	 * @since 27/06/2017
-	 */
-	public static List<MyLog> extractListFromFiles(File[] files) throws Exception {
-
-		List<MyLog> logs = new ArrayList<>();
-
-		for (File file : files)
-			logs.addAll(extractLogs(file));
-
-		return sortLogsByDate(logs);
-	}
-
-	/**
-	 * Return the extraction info
-	 * 
-	 * @param logs
-	 *            The list of logs
-	 * @return The info about the extraction
-	 */
-	public static String displayExtractionInfos(List<MyLog> logs, int sizeBeforeCleaning) {
-
-		// General
-		StringBuilder strB = new StringBuilder("Before\tAfter\tVariation");
-		strB.append("\n");
-		float rate = 100 - ((float) logs.size() / (float) sizeBeforeCleaning) * 100;
-		strB.append(String.format("%d\t%d\t-%.2f%%", sizeBeforeCleaning, logs.size(), rate));
-		strB.append("\n\n");
-
-		// By sensor type
-		strB.append("Sensors type\tLogs\tSensors");
-		strB.append("\n");
-		for (Type type : getAllSensorTypes(logs)) {
-			List<String> ids = getSensorsIdWithTypes(logs, type);
-			strB.append(String.format("%s\t%d\t%d\t%s", type.name(), sortBySensorType(logs, type).size(), ids.size(),
-					ids.toString()));
-			strB.append("\n");
-		}
-		strB.append("\n");
-
-		// By month
-		HashMap<String, List<MyLog>> map = LogExtractor.sortLogsByMonth(logs);
-		strB.append(String.format("Month\t\tDays\tLogs", LogExtractor.getDayNumber(logs), logs.size()));
-		strB.append("\n");
-		for (Iterator<Entry<String, List<MyLog>>> iterator = map.entrySet().iterator(); iterator.hasNext();) {
-			Entry<String, List<MyLog>> entry = iterator.next();
-			strB.append(entry.getKey());
-			List<MyLog> monthLogs = entry.getValue();
-			strB.append(String.format("\t\t%02d", LogExtractor.getDayNumber(monthLogs)));
-			strB.append(String.format("\t%d", monthLogs.size()));
-			strB.append("\n");
-		}
-		strB.append(String.format("Total\t\t%d\t%d", LogExtractor.getDayNumber(logs), logs.size()));
-		return strB.toString();
-	}
-
-	public static boolean validateRawLogFile(File pRawLogFile) throws Exception {
-		
-		extractJSON(pRawLogFile);
-		
-		try {
-			if (!extractLogs(pRawLogFile).isEmpty()) {
-				return true;
-			} else {
-				throw new Exception("Inavlid RawLog file");
-			}
-		} catch (Exception exception) {
-			throw new Exception("Inavlid RawLog file");
-		}
-	}
 }

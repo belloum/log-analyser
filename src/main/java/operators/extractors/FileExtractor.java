@@ -1,8 +1,12 @@
 package operators.extractors;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 
 public class FileExtractor {
 
@@ -22,6 +26,20 @@ public class FileExtractor {
 		in.read(r);
 		in.close();
 		return (new String(r));
+	}
+
+	public static boolean saveFile(String pContent, File pOutputFile) {
+		Writer writer;
+		try {
+			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(pOutputFile), "utf-8"));
+			writer.write(pContent);
+			writer.flush();
+			writer.close();
+			return true;
+		} catch (IOException e) {
+			System.out.println("Exception while writing content: " + e);
+			return false;
+		}
 	}
 
 }

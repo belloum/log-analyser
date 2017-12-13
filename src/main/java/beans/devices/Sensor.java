@@ -55,8 +55,9 @@ public class Sensor {
 		this.id = pId;
 		this.location = pLocation;
 	}
-	
-	public Sensor(){}
+
+	public Sensor() {
+	}
 
 	/**
 	 * 
@@ -162,15 +163,16 @@ public class Sensor {
 	 */
 	public static Sensor getSensorWithJSON(JSONObject jsonDevice) throws Exception {
 
-		String id = jsonDevice.getString("name");
-		if (id.contains("Motion"))
-			return new MotionDetector(id, jsonDevice.getString("room"));
-		else if (id.contains("Contact"))
-			return new ContactSensor(id, jsonDevice.getString("room"));
-		else if (id.contains("EMeter"))
-			return new ElectricMeter(id, jsonDevice.getString("room"));
-		else
-			return null;
+		// String id = jsonDevice.getString("name");
+		// if (id.contains("Motion"))
+		// return new MotionDetector(id, jsonDevice.getString("room"));
+		// else if (id.contains("Contact"))
+		// return new ContactSensor(id, jsonDevice.getString("room"));
+		// else if (id.contains("EMeter"))
+		// return new ElectricMeter(id, jsonDevice.getString("room"));
+		// else
+		// return null;
+		return null;
 
 	}
 

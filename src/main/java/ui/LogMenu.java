@@ -5,15 +5,13 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
+import ui.mytabs.TabLog;
 import ui.mytabs.TabParticipants;
 import ui.mytabs.TabSettings;
 import utils.Configuration;
 
 public class LogMenu extends JFrame {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	// UI Components
 	private JFrame mJFrameTabParticipant, mJFrameTabSettings;
@@ -40,6 +38,7 @@ public class LogMenu extends JFrame {
 	 */
 	public LogMenu() throws Exception {
 		super("Log Handler");
+		setResizable(false);
 		setVisible(true);
 		setBounds(100, 100, Configuration.MAX_WIDTH, Configuration.MAX_HEIGHT);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -49,6 +48,8 @@ public class LogMenu extends JFrame {
 		mJTabbedPane.addTab("Userbox", mJFrameTabParticipant.getContentPane());
 		mJFrameTabSettings = new TabSettings("Settings");
 		mJTabbedPane.addTab("Settings", mJFrameTabSettings.getContentPane());
+		TabLog tb = new TabLog("Logs"); 
+		mJTabbedPane.addTab("Logs", tb.getContentPane());
 
 		add(mJTabbedPane);
 	}

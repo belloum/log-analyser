@@ -7,11 +7,11 @@ package beans.devices;
  * @since 05/24/17
  *
  */
-public class ContactSensor extends Sensor {
+public class ContactSensor extends Device {
 
 	public ContactSensor(String pId, String pLocation) {
 		super(pId, pLocation);
-		this.type = Type.ContactSensor;
+		this.mType = DeviceType.ContactSensor;
 	}
 
 }

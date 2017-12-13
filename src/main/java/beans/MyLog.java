@@ -68,7 +68,6 @@ public class MyLog {
 		utcFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 		this.timestamp = utcFormat.parse(json.getString("@timestamp")).getTime();
 		this.value = Float.parseFloat(json.getJSONObject("event").getString("value"));
-
 		this.device = Sensor.getSensorWithJSON(json.getJSONObject("device"));
 	}
 
@@ -208,7 +207,7 @@ public class MyLog {
 	 *             Exception is thrown if json specified in parameters is
 	 *             malformed
 	 */
-	public static boolean isAValidLog(JSONObject json) throws Exception {
+	public static boolean isAValidLog(JSONObject json) {
 
 		if (!json.has("@timestamp")) {
 			// System.out.println("Doesn't have '@timestamp' leaf");
