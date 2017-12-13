@@ -14,7 +14,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
@@ -387,7 +387,7 @@ public class HistogramsExtractor {
 			return false;
 
 		if (sensorIds.length > 1)
-			if (!saveMixedHistogram(parentFolder, period + "_" + chartTitle +".jpg", xLabel, yLabel,
+			if (!saveMixedHistogram(parentFolder, period + "_" + chartTitle + ".jpg", xLabel, yLabel,
 					Arrays.asList(sensorIds)))
 				return false;
 
@@ -658,7 +658,7 @@ public class HistogramsExtractor {
 	private boolean drawChart(JFreeChart chart, File output) {
 		System.out.println("Saving " + output.getName() + " in " + output.getParent());
 		try {
-			ChartUtilities.saveChartAsJPEG(output, chart, 1500, 600);
+			ChartUtils.saveChartAsJPEG(output, chart, 1500, 600);
 			return true;
 		} catch (IOException e) {
 			System.err.println("Problem occurred creating chart.");
