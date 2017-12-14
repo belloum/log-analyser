@@ -67,7 +67,6 @@ public class DataSetComponent extends CustomComponent {
 		super.build();
 		xOffset = 5;
 		this.mProperties.forEach((key, value) -> {
-			//System.out.println("Builde DSC: " + xOffset + " x " + yOffset);
 
 			JLabel jlabel = new JLabel(key);
 			addComponentHorizontally(jlabel, getWidth() / 2, false);
@@ -78,7 +77,6 @@ public class DataSetComponent extends CustomComponent {
 			yOffset += Configuration.ITEM_HEIGHT;
 			xOffset = 5;
 		});
-
 		return;
 	}
 

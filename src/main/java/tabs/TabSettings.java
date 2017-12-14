@@ -1,4 +1,4 @@
-package ui.mytabs;
+package tabs;
 
 import java.awt.Font;
 

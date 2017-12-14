@@ -57,6 +57,12 @@ public abstract class CustomComponent extends JPanel {
 		removeAll();
 		xOffset = 0;
 		yOffset = 0;
+		redraw();
 	};
+	
+	private void redraw(){
+		setVisible(false);
+		setVisible(true);
+	}
 
 }

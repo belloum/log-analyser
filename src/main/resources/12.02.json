@@ -1,0 +1,235 @@
+{"date":"Thu Dec 07 01:23:26 CET 2017","state":"unknown","value":72.5,"device":{"location":"Livingroom","id":"3 in 1 sensor (temperature) 4"},"timestamp":1512606206060}
+{"date":"Thu Dec 07 02:08:34 CET 2017","state":"unknown","value":70.30000305175781,"device":{"location":"Livingroom","id":"3 in 1 sensor (temperature) 4"},"timestamp":1512608914431}
+{"date":"Thu Dec 07 03:23:54 CET 2017","state":"unknown","value":68.4000015258789,"device":{"location":"Livingroom","id":"3 in 1 sensor (temperature) 4"},"timestamp":1512613434486}
+{"date":"Thu Dec 07 04:54:21 CET 2017","state":"unknown","value":66.5999984741211,"device":{"location":"Livingroom","id":"3 in 1 sensor (temperature) 4"},"timestamp":1512618861934}
+{"date":"Thu Dec 07 05:54:40 CET 2017","state":"unknown","value":70.30000305175781,"device":{"location":"Livingroom","id":"3 in 1 sensor (temperature) 4"},"timestamp":1512622480043}
+{"date":"Thu Dec 07 06:09:42 CET 2017","state":"unknown","value":72.5,"device":{"location":"Livingroom","id":"3 in 1 sensor (temperature) 4"},"timestamp":1512623382240}
+{"date":"Thu Dec 07 06:39:46 CET 2017","state":"unknown","value":74.80000305175781,"device":{"location":"Livingroom","id":"3 in 1 sensor (temperature) 4"},"timestamp":1512625186671}
+{"date":"Thu Dec 07 07:09:48 CET 2017","state":"unknown","value":77,"device":{"location":"Livingroom","id":"3 in 1 sensor (temperature) 4"},"timestamp":1512626988917}
+{"date":"Thu Dec 07 08:53:17 CET 2017","state":"Open","value":1,"device":{"location":"Kitchen","id":"ContactS_Fridge"},"timestamp":1512633197879}
+{"date":"Thu Dec 07 08:53:29 CET 2017","state":"Close","value":0,"device":{"location":"Kitchen","id":"ContactS_Fridge"},"timestamp":1512633209702}
+{"date":"Thu Dec 07 08:53:33 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512633213070}
+{"date":"Thu Dec 07 08:54:27 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512633267933}
+{"date":"Thu Dec 07 08:54:58 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512633298410}
+{"date":"Thu Dec 07 09:55:10 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512636910617}
+{"date":"Thu Dec 07 09:57:26 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512637046560}
+{"date":"Thu Dec 07 09:57:57 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512637077008}
+{"date":"Thu Dec 07 10:01:23 CET 2017","state":"Open","value":1,"device":{"location":"Kitchen","id":"ContactS_Fridge"},"timestamp":1512637283359}
+{"date":"Thu Dec 07 10:01:35 CET 2017","state":"Close","value":0,"device":{"location":"Kitchen","id":"ContactS_Fridge"},"timestamp":1512637295202}
+{"date":"Thu Dec 07 10:04:01 CET 2017","state":"TurnOn","value":238.3000030517578,"device":{"location":"Kitchen","id":"EMeter_Coffemaker"},"timestamp":1512637441569}
+{"date":"Thu Dec 07 10:04:27 CET 2017","state":"Open","value":1,"device":{"location":"Kitchen","id":"ContactS_Fridge"},"timestamp":1512637467046}
+{"date":"Thu Dec 07 10:04:40 CET 2017","state":"Close","value":0,"device":{"location":"Kitchen","id":"ContactS_Fridge"},"timestamp":1512637480573}
+{"date":"Thu Dec 07 10:04:51 CET 2017","state":"TurnOff","value":0,"device":{"location":"Kitchen","id":"EMeter_Coffemaker"},"timestamp":1512637491764}
+{"date":"Thu Dec 07 10:04:52 CET 2017","state":"Open","value":1,"device":{"location":"Kitchen","id":"ContactS_Fridge"},"timestamp":1512637492537}
+{"date":"Thu Dec 07 10:05:20 CET 2017","state":"Close","value":0,"device":{"location":"Kitchen","id":"ContactS_Fridge"},"timestamp":1512637520635}
+{"date":"Thu Dec 07 10:05:21 CET 2017","state":"TurnOn","value":78.9000015258789,"device":{"location":"Kitchen","id":"EMeter_Coffemaker"},"timestamp":1512637521576}
+{"date":"Thu Dec 07 10:05:50 CET 2017","state":"TurnOff","value":0,"device":{"location":"Kitchen","id":"EMeter_Coffemaker"},"timestamp":1512637550872}
+{"date":"Thu Dec 07 10:06:16 CET 2017","state":"TurnOn","value":692.7000122070312,"device":{"location":"Kitchen","id":"EMeter_Coffemaker"},"timestamp":1512637576494}
+{"date":"Thu Dec 07 10:06:42 CET 2017","state":"TurnOn","value":0.699999988079071,"device":{"location":"Kitchen","id":"EMeter_Coffemaker"},"timestamp":1512637602532}
+{"date":"Thu Dec 07 10:07:09 CET 2017","state":"TurnOn","value":391.5,"device":{"location":"Kitchen","id":"EMeter_Coffemaker"},"timestamp":1512637629601}
+{"date":"Thu Dec 07 10:07:35 CET 2017","state":"TurnOff","value":0,"device":{"location":"Kitchen","id":"EMeter_Coffemaker"},"timestamp":1512637655512}
+{"date":"Thu Dec 07 10:07:54 CET 2017","state":"Open","value":1,"device":{"location":"Kitchen","id":"ContactS_Cupboard"},"timestamp":1512637674402}
+{"date":"Thu Dec 07 10:08:02 CET 2017","state":"TurnOn","value":307.79998779296875,"device":{"location":"Kitchen","id":"EMeter_Coffemaker"},"timestamp":1512637682505}
+{"date":"Thu Dec 07 10:08:12 CET 2017","state":"Open","value":1,"device":{"location":"Kitchen","id":"ContactS_Fridge"},"timestamp":1512637692633}
+{"date":"Thu Dec 07 10:08:20 CET 2017","state":"Close","value":0,"device":{"location":"Kitchen","id":"ContactS_Fridge"},"timestamp":1512637700403}
+{"date":"Thu Dec 07 10:08:28 CET 2017","state":"TurnOff","value":0,"device":{"location":"Kitchen","id":"EMeter_Coffemaker"},"timestamp":1512637708555}
+{"date":"Thu Dec 07 10:08:55 CET 2017","state":"TurnOn","value":157.1999969482422,"device":{"location":"Kitchen","id":"EMeter_Coffemaker"},"timestamp":1512637735516}
+{"date":"Thu Dec 07 10:09:21 CET 2017","state":"TurnOff","value":0,"device":{"location":"Kitchen","id":"EMeter_Coffemaker"},"timestamp":1512637761530}
+{"date":"Thu Dec 07 10:09:48 CET 2017","state":"TurnOn","value":158.6999969482422,"device":{"location":"Kitchen","id":"EMeter_Coffemaker"},"timestamp":1512637788654}
+{"date":"Thu Dec 07 10:10:13 CET 2017","state":"TurnOff","value":0,"device":{"location":"Kitchen","id":"EMeter_Coffemaker"},"timestamp":1512637813531}
+{"date":"Thu Dec 07 10:10:42 CET 2017","state":"TurnOn","value":385.8999938964844,"device":{"location":"Kitchen","id":"EMeter_Coffemaker"},"timestamp":1512637842527}
+{"date":"Thu Dec 07 10:11:07 CET 2017","state":"TurnOff","value":0,"device":{"location":"Kitchen","id":"EMeter_Coffemaker"},"timestamp":1512637867579}
+{"date":"Thu Dec 07 10:11:36 CET 2017","state":"TurnOn","value":701.2999877929688,"device":{"location":"Kitchen","id":"EMeter_Coffemaker"},"timestamp":1512637896517}
+{"date":"Thu Dec 07 10:11:50 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512637910645}
+{"date":"Thu Dec 07 10:12:00 CET 2017","state":"TurnOff","value":0,"device":{"location":"Kitchen","id":"EMeter_Coffemaker"},"timestamp":1512637920538}
+{"date":"Thu Dec 07 10:12:21 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512637941018}
+{"date":"Thu Dec 07 10:12:29 CET 2017","state":"TurnOn","value":157.39999389648438,"device":{"location":"Kitchen","id":"EMeter_Coffemaker"},"timestamp":1512637949544}
+{"date":"Thu Dec 07 10:12:49 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512637969520}
+{"date":"Thu Dec 07 10:12:53 CET 2017","state":"TurnOff","value":0,"device":{"location":"Kitchen","id":"EMeter_Coffemaker"},"timestamp":1512637973541}
+{"date":"Thu Dec 07 10:13:20 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512638000097}
+{"date":"Thu Dec 07 10:13:23 CET 2017","state":"TurnOn","value":309.5,"device":{"location":"Kitchen","id":"EMeter_Coffemaker"},"timestamp":1512638003546}
+{"date":"Thu Dec 07 10:13:47 CET 2017","state":"TurnOff","value":0,"device":{"location":"Kitchen","id":"EMeter_Coffemaker"},"timestamp":1512638027679}
+{"date":"Thu Dec 07 10:14:17 CET 2017","state":"TurnOn","value":460.20001220703125,"device":{"location":"Kitchen","id":"EMeter_Coffemaker"},"timestamp":1512638057546}
+{"date":"Thu Dec 07 10:14:28 CET 2017","state":"Open","value":1,"device":{"location":"Kitchen","id":"ContactS_Fridge"},"timestamp":1512638068273}
+{"date":"Thu Dec 07 10:14:40 CET 2017","state":"TurnOff","value":0,"device":{"location":"Kitchen","id":"EMeter_Coffemaker"},"timestamp":1512638080567}
+{"date":"Thu Dec 07 10:15:13 CET 2017","state":"TurnOn","value":156.89999389648438,"device":{"location":"Kitchen","id":"EMeter_Coffemaker"},"timestamp":1512638113555}
+{"date":"Thu Dec 07 10:15:35 CET 2017","state":"TurnOff","value":0,"device":{"location":"Kitchen","id":"EMeter_Coffemaker"},"timestamp":1512638135607}
+{"date":"Thu Dec 07 10:15:37 CET 2017","state":"Close","value":0,"device":{"location":"Kitchen","id":"ContactS_Fridge"},"timestamp":1512638137077}
+{"date":"Thu Dec 07 10:16:25 CET 2017","state":"TurnOn","value":309.3999938964844,"device":{"location":"Kitchen","id":"EMeter_Coffemaker"},"timestamp":1512638185562}
+{"date":"Thu Dec 07 10:16:45 CET 2017","state":"TurnOff","value":0,"device":{"location":"Kitchen","id":"EMeter_Coffemaker"},"timestamp":1512638205560}
+{"date":"Thu Dec 07 10:18:22 CET 2017","state":"TurnOn","value":80.9000015258789,"device":{"location":"Kitchen","id":"EMeter_Coffemaker"},"timestamp":1512638302590}
+{"date":"Thu Dec 07 10:18:39 CET 2017","state":"TurnOff","value":0,"device":{"location":"Kitchen","id":"EMeter_Coffemaker"},"timestamp":1512638319579}
+{"date":"Thu Dec 07 10:19:32 CET 2017","state":"Open","value":1,"device":{"location":"Kitchen","id":"ContactS_Fridge"},"timestamp":1512638372890}
+{"date":"Thu Dec 07 10:19:35 CET 2017","state":"Close","value":0,"device":{"location":"Kitchen","id":"ContactS_Fridge"},"timestamp":1512638375530}
+{"date":"Thu Dec 07 10:19:52 CET 2017","state":"Open","value":1,"device":{"location":"Kitchen","id":"ContactS_Fridge"},"timestamp":1512638392939}
+{"date":"Thu Dec 07 10:19:58 CET 2017","state":"Close","value":0,"device":{"location":"Kitchen","id":"ContactS_Fridge"},"timestamp":1512638398950}
+{"date":"Thu Dec 07 10:22:24 CET 2017","state":"unknown","value":27,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512638544760}
+{"date":"Thu Dec 07 10:25:59 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512638759733}
+{"date":"Thu Dec 07 10:26:52 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512638812413}
+{"date":"Thu Dec 07 10:27:18 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512638838604}
+{"date":"Thu Dec 07 10:27:48 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512638868543}
+{"date":"Thu Dec 07 10:29:56 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512638996559}
+{"date":"Thu Dec 07 10:30:26 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512639026839}
+{"date":"Thu Dec 07 10:30:54 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512639054079}
+{"date":"Thu Dec 07 10:31:24 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512639084900}
+{"date":"Thu Dec 07 10:33:51 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512639231967}
+{"date":"Thu Dec 07 10:34:36 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512639276155}
+{"date":"Thu Dec 07 10:34:52 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512639292646}
+{"date":"Thu Dec 07 10:35:49 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512639349176}
+{"date":"Thu Dec 07 11:10:05 CET 2017","state":"unknown","value":75.19999694824219,"device":{"location":"Livingroom","id":"3 in 1 sensor (temperature) 4"},"timestamp":1512641405975}
+{"date":"Thu Dec 07 11:22:30 CET 2017","state":"unknown","value":31,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512642150100}
+{"date":"Thu Dec 07 11:24:51 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512642291449}
+{"date":"Thu Dec 07 11:26:34 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512642394768}
+{"date":"Thu Dec 07 11:26:46 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512642406567}
+{"date":"Thu Dec 07 11:27:50 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512642470812}
+{"date":"Thu Dec 07 11:31:08 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512642668294}
+{"date":"Thu Dec 07 11:34:20 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512642860688}
+{"date":"Thu Dec 07 11:34:21 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512642861970}
+{"date":"Thu Dec 07 11:34:23 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512642863797}
+{"date":"Thu Dec 07 11:34:59 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512642899693}
+{"date":"Thu Dec 07 11:35:00 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512642900924}
+{"date":"Thu Dec 07 11:35:49 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512642949999}
+{"date":"Thu Dec 07 11:37:00 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512643020740}
+{"date":"Thu Dec 07 11:37:01 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512643021847}
+{"date":"Thu Dec 07 11:37:31 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512643051021}
+{"date":"Thu Dec 07 11:42:07 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512643327533}
+{"date":"Thu Dec 07 11:42:38 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512643358443}
+{"date":"Thu Dec 07 11:47:44 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512643664695}
+{"date":"Thu Dec 07 11:47:45 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512643665901}
+{"date":"Thu Dec 07 11:48:23 CET 2017","state":"Open","value":1,"device":{"location":"Kitchen","id":"ContactS_Fridge"},"timestamp":1512643703033}
+{"date":"Thu Dec 07 11:48:40 CET 2017","state":"Close","value":0,"device":{"location":"Kitchen","id":"ContactS_Fridge"},"timestamp":1512643720623}
+{"date":"Thu Dec 07 11:49:07 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512643747143}
+{"date":"Thu Dec 07 11:49:11 CET 2017","state":"Open","value":1,"device":{"location":"Kitchen","id":"ContactS_Fridge"},"timestamp":1512643751162}
+{"date":"Thu Dec 07 11:49:19 CET 2017","state":"Close","value":0,"device":{"location":"Kitchen","id":"ContactS_Fridge"},"timestamp":1512643759449}
+{"date":"Thu Dec 07 11:49:56 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512643796097}
+{"date":"Thu Dec 07 11:49:57 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512643797842}
+{"date":"Thu Dec 07 11:50:48 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512643848455}
+{"date":"Thu Dec 07 12:22:37 CET 2017","state":"unknown","value":53,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512645757184}
+{"date":"Thu Dec 07 12:39:08 CET 2017","state":"unknown","value":174,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512646748449}
+{"date":"Thu Dec 07 13:01:26 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512648086689}
+{"date":"Thu Dec 07 13:02:06 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512648126049}
+{"date":"Thu Dec 07 13:02:09 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512648129610}
+{"date":"Thu Dec 07 13:02:40 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512648160207}
+{"date":"Thu Dec 07 13:19:03 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512649143920}
+{"date":"Thu Dec 07 13:19:34 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512649174113}
+{"date":"Thu Dec 07 13:22:27 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512649347336}
+{"date":"Thu Dec 07 13:22:58 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512649378373}
+{"date":"Thu Dec 07 13:28:42 CET 2017","state":"unknown","value":216,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512649722024}
+{"date":"Thu Dec 07 13:28:59 CET 2017","state":"Open","value":1,"device":{"location":"Kitchen","id":"ContactS_Cupboard"},"timestamp":1512649739641}
+{"date":"Thu Dec 07 13:29:00 CET 2017","state":"unknown","value":342,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512649740346}
+{"date":"Thu Dec 07 13:29:04 CET 2017","state":"Close","value":0,"device":{"location":"Kitchen","id":"ContactS_Cupboard"},"timestamp":1512649744775}
+{"date":"Thu Dec 07 13:29:31 CET 2017","state":"Open","value":1,"device":{"location":"Kitchen","id":"ContactS_Fridge"},"timestamp":1512649771049}
+{"date":"Thu Dec 07 13:29:39 CET 2017","state":"Close","value":0,"device":{"location":"Kitchen","id":"ContactS_Fridge"},"timestamp":1512649779508}
+{"date":"Thu Dec 07 13:29:40 CET 2017","state":"unknown","value":235,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512649780375}
+{"date":"Thu Dec 07 13:30:24 CET 2017","state":"unknown","value":392,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512649824444}
+{"date":"Thu Dec 07 13:30:41 CET 2017","state":"unknown","value":290,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512649841297}
+{"date":"Thu Dec 07 13:31:43 CET 2017","state":"unknown","value":191,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512649903249}
+{"date":"Thu Dec 07 13:33:13 CET 2017","state":"unknown","value":109,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512649993060}
+{"date":"Thu Dec 07 13:43:08 CET 2017","state":"unknown","value":209,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512650588938}
+{"date":"Thu Dec 07 13:44:30 CET 2017","state":"unknown","value":336,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512650670485}
+{"date":"Thu Dec 07 13:44:57 CET 2017","state":"unknown","value":514,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512650697817}
+{"date":"Thu Dec 07 13:45:41 CET 2017","state":"unknown","value":387,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512650741853}
+{"date":"Thu Dec 07 13:46:09 CET 2017","state":"unknown","value":570,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512650769907}
+{"date":"Thu Dec 07 13:46:41 CET 2017","state":"Open","value":1,"device":{"location":"Kitchen","id":"ContactS_Fridge"},"timestamp":1512650801443}
+{"date":"Thu Dec 07 13:46:58 CET 2017","state":"Close","value":0,"device":{"location":"Kitchen","id":"ContactS_Fridge"},"timestamp":1512650818984}
+{"date":"Thu Dec 07 13:51:19 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512651079992}
+{"date":"Thu Dec 07 13:51:29 CET 2017","state":"unknown","value":430,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512651089782}
+{"date":"Thu Dec 07 13:52:00 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512651120845}
+{"date":"Thu Dec 07 13:58:42 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512651522206}
+{"date":"Thu Dec 07 13:59:12 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512651552444}
+{"date":"Thu Dec 07 13:59:46 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512651586161}
+{"date":"Thu Dec 07 14:00:16 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512651616608}
+{"date":"Thu Dec 07 14:01:12 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512651672494}
+{"date":"Thu Dec 07 14:01:51 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512651711846}
+{"date":"Thu Dec 07 14:04:29 CET 2017","state":"unknown","value":317,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512651869332}
+{"date":"Thu Dec 07 14:05:37 CET 2017","state":"unknown","value":463,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512651937499}
+{"date":"Thu Dec 07 14:07:40 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512652060419}
+{"date":"Thu Dec 07 14:07:44 CET 2017","state":"unknown","value":331,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512652064992}
+{"date":"Thu Dec 07 14:08:11 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512652091465}
+{"date":"Thu Dec 07 14:08:19 CET 2017","state":"unknown","value":229,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512652099491}
+{"date":"Thu Dec 07 14:09:56 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512652196397}
+{"date":"Thu Dec 07 14:09:57 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512652197860}
+{"date":"Thu Dec 07 14:10:26 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512652226632}
+{"date":"Thu Dec 07 14:10:41 CET 2017","state":"unknown","value":392,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512652241427}
+{"date":"Thu Dec 07 14:11:05 CET 2017","state":"unknown","value":590,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512652265476}
+{"date":"Thu Dec 07 14:12:41 CET 2017","state":"unknown","value":426,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512652361603}
+{"date":"Thu Dec 07 14:13:31 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512652411570}
+{"date":"Thu Dec 07 14:13:41 CET 2017","state":"unknown","value":330,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512652421858}
+{"date":"Thu Dec 07 14:13:55 CET 2017","state":"unknown","value":459,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512652435495}
+{"date":"Thu Dec 07 14:14:01 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512652441935}
+{"date":"Thu Dec 07 14:14:17 CET 2017","state":"unknown","value":343,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512652457937}
+{"date":"Thu Dec 07 14:14:30 CET 2017","state":"unknown","value":236,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512652470749}
+{"date":"Thu Dec 07 14:16:43 CET 2017","state":"unknown","value":361,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512652603084}
+{"date":"Thu Dec 07 14:17:03 CET 2017","state":"unknown","value":233,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512652623149}
+{"date":"Thu Dec 07 14:18:21 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512652701448}
+{"date":"Thu Dec 07 14:18:23 CET 2017","state":"unknown","value":148,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512652703524}
+{"date":"Thu Dec 07 14:18:52 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512652732386}
+{"date":"Thu Dec 07 14:28:02 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512653282197}
+{"date":"Thu Dec 07 14:29:09 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512653349334}
+{"date":"Thu Dec 07 14:29:14 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512653354289}
+{"date":"Thu Dec 07 14:30:06 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512653406372}
+{"date":"Thu Dec 07 14:32:06 CET 2017","state":"unknown","value":182,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512653526395}
+{"date":"Thu Dec 07 14:33:49 CET 2017","state":"unknown","value":323,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512653629557}
+{"date":"Thu Dec 07 14:37:56 CET 2017","state":"unknown","value":442,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512653876526}
+{"date":"Thu Dec 07 14:50:17 CET 2017","state":"unknown","value":347,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512654617493}
+{"date":"Thu Dec 07 14:52:37 CET 2017","state":"unknown","value":235,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512654757030}
+{"date":"Thu Dec 07 14:57:03 CET 2017","state":"unknown","value":109,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512655023549}
+{"date":"Thu Dec 07 15:05:43 CET 2017","state":"unknown","value":216,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512655543195}
+{"date":"Thu Dec 07 15:06:18 CET 2017","state":"unknown","value":366,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512655578197}
+{"date":"Thu Dec 07 15:07:17 CET 2017","state":"unknown","value":556,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512655637523}
+{"date":"Thu Dec 07 15:18:44 CET 2017","state":"unknown","value":438,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512656324664}
+{"date":"Thu Dec 07 15:20:57 CET 2017","state":"unknown","value":326,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512656457084}
+{"date":"Thu Dec 07 15:23:35 CET 2017","state":"unknown","value":194,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512656615869}
+{"date":"Thu Dec 07 15:24:24 CET 2017","state":"unknown","value":106,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512656664162}
+{"date":"Thu Dec 07 15:25:50 CET 2017","state":"unknown","value":238,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512656750938}
+{"date":"Thu Dec 07 15:26:01 CET 2017","state":"unknown","value":133,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512656761203}
+{"date":"Thu Dec 07 15:30:03 CET 2017","state":"unknown","value":51,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512657003779}
+{"date":"Thu Dec 07 16:30:09 CET 2017","state":"unknown","value":4,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512660609532}
+{"date":"Thu Dec 07 17:13:12 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512663192679}
+{"date":"Thu Dec 07 17:13:13 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512663193804}
+{"date":"Thu Dec 07 17:13:43 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512663223041}
+{"date":"Thu Dec 07 17:13:56 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512663236155}
+{"date":"Thu Dec 07 17:17:36 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512663456302}
+{"date":"Thu Dec 07 17:18:06 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512663486438}
+{"date":"Thu Dec 07 17:21:49 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512663709434}
+{"date":"Thu Dec 07 17:22:29 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512663749014}
+{"date":"Thu Dec 07 17:25:29 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512663929949}
+{"date":"Thu Dec 07 17:26:48 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512664008635}
+{"date":"Thu Dec 07 17:27:57 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512664077562}
+{"date":"Thu Dec 07 17:28:27 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512664107934}
+{"date":"Thu Dec 07 17:30:16 CET 2017","state":"unknown","value":2,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512664216855}
+{"date":"Thu Dec 07 17:35:00 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512664500522}
+{"date":"Thu Dec 07 17:35:47 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512664547691}
+{"date":"Thu Dec 07 17:35:48 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512664548808}
+{"date":"Thu Dec 07 18:56:39 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512669399136}
+{"date":"Thu Dec 07 18:57:51 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512669471868}
+{"date":"Thu Dec 07 18:58:01 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512669481431}
+{"date":"Thu Dec 07 18:58:31 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512669511946}
+{"date":"Thu Dec 07 19:30:30 CET 2017","state":"unknown","value":14,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512671430948}
+{"date":"Thu Dec 07 19:41:00 CET 2017","state":"unknown","value":73,"device":{"location":"Livingroom","id":"3 in 1 sensor (temperature) 4"},"timestamp":1512672060170}
+{"date":"Thu Dec 07 21:05:21 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512677121285}
+{"date":"Thu Dec 07 21:06:00 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512677160440}
+{"date":"Thu Dec 07 21:06:09 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512677169461}
+{"date":"Thu Dec 07 21:06:39 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512677199541}
+{"date":"Thu Dec 07 21:07:27 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512677247525}
+{"date":"Thu Dec 07 21:07:57 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512677277627}
+{"date":"Thu Dec 07 21:12:52 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512677572190}
+{"date":"Thu Dec 07 22:26:28 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512681988529}
+{"date":"Thu Dec 07 22:26:59 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512682019260}
+{"date":"Thu Dec 07 22:27:13 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512682033084}
+{"date":"Thu Dec 07 22:29:52 CET 2017","state":"Open","value":1,"device":{"location":"Kitchen","id":"ContactS_Cupboard"},"timestamp":1512682192852}
+{"date":"Thu Dec 07 22:30:01 CET 2017","state":"Close","value":0,"device":{"location":"Kitchen","id":"ContactS_Cupboard"},"timestamp":1512682201570}
+{"date":"Thu Dec 07 22:30:50 CET 2017","state":"unknown","value":15,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512682250473}
+{"date":"Thu Dec 07 22:36:22 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512682582441}
+{"date":"Thu Dec 07 22:37:01 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512682621428}
+{"date":"Thu Dec 07 22:45:39 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512683139746}
+{"date":"Thu Dec 07 22:45:56 CET 2017","state":"Open","value":1,"device":{"location":"Kitchen","id":"ContactS_Fridge"},"timestamp":1512683156234}
+{"date":"Thu Dec 07 22:46:10 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512683170547}
+{"date":"Thu Dec 07 22:46:12 CET 2017","state":"Close","value":0,"device":{"location":"Kitchen","id":"ContactS_Fridge"},"timestamp":1512683172121}
+{"date":"Thu Dec 07 22:47:25 CET 2017","state":"Open","value":1,"device":{"location":"Kitchen","id":"ContactS_Cupboard"},"timestamp":1512683245631}
+{"date":"Thu Dec 07 22:47:31 CET 2017","state":"Close","value":0,"device":{"location":"Kitchen","id":"ContactS_Cupboard"},"timestamp":1512683251806}
+{"date":"Thu Dec 07 23:09:55 CET 2017","state":"Open","value":1,"device":{"location":"Kitchen","id":"ContactS_Fridge"},"timestamp":1512684595549}
+{"date":"Thu Dec 07 23:10:06 CET 2017","state":"Close","value":0,"device":{"location":"Kitchen","id":"ContactS_Fridge"},"timestamp":1512684606351}
+{"date":"Thu Dec 07 23:11:40 CET 2017","state":"Presence","value":1,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512684700427}
+{"date":"Thu Dec 07 23:12:20 CET 2017","state":"Absence","value":0,"device":{"location":"Livingroom","id":"MotionD_L"},"timestamp":1512684740999}
+{"date":"Thu Dec 07 23:30:59 CET 2017","state":"unknown","value":12,"device":{"location":"Livingroom","id":"3 in 1 sensor (light) 4"},"timestamp":1512685859600}

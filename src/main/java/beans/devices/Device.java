@@ -120,4 +120,11 @@ public class Device {
 		return "Device [mId=" + mId + ", mLocation=" + mLocation + ", mType=" + mType + "]";
 	}
 
+	public static JSONObject toJSON(Device pDevice) {
+		JSONObject json = new JSONObject();
+		json.put("location", pDevice.getLocation());
+		json.put("id", pDevice.getId());
+		return json;
+	}
+
 }

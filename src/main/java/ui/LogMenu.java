@@ -5,9 +5,9 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
-import ui.mytabs.TabLog;
-import ui.mytabs.TabParticipants;
-import ui.mytabs.TabSettings;
+import tabs.TabLog;
+import tabs.TabParticipants;
+import tabs.TabSettings;
 import utils.Configuration;
 
 public class LogMenu extends JFrame {

@@ -34,7 +34,7 @@ public class RawLogFormater extends FileExtractor {
 			content = String.format("[%s]", content);
 			return new JSONArray(content);
 		} catch (IOException e) {
-			throw new RawLogException(RawLogException.FILE_UNFOUND);
+			throw new RawLogException(e.getMessage());
 		}
 	}
 

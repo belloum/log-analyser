@@ -30,6 +30,10 @@ public class ButtonBar extends CustomComponent {
 		return mButtons.containsKey(pIndex) ? mButtons.get(pIndex) : null;
 	}
 
+	public void setEnabled(boolean pEnabled) {
+		mButtons.forEach((key, button) -> button.setEnabled(pEnabled));
+	}
+
 	public void addButton(JButton pButton) {
 		addButton(pButton, true);
 	}
@@ -46,7 +50,6 @@ public class ButtonBar extends CustomComponent {
 		this.mButtons.forEach((key, button) -> {
 			addComponentHorizontally(button, (getWidth() - Configuration.PADDING) / getCount(), false);
 		});
-
 		return;
 	}
 

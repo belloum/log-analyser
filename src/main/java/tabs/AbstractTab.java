@@ -1,4 +1,4 @@
-package ui.mytabs;
+package tabs;
 
 import java.awt.Dimension;
 import java.awt.HeadlessException;
@@ -33,7 +33,8 @@ public abstract class AbstractTab extends JFrame {
 	protected void addComponent(JComponent pJComponent, Dimension pDimension) {
 		int pWidth = pDimension.width;
 		int pHeight = pDimension.height;
-		//System.out.println(pWidth + " x " + pHeight + " x " + xOffset + " x " + yOffset + " x " + pJComponent);
+		// System.out.println(pWidth + " x " + pHeight + " x " + xOffset + " x "
+		// + yOffset + " x " + pJComponent);
 		pJComponent.setBounds(xOffset, yOffset, pWidth - Configuration.PADDING, pHeight);
 
 		add(pJComponent);

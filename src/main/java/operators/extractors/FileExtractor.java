@@ -20,9 +20,9 @@ public class FileExtractor {
 	 *             Exception is thrown if the specified file does not exist or
 	 *             if its content can not be red
 	 */
-	public static String readFile(File file) throws IOException {
-		FileInputStream in = new FileInputStream(file);
-		byte[] r = new byte[(int) file.length()];
+	public static String readFile(File pFile) throws IOException {
+		FileInputStream in = new FileInputStream(pFile);
+		byte[] r = new byte[(int) pFile.length()];
 		in.read(r);
 		in.close();
 		return (new String(r));

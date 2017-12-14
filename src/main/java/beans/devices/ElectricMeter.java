@@ -10,6 +10,10 @@ package beans.devices;
 
 public class ElectricMeter extends Device {
 
+	public enum ElectricMeterState {
+		TurnOn, TurnOff
+	}
+
 	public ElectricMeter(String pId, String pLocation) {
 		super(pId, pLocation);
 		this.mType = DeviceType.ElectricMeter;

@@ -3,22 +3,28 @@ package beans;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.TimeZone;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import beans.devices.ContactSensor.ContactSensorState;
 import beans.devices.Device;
+import beans.devices.ElectricMeter.ElectricMeterState;
+import beans.devices.MotionDetector.MotionDetectorState;
 import exceptions.RawLogException;
+import utils.DateFormater;
 
 public class SoftLog {
 
-	private long mTimestamp;
+	private Date mDate;
 	private float mValue;
+	private String mState;
 	private Device mDevice;
 
-	public SoftLog(long pTimestamp, float pValue, Device pDevice) {
-		this.mTimestamp = pTimestamp;
+	public SoftLog(Date pDate, float pValue, Device pDevice) {
+		this.mDate = pDate;
 		this.mValue = pValue;
 		this.mDevice = pDevice;
 	}
@@ -28,9 +34,24 @@ public class SoftLog {
 		DateFormat utcFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 		utcFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 		try {
-			this.mTimestamp = utcFormat.parse(pJSON.getString("@timestamp")).getTime();
-			this.mValue = Float.parseFloat(pJSON.getJSONObject("event").getString("value"));
+			this.mDate = utcFormat.parse(pJSON.getString("@timestamp"));
 			this.mDevice = new Device(pJSON.getJSONObject("device"));
+			this.mValue = Float.parseFloat(pJSON.getJSONObject("event").getString("value"));
+			switch (this.mDevice.getType()) {
+			case ContactSensor:
+				this.mState = this.mValue == 0 ? ContactSensorState.Close.name() : ContactSensorState.Open.name();
+				break;
+			case MotionDetector:
+				this.mState = this.mValue == 0 ? MotionDetectorState.Absence.name()
+						: MotionDetectorState.Presence.name();
+				break;
+			case ElectricMeter:
+				this.mState = this.mValue == 0 ? ElectricMeterState.TurnOff.name() : ElectricMeterState.TurnOn.name();
+				break;
+			default:
+				this.mState = "unknown";
+				break;
+			}
 		} catch (JSONException exception) {
 			String error = new StringBuffer(RawLogException.MALFORMED_LOG)
 					.append(String.format(": %s", exception.getMessage())).toString();
@@ -41,12 +62,12 @@ public class SoftLog {
 
 	}
 
-	public long getTimestamp() {
-		return mTimestamp;
+	public Date getDate() {
+		return mDate;
 	}
 
-	public void setTimestamp(long pTimestamp) {
-		this.mTimestamp = pTimestamp;
+	public void setTimestamp(Date pDate) {
+		this.mDate = pDate;
 	}
 
 	public float getValue() {
@@ -65,9 +86,31 @@ public class SoftLog {
 		this.mDevice = pDevice;
 	}
 
+	public String getDayLabel() {
+		return DateFormater.formatDate(this.mDate, DateFormater.SHORT_DAY_FORMAT);
+	}
+
+	public String getMonth() {
+		return DateFormater.formatDate(this.mDate, DateFormater.SHORT_MONTH_FORMAT);
+	}
+
+	public boolean isBetween(TSLimits pTsLimits) {
+		return pTsLimits.contains(this.mDate);
+	}
+
 	@Override
 	public String toString() {
-		return "SoftLog [mTimestamp=" + mTimestamp + ", mValue=" + mValue + ", mDevice=" + mDevice + "]";
+		return "SoftLog [mDate=" + mDate + ", mValue=" + mValue + ", mMeaning=" + mState + ", mDevice=" + mDevice + "]";
+	}
+
+	public static JSONObject toJSON(SoftLog pSoftLog) {
+		JSONObject json = new JSONObject();
+		json.put("date", pSoftLog.getDate());
+		json.put("value", pSoftLog.getValue());
+		json.put("timestamp", pSoftLog.getDate().getTime());
+		json.put("device", Device.toJSON(pSoftLog.getDevice()));
+		json.put("state", pSoftLog.mState);
+		return json;
 	}
 
 }
