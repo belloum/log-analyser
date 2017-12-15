@@ -1,5 +1,7 @@
 package tabs;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -13,11 +15,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 
@@ -36,13 +41,13 @@ import ui.components.DateFiler;
 import ui.components.DeviceSelector;
 import ui.components.DeviceSelector.DeviceSelectorListener;
 import ui.components.FileChooserWithResult;
-import ui.components.FileChooserWithResult.FileChooserListener;
+import ui.components.FileChooserWithResult.ChoiceListener;
 import ui.components.ResultLabel;
 import ui.components.ResultLabel.ResultType;
 import utils.Configuration;
 import utils.DateFormater;
 
-public class TabLog extends AbstractTab implements DeviceSelectorListener, FileChooserListener {
+public class TabLog extends AbstractTab implements DeviceSelectorListener, ChoiceListener {
 
 	private static final long serialVersionUID = 1L;
 
@@ -65,49 +70,93 @@ public class TabLog extends AbstractTab implements DeviceSelectorListener, FileC
 	private List<SoftLog> mCleanedLogs = new ArrayList<>();
 	private List<Device> mCurrentDeviceSelected = new ArrayList<>();
 
+	public void pseudoRun() {
+		setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+
+		JPanel container = new JPanel();
+		container.setLayout(new BorderLayout());
+		container.setBackground(Color.GRAY);
+		add(container);
+		container.setMaximumSize(new Dimension(MAX_WIDTH, 2 * Configuration.ITEM_HEIGHT));
+
+		JPanel jPan = new JPanel(new BorderLayout());
+		// jPan.setAlignmentX(0);
+		container.add(jPan, BorderLayout.PAGE_START);
+		jPan.setPreferredSize(new Dimension(MAX_WIDTH, Configuration.ITEM_HEIGHT));
+
+		JTextArea jta = new JTextArea("Test");
+		jPan.add(jta, BorderLayout.LINE_START);
+		jta.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		int a = MAX_WIDTH * 80 / 100;
+		jta.setPreferredSize(new Dimension(a, Configuration.ITEM_HEIGHT));
+		jta.setMinimumSize(new Dimension(a, Configuration.ITEM_HEIGHT));
+
+		JButton jB = new JButton("Groink");
+		jPan.add(jB, BorderLayout.LINE_END);
+		jB.setBorder(BorderFactory.createLineBorder(Color.CYAN));
+		jB.setPreferredSize(new Dimension(100, Configuration.ITEM_HEIGHT));
+
+		ResultLabel rL = new ResultLabel();
+		container.add(rL, BorderLayout.PAGE_END);
+		rL.setPreferredSize(
+				new Dimension(((int) 0.8 * rL.getParent().getMaximumSize().width), Configuration.ITEM_HEIGHT));
+		rL.setBackground(Color.GREEN);
+		rL.setBorder(BorderFactory.createLineBorder(Color.BLUE));
+		rL.printResult("So SAD", ResultType.SUCCESS);
+	}
+
 	public TabLog(String title) throws Exception {
 		super(title);
+		setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
 		mParticipant = ParticipantExtractor.extractParticipant(Configuration.PARTICIPANT_FILE, "4020");
 		System.out.println(LogExtractor.getRequests("2017.12.*", mParticipant.getVera(), true));
 
-		mFCLog = new FileChooserWithResult("Log file:", Configuration.RAW_LOG_FILE, this);
+		mFCLog = new FileChooserWithResult(Configuration.RAW_LOG_FILE, this);
+		add(mFCLog);
 
-		addComponent(mFCLog, new Dimension(MAX_WIDTH, mFCLog.getPreferredSize().height));
-
-		xOffset = Configuration.MARGINS;
-		yOffset += 2 * (Configuration.ITEM_HEIGHT + Configuration.PADDING);
-
+		// Extracted Log Info
+		JPanel jPan = new JPanel(new BorderLayout());
+		jPan.setBorder(BorderFactory.createLineBorder(Color.red));
 		mDSCDeviceInfo = new DataSetComponent();
 		mDSCDeviceInfo.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
-		addComponent(mDSCDeviceInfo, new Dimension((int) (0.2 * MAX_WIDTH), 5 * Configuration.ITEM_HEIGHT));
 		mDSCDeviceInfo.setLabels(Arrays.asList("Logs", "Devices", "Types", "Days", "Months"));
+		jPan.add(mDSCDeviceInfo, BorderLayout.WEST);
+		add(jPan);
+		jPan.setMaximumSize(new Dimension(MAX_WIDTH, jPan.getPreferredSize().height));
 
-		mDeviceSelector = new DeviceSelector();
-		mDeviceSelector.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
-		addComponent(mDeviceSelector, new Dimension((int) (0.8 * MAX_WIDTH), 3 * Configuration.ITEM_HEIGHT));
-
-		xOffset = mDeviceSelector.getX();
-		yOffset += 3 * Configuration.ITEM_HEIGHT;
+		// Right Panel
+		JPanel pright = new JPanel(new BorderLayout());
+		pright.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
+		jPan.add(pright, BorderLayout.EAST);
 
 		mDateFilter = new DateFiler();
-		mDateFilter.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
-		addComponent(mDateFilter, new Dimension((int) (0.8 * MAX_WIDTH), 2 * Configuration.ITEM_HEIGHT));
+		pright.add(mDateFilter, BorderLayout.PAGE_START);
 
-		xOffset = Configuration.MARGINS;
-		yOffset += 2 * (Configuration.ITEM_HEIGHT + Configuration.PADDING);
+		mDeviceSelector = new DeviceSelector();
+		pright.add(mDeviceSelector, BorderLayout.CENTER);
+
+		pright.setMaximumSize(new Dimension(MAX_WIDTH * 75 / 100, pright.getPreferredSize().height));
+		pright.setPreferredSize(pright.getMaximumSize());
+		pright.setMinimumSize(pright.getMaximumSize());
+
+		JPanel pBarButton = new JPanel();
+		pBarButton.setLayout(new BoxLayout(pBarButton, BoxLayout.X_AXIS));
+		add(pBarButton);
 
 		JLabel watt = new JLabel("Electric threshold");
 		CustomComponent.setJLabelFontStyle(watt, Font.BOLD);
-		addComponent(watt, new Dimension((int) (0.15 * MAX_WIDTH), Configuration.ITEM_HEIGHT));
+		pBarButton.add(watt);
+		watt.setMaximumSize(new Dimension(MAX_WIDTH * 15 / 100, Configuration.ITEM_HEIGHT));
 
 		mFTFElectricThreshold = new JFormattedTextField(new DecimalFormat("#.#"));
 		mFTFElectricThreshold.setValue(DEFAULT_THRESHOLD);
 		mFTFElectricThreshold.setHorizontalAlignment(SwingConstants.CENTER);
-		addComponent(mFTFElectricThreshold, new Dimension((int) (0.1 * MAX_WIDTH), Configuration.ITEM_HEIGHT));
+		mFTFElectricThreshold.setMaximumSize(new Dimension(MAX_WIDTH * 10 / 100, Configuration.ITEM_HEIGHT));
+		pBarButton.add(mFTFElectricThreshold);
 
 		mButtonBar = new ButtonBar();
-		addComponent(mButtonBar, new Dimension((int) (0.6 * MAX_WIDTH), Configuration.ITEM_HEIGHT));
+		mButtonBar.setMaximumSize(new Dimension(MAX_WIDTH * 60 / 100, Configuration.ITEM_HEIGHT));
 
 		JButton jB = new JButton("Clean logs");
 		jB.addActionListener(new ActionListener() {
@@ -175,18 +224,27 @@ public class TabLog extends AbstractTab implements DeviceSelectorListener, FileC
 		});
 		mButtonBar.addButton(jB, false);
 
+		pBarButton.add(mButtonBar);
+
 		mFTFRemainingLogs = new JFormattedTextField();
 		mFTFRemainingLogs.setEditable(false);
 		mFTFRemainingLogs.setHorizontalAlignment(SwingConstants.CENTER);
-		addComponent(mFTFRemainingLogs, new Dimension((int) (0.15 * MAX_WIDTH), Configuration.ITEM_HEIGHT));
+		mFTFRemainingLogs.setMaximumSize(new Dimension(MAX_WIDTH * 15 / 100, Configuration.ITEM_HEIGHT));
 
-		xOffset = Configuration.MARGINS;
-		yOffset += 1 * (Configuration.ITEM_HEIGHT + Configuration.PADDING);
+		pBarButton.add(mFTFRemainingLogs);
 
+		pBarButton.setMaximumSize(new Dimension(MAX_WIDTH, pBarButton.getPreferredSize().height));
+		pBarButton.setPreferredSize(pBarButton.getMaximumSize());
+		
+		JPanel jP = new JPanel(new BorderLayout());
+		jP.setBorder(BorderFactory.createLineBorder(Color.BLUE));
 		mRLCleaning = new ResultLabel();
-		addComponent(mRLCleaning, new Dimension(MAX_WIDTH, Configuration.ITEM_HEIGHT));
+		jP.add(mRLCleaning, BorderLayout.LINE_START);
+		add(jP);
+		jP.setPreferredSize(new Dimension(MAX_WIDTH, Configuration.ITEM_HEIGHT));
+		jP.setMaximumSize(jP.getPreferredSize());
+
 		resetLogData();
-		super.fillBlank(xOffset, yOffset + Configuration.ITEM_HEIGHT);
 	}
 
 	private void fillLogInfos(File pSelectedFile) throws Exception {
@@ -206,25 +264,24 @@ public class TabLog extends AbstractTab implements DeviceSelectorListener, FileC
 		mDateFilter.setVisible(true);
 		mDateFilter.setDates(SoftLogExtractor.getDays(mCleanedLogs));
 
-		List<Device> pDevices = SoftLogExtractor.getDeviceIds(mCleanedLogs);
+		List<Device> pDevices = SoftLogExtractor.getDevices(mCleanedLogs);
 		mDeviceSelector.setCheckBoxDevices(pDevices);
 		mCurrentDeviceSelected.addAll(pDevices);
 		notifyDataChanged();
 		mDeviceSelector.setVisible(true);
 		mDeviceSelector.setListener(this);
-		mDeviceSelector.setSize(new Dimension(mDeviceSelector.getWidth(), 3 * Configuration.ITEM_HEIGHT));
 
 		mButtonBar.setEnabled(true);
 	}
 
 	private List<SoftLog> extractCleanedSoftLogList() throws Exception {
 		List<SoftLog> logs = RawLogFormater.extractLogs(this.mSelectedFile);
-		List<String> types = mCurrentDeviceSelected.stream().map(Device::getId).collect(Collectors.toList());
+		List<String> ids = mCurrentDeviceSelected.stream().map(Device::getId).collect(Collectors.toList());
 		if (mDateFilter.getSelectedPosition() > 0) {
-			return SoftLogExtractor.cleanUpLogs(logs, types, Float.parseFloat(mFTFElectricThreshold.getText()),
+			return SoftLogExtractor.cleanUpLogs(logs, ids, Float.parseFloat(mFTFElectricThreshold.getText()),
 					DateFormater.getTimestampLimitsOfDay(mDateFilter.getSelectedItem()));
 		} else {
-			return SoftLogExtractor.cleanUpLogs(logs, types, Float.parseFloat(mFTFElectricThreshold.getText()));
+			return SoftLogExtractor.cleanUpLogs(logs, ids, Float.parseFloat(mFTFElectricThreshold.getText()));
 		}
 	}
 
@@ -234,7 +291,7 @@ public class TabLog extends AbstractTab implements DeviceSelectorListener, FileC
 		mCurrentDeviceSelected.clear();
 		mDSCDeviceInfo.resetViews();
 		mFTFElectricThreshold.setEditable(false);
-		mDeviceSelector.clearDevicesList();
+		mDeviceSelector.resetDevicesList();
 		mRLCleaning.setVisible(false);
 		mButtonBar.setEnabled(false);
 		mDateFilter.setVisible(false);
@@ -253,7 +310,7 @@ public class TabLog extends AbstractTab implements DeviceSelectorListener, FileC
 	}
 
 	@Override
-	public void unselect(final Device pDevice) {
+	public void unselect(Device pDevice) {
 		if (mCurrentDeviceSelected.contains(pDevice)) {
 			mCurrentDeviceSelected.remove(pDevice);
 			notifyDataChanged();

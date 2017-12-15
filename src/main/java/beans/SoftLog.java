@@ -3,6 +3,7 @@ package beans;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -102,6 +103,13 @@ public class SoftLog {
 	public String toString() {
 		return "SoftLog [mDate=" + mDate + ", mValue=" + mValue + ", mMeaning=" + mState + ", mDevice=" + mDevice + "]";
 	}
+	
+	public static Comparator<SoftLog> mCompareDate = new Comparator<SoftLog>() {
+		@Override
+		public int compare(SoftLog o1, SoftLog o2) {
+			return Long.compare(o1.getDate().getTime(), o2.getDate().getTime());
+		}
+	};
 
 	public static JSONObject toJSON(SoftLog pSoftLog) {
 		JSONObject json = new JSONObject();

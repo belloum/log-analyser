@@ -4,10 +4,8 @@ import java.io.File;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
@@ -18,17 +16,15 @@ import beans.SoftLog;
 import beans.TSLimits;
 import beans.devices.Device;
 import beans.devices.Device.DeviceType;
+import utils.Utils;
 
 public class SoftLogExtractor extends FileExtractor {
 
 	private static final String INVALID_THRESHOLD = "Invalid threshold: ";
 
 	public static JSONArray extractJSON(File extractedFile) throws Exception {
-		String content = readFile(extractedFile);
-		content = "[" + content;
-		content = content.replace("}\n", "},");
-		content += "]";
-
+		String content = readFile(extractedFile).replace("}\n", "},");
+		content = String.format("[%s]", content);
 		return new JSONArray(content);
 	}
 
@@ -74,41 +70,36 @@ public class SoftLogExtractor extends FileExtractor {
 	}
 
 	public static List<DeviceType> getDeviceTypes(List<SoftLog> pLogs) {
-		return getDeviceIds(pLogs).stream().map(Device::getType).distinct().collect(Collectors.toList());
+		return getDevices(pLogs).stream().map(Device::getType).distinct().collect(Collectors.toList());
 	}
 
 	public static int getDeviceTypeCount(List<SoftLog> pLogs) {
 		return getDeviceTypes(pLogs).size();
 	}
 
-	public static List<Device> getDeviceIds(List<SoftLog> pLogs) {
+	public static List<Device> getDevices(List<SoftLog> pLogs) {
 		return pLogs.stream().map(SoftLog::getDevice).distinct().collect(Collectors.toList());
 	}
 
 	public static int getDeviceCount(List<SoftLog> pLogs) {
-		return getDeviceIds(pLogs).size();
+		return getDevices(pLogs).size();
 	}
 
 	public static List<String> getDeviceIdsWithType(List<SoftLog> pLogs, DeviceType pType) {
-		return getDeviceIds(pLogs).stream().filter(device -> device.getType().equals(pType)).map(Device::getId)
+		return getDevices(pLogs).stream().filter(device -> device.getType().equals(pType)).map(Device::getId)
 				.collect(Collectors.toList());
 	}
 
 	public static List<String> getDays(List<SoftLog> pLogs) {
-		return pLogs.stream().map(SoftLog::getDayLabel).distinct().collect(Collectors.toList());
+		return pLogs.stream().map(SoftLog::getDayLabel).distinct().sorted().collect(Collectors.toList());
 	}
 
 	public static List<String> getMonths(List<SoftLog> pLogs) {
-		return pLogs.stream().map(SoftLog::getMonth).distinct().collect(Collectors.toList());
+		return pLogs.stream().map(SoftLog::getMonth).distinct().sorted().collect(Collectors.toList());
 	}
 
 	public static List<SoftLog> sortLogsByDate(List<SoftLog> pLogs) {
-		Collections.sort(pLogs, new Comparator<SoftLog>() {
-			@Override
-			public int compare(SoftLog o1, SoftLog o2) {
-				return Long.compare(o1.getDate().getTime(), o2.getDate().getTime());
-			}
-		});
+		Collections.sort(pLogs, SoftLog.mCompareDate);
 		return pLogs;
 	}
 
@@ -118,17 +109,15 @@ public class SoftLogExtractor extends FileExtractor {
 		return saveFile(StringUtils.join(str, "\n"), pOutputFile);
 	}
 
+	@SuppressWarnings("unchecked")
 	public static Map<String, List<SoftLog>> sortLogsByMonth(final List<SoftLog> logs) {
-		TreeMap<String, List<SoftLog>> map = new TreeMap<>();
-		logs.stream().map(SoftLog::getMonth).distinct().forEach(label -> map.put(label,
-				logs.stream().filter(log -> log.getMonth().equals(label)).collect(Collectors.toList())));
-		return map;
+		return (Map<String, List<SoftLog>>) Utils
+				.sortMap(logs.stream().collect(Collectors.groupingBy(SoftLog::getMonth)));
 	}
 
-	public static Map<String, List<SoftLog>> sortLogsByDay(final List<SoftLog> logs) {
-		TreeMap<String, List<SoftLog>> map = new TreeMap<>();
-		logs.stream().map(SoftLog::getDayLabel).distinct().forEach(label -> map.put(label,
-				logs.stream().filter(log -> log.getDayLabel().equals(label)).collect(Collectors.toList())));
-		return map;
+	@SuppressWarnings("unchecked")
+	public static Map<String, List<SoftLog>> sortLogsByDay(List<SoftLog> logs) {
+		return (Map<String, List<SoftLog>>) Utils
+				.sortMap(logs.stream().collect(Collectors.groupingBy(SoftLog::getDayLabel)));
 	}
 }

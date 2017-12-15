@@ -1,10 +1,10 @@
 package ui.components;
 
+import java.awt.Dimension;
 import java.util.LinkedHashMap;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
-
-import utils.Configuration;
 
 public class ButtonBar extends CustomComponent {
 
@@ -14,6 +14,7 @@ public class ButtonBar extends CustomComponent {
 	private LinkedHashMap<Integer, JButton> mButtons;
 
 	public ButtonBar() {
+		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		this.mButtonCount = 0;
 		this.mButtons = new LinkedHashMap<>();
 	}
@@ -48,7 +49,8 @@ public class ButtonBar extends CustomComponent {
 	protected void build() {
 		super.build();
 		this.mButtons.forEach((key, button) -> {
-			addComponentHorizontally(button, (getWidth() - Configuration.PADDING) / getCount(), false);
+			button.setMaximumSize(new Dimension(getMaximumSize().width / getCount(), getMaximumSize().height));
+			add(button);
 		});
 		return;
 	}

@@ -20,6 +20,10 @@ public class ResultLabel extends JLabel {
 		setVisible(false);
 	}
 
+	public ResultLabel(String pText) {
+		super(pText);
+	}
+
 	public ResultLabel(Color pSuccessColor, Color pErrorColor) {
 		this();
 		this.mErrorColor = pErrorColor;

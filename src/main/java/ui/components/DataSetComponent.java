@@ -1,11 +1,15 @@
 package ui.components;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import javax.swing.BoxLayout;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import utils.Configuration;
 
@@ -16,7 +20,7 @@ public class DataSetComponent extends CustomComponent {
 	private LinkedHashMap<String, Object> mProperties;
 
 	public DataSetComponent() {
-		super();
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		mProperties = new LinkedHashMap<>();
 	}
 
@@ -65,18 +69,27 @@ public class DataSetComponent extends CustomComponent {
 
 	protected void build() {
 		super.build();
-		xOffset = 5;
+		// TODO update here
+		int a = MAX_WIDTH * 20 / 100;
+		setMaximumSize(new Dimension(a, mProperties.size() * Configuration.ITEM_HEIGHT));
+
 		this.mProperties.forEach((key, value) -> {
 
-			JLabel jlabel = new JLabel(key);
-			addComponentHorizontally(jlabel, getWidth() / 2, false);
-			setJLabelFontStyle(jlabel, Font.BOLD);
+			JPanel jPanel = new JPanel(new BorderLayout());
+			add(jPanel);
+			jPanel.setPreferredSize(new Dimension(a, Configuration.ITEM_HEIGHT));
 
-			jlabel = new JLabel(value.toString());// , SwingConstants.RIGHT);
-			addComponentHorizontally(jlabel, getWidth() / 2, false);
-			yOffset += Configuration.ITEM_HEIGHT;
-			xOffset = 5;
+			JLabel jLabel = new JLabel(key);
+			jLabel.setPreferredSize(new Dimension(a / 2, Configuration.ITEM_HEIGHT));
+			setJLabelFontStyle(jLabel, Font.BOLD);
+			jPanel.add(jLabel, BorderLayout.LINE_START);
+
+			jLabel = new JLabel(value.toString());
+			jLabel.setMaximumSize(new Dimension(a / 2, Configuration.ITEM_HEIGHT));
+			jPanel.add(jLabel, BorderLayout.LINE_END);
+			jPanel.add(jLabel);
 		});
+
 		return;
 	}
 

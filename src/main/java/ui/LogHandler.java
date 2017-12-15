@@ -10,6 +10,7 @@ import utils.Configuration;
 public class LogHandler extends JFrame {
 
 	private static final long serialVersionUID = 1L;
+
 	/**
 	 * Launch the application.
 	 */
