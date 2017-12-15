@@ -20,24 +20,23 @@ import org.apache.commons.lang3.StringUtils;
 import utils.Configuration;
 
 public class FileChooserWithResult extends CustomComponent {
-	
+
 	private static final long serialVersionUID = 1L;
 	private static final String SELECT_A_FILE = "Please select a file ...";
 	private static final String DEFAULT_BUTTON_TEXT = "Browse";
 
 	private File mSelectedFile;
 	private JTextArea mJTAPathFile = new JTextArea(SELECT_A_FILE);
+	private Integer mMaxWidth;
 	private JFileChooser mJFileChooser = new JFileChooser();
-	private ResultLabel mJLResults = new ResultLabel();
+	private ResultLabel mJLResults = new ResultLabel("");
 	private JButton mJButton = new JButton(DEFAULT_BUTTON_TEXT);
 	private ActionListener mPickFileListener;
 	private ChoiceListener mChoiceListener = new ChoiceListener() {
 
 		@Override
 		public void fileDoesNotExist(File pFile) {
-			String msg = new StringBuffer("The selected file `").append(pFile.getPath()).append("` does not exist.")
-					.toString();
-			System.out.println(msg);
+
 		}
 
 		@Override
@@ -46,9 +45,11 @@ public class FileChooserWithResult extends CustomComponent {
 		}
 	};
 
-	public FileChooserWithResult(File pCurrentDirectory, String pButtonLabel, ChoiceListener pFCListener) {
+	public FileChooserWithResult(File pCurrentDirectory, String pButtonLabel, ChoiceListener pFCListener,
+			Integer pMaxWidth) {
 		setLayout(new BorderLayout());
 
+		this.mMaxWidth = pMaxWidth;
 		this.mJFileChooser.setCurrentDirectory(pCurrentDirectory);
 		this.mJTAPathFile.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 
@@ -92,11 +93,10 @@ public class FileChooserWithResult extends CustomComponent {
 		});
 
 		build();
-		System.out.println(getPreferredSize());
 	}
 
-	public FileChooserWithResult(File pCurrentDirectory, ChoiceListener pFCListener) {
-		this(pCurrentDirectory, DEFAULT_BUTTON_TEXT, pFCListener);
+	public FileChooserWithResult(File pCurrentDirectory, ChoiceListener pFCListener, Integer pMaxWidth) {
+		this(pCurrentDirectory, DEFAULT_BUTTON_TEXT, pFCListener, pMaxWidth);
 	}
 
 	public void setFileChooserListener(ChoiceListener pListener) {
@@ -128,32 +128,28 @@ public class FileChooserWithResult extends CustomComponent {
 		return this.mSelectedFile;
 	}
 
-	public void setMaxWidth(int pMaxWidth) {
-		this.MAX_WIDTH = pMaxWidth - 2 * Configuration.MARGINS;
-	}
-
 	protected void build() {
-		//TODO update here
-		setMaximumSize(new Dimension(MAX_WIDTH, 2 * Configuration.ITEM_HEIGHT));
-		setPreferredSize(new Dimension(MAX_WIDTH, 2 * Configuration.ITEM_HEIGHT));
-		setMinimumSize(new Dimension(MAX_WIDTH, 2 * Configuration.ITEM_HEIGHT));
-
 		JPanel jPan = new JPanel(new BorderLayout());
 		add(jPan, BorderLayout.PAGE_START);
-		jPan.setPreferredSize(new Dimension(MAX_WIDTH, Configuration.ITEM_HEIGHT));
+		jPan.setPreferredSize(new Dimension(mMaxWidth, Configuration.ITEM_HEIGHT));
 
 		jPan.add(mJTAPathFile, BorderLayout.LINE_START);
 		mJTAPathFile.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		int a = MAX_WIDTH * 80 / 100;
-		mJTAPathFile.setPreferredSize(new Dimension(a, Configuration.ITEM_HEIGHT));
-		mJTAPathFile.setMinimumSize(new Dimension(a, Configuration.ITEM_HEIGHT));
 
 		jPan.add(mJButton, BorderLayout.LINE_END);
-		mJButton.setPreferredSize(new Dimension(100, Configuration.ITEM_HEIGHT));
-
 		add(mJLResults, BorderLayout.PAGE_END);
-		mJLResults.setPreferredSize(new Dimension(a, Configuration.ITEM_HEIGHT));
-		mJLResults.setBackground(Color.GREEN);
+
+		mJTAPathFile.setPreferredSize(new Dimension(80 * mMaxWidth / 100, Configuration.ITEM_HEIGHT));
+		mJTAPathFile.setMinimumSize(mJTAPathFile.getPreferredSize());
+
+		mJButton.setPreferredSize(new Dimension(15 * mMaxWidth / 100, Configuration.ITEM_HEIGHT));
+		mJButton.setMinimumSize(mJButton.getPreferredSize());
+
+		mJLResults.setPreferredSize(new Dimension(mMaxWidth, Configuration.ITEM_HEIGHT));
+		mJLResults.setMinimumSize(mJLResults.getPreferredSize());
+
+		setPreferredSize(getPreferredSize());
+		setMaximumSize(getPreferredSize());
 	}
 
 	public interface ChoiceListener {

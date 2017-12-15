@@ -16,12 +16,14 @@ import utils.Configuration;
 public class DataSetComponent extends CustomComponent {
 
 	private static final long serialVersionUID = 1L;
+	private Integer mMaxWidth;
 
 	private LinkedHashMap<String, Object> mProperties;
 
-	public DataSetComponent() {
+	public DataSetComponent(Integer pMaxWidth) {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		mProperties = new LinkedHashMap<>();
+		this.mProperties = new LinkedHashMap<>();
+		this.mMaxWidth = pMaxWidth;
 	}
 
 	public void setLabels(List<String> pPropertyLabels) {
@@ -31,8 +33,8 @@ public class DataSetComponent extends CustomComponent {
 		build();
 	}
 
-	public DataSetComponent(LinkedHashMap<String, Object> pProperties) {
-		this();
+	public DataSetComponent(LinkedHashMap<String, Object> pProperties, Integer pMaxWidth) {
+		this(pMaxWidth);
 		this.mProperties = pProperties;
 		build();
 	}
@@ -70,7 +72,7 @@ public class DataSetComponent extends CustomComponent {
 	protected void build() {
 		super.build();
 		// TODO update here
-		int a = MAX_WIDTH * 20 / 100;
+		int a = 20 * mMaxWidth / 100;
 		setMaximumSize(new Dimension(a, mProperties.size() * Configuration.ITEM_HEIGHT));
 
 		this.mProperties.forEach((key, value) -> {

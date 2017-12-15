@@ -22,7 +22,6 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 
@@ -70,41 +69,6 @@ public class TabLog extends AbstractTab implements DeviceSelectorListener, Choic
 	private List<SoftLog> mCleanedLogs = new ArrayList<>();
 	private List<Device> mCurrentDeviceSelected = new ArrayList<>();
 
-	public void pseudoRun() {
-		setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
-
-		JPanel container = new JPanel();
-		container.setLayout(new BorderLayout());
-		container.setBackground(Color.GRAY);
-		add(container);
-		container.setMaximumSize(new Dimension(MAX_WIDTH, 2 * Configuration.ITEM_HEIGHT));
-
-		JPanel jPan = new JPanel(new BorderLayout());
-		// jPan.setAlignmentX(0);
-		container.add(jPan, BorderLayout.PAGE_START);
-		jPan.setPreferredSize(new Dimension(MAX_WIDTH, Configuration.ITEM_HEIGHT));
-
-		JTextArea jta = new JTextArea("Test");
-		jPan.add(jta, BorderLayout.LINE_START);
-		jta.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		int a = MAX_WIDTH * 80 / 100;
-		jta.setPreferredSize(new Dimension(a, Configuration.ITEM_HEIGHT));
-		jta.setMinimumSize(new Dimension(a, Configuration.ITEM_HEIGHT));
-
-		JButton jB = new JButton("Groink");
-		jPan.add(jB, BorderLayout.LINE_END);
-		jB.setBorder(BorderFactory.createLineBorder(Color.CYAN));
-		jB.setPreferredSize(new Dimension(100, Configuration.ITEM_HEIGHT));
-
-		ResultLabel rL = new ResultLabel();
-		container.add(rL, BorderLayout.PAGE_END);
-		rL.setPreferredSize(
-				new Dimension(((int) 0.8 * rL.getParent().getMaximumSize().width), Configuration.ITEM_HEIGHT));
-		rL.setBackground(Color.GREEN);
-		rL.setBorder(BorderFactory.createLineBorder(Color.BLUE));
-		rL.printResult("So SAD", ResultType.SUCCESS);
-	}
-
 	public TabLog(String title) throws Exception {
 		super(title);
 		setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
@@ -112,13 +76,13 @@ public class TabLog extends AbstractTab implements DeviceSelectorListener, Choic
 		mParticipant = ParticipantExtractor.extractParticipant(Configuration.PARTICIPANT_FILE, "4020");
 		System.out.println(LogExtractor.getRequests("2017.12.*", mParticipant.getVera(), true));
 
-		mFCLog = new FileChooserWithResult(Configuration.RAW_LOG_FILE, this);
+		// Browse RawLog file
+		mFCLog = new FileChooserWithResult(Configuration.RAW_LOG_FILE, this, MAX_WIDTH);
 		add(mFCLog);
 
 		// Extracted Log Info
 		JPanel jPan = new JPanel(new BorderLayout());
-		jPan.setBorder(BorderFactory.createLineBorder(Color.red));
-		mDSCDeviceInfo = new DataSetComponent();
+		mDSCDeviceInfo = new DataSetComponent(MAX_WIDTH);
 		mDSCDeviceInfo.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
 		mDSCDeviceInfo.setLabels(Arrays.asList("Logs", "Devices", "Types", "Days", "Months"));
 		jPan.add(mDSCDeviceInfo, BorderLayout.WEST);
@@ -235,7 +199,7 @@ public class TabLog extends AbstractTab implements DeviceSelectorListener, Choic
 
 		pBarButton.setMaximumSize(new Dimension(MAX_WIDTH, pBarButton.getPreferredSize().height));
 		pBarButton.setPreferredSize(pBarButton.getMaximumSize());
-		
+
 		JPanel jP = new JPanel(new BorderLayout());
 		jP.setBorder(BorderFactory.createLineBorder(Color.BLUE));
 		mRLCleaning = new ResultLabel();
@@ -298,9 +262,6 @@ public class TabLog extends AbstractTab implements DeviceSelectorListener, Choic
 		notifyDataChanged();
 	}
 
-	/*
-	 * DeviceSelectorListener
-	 */
 	@Override
 	public void select(Device pDevice) {
 		if (!mCurrentDeviceSelected.contains(pDevice)) {
