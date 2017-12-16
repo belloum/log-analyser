@@ -50,6 +50,7 @@ public class DeviceSelector extends CustomComponent implements ItemListener {
 		removeAll();
 		mDevices.clear();
 		mLCheck.clear();
+		build();
 	}
 
 	public void setListener(DeviceSelectorListener pListener) {
@@ -102,8 +103,6 @@ public class DeviceSelector extends CustomComponent implements ItemListener {
 		void select(Device pDevice);
 
 		void unselect(Device pDevice);
-
-		void notifyDataChanged();
 	}
 
 }

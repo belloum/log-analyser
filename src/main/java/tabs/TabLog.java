@@ -25,10 +25,13 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 
+import org.jfree.chart.ChartPanel;
+
 import beans.SoftLog;
+import beans.TSLimits;
 import beans.devices.Device;
-import beans.devices.Device.DeviceType;
 import beans.participants.Participant;
+import operators.extractors.HExtract;
 import operators.extractors.LogExtractor;
 import operators.extractors.ParticipantExtractor;
 import operators.extractors.RawLogFormater;
@@ -44,7 +47,6 @@ import ui.components.FileChooserWithResult.ChoiceListener;
 import ui.components.ResultLabel;
 import ui.components.ResultLabel.ResultType;
 import utils.Configuration;
-import utils.DateFormater;
 
 public class TabLog extends AbstractTab implements DeviceSelectorListener, ChoiceListener {
 
@@ -56,17 +58,18 @@ public class TabLog extends AbstractTab implements DeviceSelectorListener, Choic
 	private static final String FILE_DOES_NOT_EXIST = "The selected file `%s` does not exist.";
 	private static final int DEFAULT_THRESHOLD = 0;
 
-	private FileChooserWithResult mFCLog;
-	private DateFiler mDateFilter;
+	private FileChooserWithResult mFCLog = new FileChooserWithResult(Configuration.RAW_LOG_FILE, this, MAX_WIDTH);
+	private DateFiler mDateFilter = new DateFiler();
 	private DeviceSelector mDeviceSelector;
-	private DataSetComponent mDSCDeviceInfo;
+	private DataSetComponent mDSCDeviceInfo = new DataSetComponent(MAX_WIDTH);;
 	private ButtonBar mButtonBar;
 	private JFormattedTextField mFTFElectricThreshold, mFTFRemainingLogs;
 	private ResultLabel mRLCleaning;
 
+	private JPanel mForChart;
+
 	private Participant mParticipant;
 	private File mSelectedFile;
-	private List<SoftLog> mCleanedLogs = new ArrayList<>();
 	private List<Device> mCurrentDeviceSelected = new ArrayList<>();
 
 	public TabLog(String title) throws Exception {
@@ -77,12 +80,10 @@ public class TabLog extends AbstractTab implements DeviceSelectorListener, Choic
 		System.out.println(LogExtractor.getRequests("2017.12.*", mParticipant.getVera(), true));
 
 		// Browse RawLog file
-		mFCLog = new FileChooserWithResult(Configuration.RAW_LOG_FILE, this, MAX_WIDTH);
 		add(mFCLog);
 
 		// Extracted Log Info
 		JPanel jPan = new JPanel(new BorderLayout());
-		mDSCDeviceInfo = new DataSetComponent(MAX_WIDTH);
 		mDSCDeviceInfo.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
 		mDSCDeviceInfo.setLabels(Arrays.asList("Logs", "Devices", "Types", "Days", "Months"));
 		jPan.add(mDSCDeviceInfo, BorderLayout.WEST);
@@ -94,7 +95,6 @@ public class TabLog extends AbstractTab implements DeviceSelectorListener, Choic
 		pright.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
 		jPan.add(pright, BorderLayout.EAST);
 
-		mDateFilter = new DateFiler();
 		pright.add(mDateFilter, BorderLayout.PAGE_START);
 
 		mDeviceSelector = new DeviceSelector();
@@ -103,6 +103,7 @@ public class TabLog extends AbstractTab implements DeviceSelectorListener, Choic
 		pright.setMaximumSize(new Dimension(MAX_WIDTH * 75 / 100, pright.getPreferredSize().height));
 		pright.setPreferredSize(pright.getMaximumSize());
 		pright.setMinimumSize(pright.getMaximumSize());
+		mDateFilter.build();
 
 		JPanel pBarButton = new JPanel();
 		pBarButton.setLayout(new BoxLayout(pBarButton, BoxLayout.X_AXIS));
@@ -127,9 +128,9 @@ public class TabLog extends AbstractTab implements DeviceSelectorListener, Choic
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					mCleanedLogs = extractCleanedSoftLogList();
+					List<SoftLog> logs = extractCleanedSoftLogList();
 					mRLCleaning.printResult(LOG_SUCCESSFULY_CLEANED, ResultType.SUCCESS);
-					mFTFRemainingLogs.setText(mCleanedLogs.size() + " logs");
+					mFTFRemainingLogs.setText(logs.size() + " logs");
 				} catch (Exception exception) {
 					mRLCleaning.printResult(exception.getMessage(), ResultType.ERROR);
 					System.out.println("Exception while cleaning: " + exception);
@@ -201,37 +202,65 @@ public class TabLog extends AbstractTab implements DeviceSelectorListener, Choic
 		pBarButton.setPreferredSize(pBarButton.getMaximumSize());
 
 		JPanel jP = new JPanel(new BorderLayout());
-		jP.setBorder(BorderFactory.createLineBorder(Color.BLUE));
 		mRLCleaning = new ResultLabel();
 		jP.add(mRLCleaning, BorderLayout.LINE_START);
 		add(jP);
 		jP.setPreferredSize(new Dimension(MAX_WIDTH, Configuration.ITEM_HEIGHT));
 		jP.setMaximumSize(jP.getPreferredSize());
 
+		// HISTO
+		jP = new JPanel(new BorderLayout());
+		jP.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		jP.setPreferredSize(new Dimension(MAX_WIDTH, 5 * Configuration.ITEM_HEIGHT));
+
+		JButton jDraw = new JButton("Draw");
+		jDraw.setPreferredSize(new Dimension(jP.getPreferredSize().width * 20 / 100, Configuration.ITEM_HEIGHT));
+		jDraw.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					ChartPanel chP = new ChartPanel(
+							HExtract.getHistograms(Integer.parseInt(mFTFElectricThreshold.getValue().toString()),
+									extractCleanedSoftLogList()));
+					mForChart.add(chP, BorderLayout.CENTER);
+					mForChart.validate();
+				} catch (Exception e1) {
+					System.out.println(e1);
+				}
+			}
+		});
+		jP.add(jDraw, BorderLayout.LINE_END);
+
+		mForChart = new JPanel(new BorderLayout());
+		mForChart.setBorder(BorderFactory.createLineBorder(Color.RED));
+		jP.add(mForChart, BorderLayout.LINE_START);
+		mForChart
+				.setPreferredSize(new Dimension(jP.getPreferredSize().width * 80 / 100, 3 * Configuration.ITEM_HEIGHT));
+		add(jP);
+
 		resetLogData();
 	}
 
 	private void fillLogInfos(File pSelectedFile) throws Exception {
-		mCleanedLogs = RawLogFormater.extractLogs(pSelectedFile);
+		List<SoftLog> cleanLogs = RawLogFormater.extractLogs(pSelectedFile);
 
 		LinkedHashMap<String, Object> infos = new LinkedHashMap<String, Object>();
-		infos.put("Logs", mCleanedLogs.size());
-		infos.put("Devices", SoftLogExtractor.getDeviceCount(mCleanedLogs));
-		infos.put("Types", SoftLogExtractor.getDeviceTypeCount(mCleanedLogs));
-		infos.put("Days", SoftLogExtractor.getDays(mCleanedLogs).size());
-		infos.put("Months", SoftLogExtractor.getMonths(mCleanedLogs).size());
+		infos.put("Logs", cleanLogs.size());
+		infos.put("Devices", SoftLogExtractor.getDeviceCount(cleanLogs));
+		infos.put("Types", SoftLogExtractor.getDeviceTypeCount(cleanLogs));
+		infos.put("Days", SoftLogExtractor.getDays(cleanLogs).size());
+		infos.put("Months", SoftLogExtractor.getMonths(cleanLogs).size());
 
 		mFCLog.getResultLabel().printResult(LOG_SUCCESSFULY_EXTRACTED, ResultType.SUCCESS);
 		mDSCDeviceInfo.setProperties(infos);
-		mFTFRemainingLogs.setText(mCleanedLogs.size() + " logs");
+		mFTFRemainingLogs.setText(cleanLogs.size() + " logs");
 
-		mDateFilter.setVisible(true);
-		mDateFilter.setDates(SoftLogExtractor.getDays(mCleanedLogs));
+		mDateFilter.setDates(SoftLogExtractor.getDays(cleanLogs));
 
-		List<Device> pDevices = SoftLogExtractor.getDevices(mCleanedLogs);
+		List<Device> pDevices = SoftLogExtractor.getDevices(cleanLogs);
 		mDeviceSelector.setCheckBoxDevices(pDevices);
 		mCurrentDeviceSelected.addAll(pDevices);
-		notifyDataChanged();
 		mDeviceSelector.setVisible(true);
 		mDeviceSelector.setListener(this);
 
@@ -241,32 +270,46 @@ public class TabLog extends AbstractTab implements DeviceSelectorListener, Choic
 	private List<SoftLog> extractCleanedSoftLogList() throws Exception {
 		List<SoftLog> logs = RawLogFormater.extractLogs(this.mSelectedFile);
 		List<String> ids = mCurrentDeviceSelected.stream().map(Device::getId).collect(Collectors.toList());
+
+		// Filter Id
+		logs = SoftLogExtractor.filterByIds(logs, ids);
+
+		// Filter Day
 		if (mDateFilter.getSelectedPosition() > 0) {
-			return SoftLogExtractor.cleanUpLogs(logs, ids, Float.parseFloat(mFTFElectricThreshold.getText()),
-					DateFormater.getTimestampLimitsOfDay(mDateFilter.getSelectedItem()));
-		} else {
-			return SoftLogExtractor.cleanUpLogs(logs, ids, Float.parseFloat(mFTFElectricThreshold.getText()));
+			logs = SoftLogExtractor.filterByDay(logs, mDateFilter.getSelectedItem());
 		}
+
+		// Filter time stamp
+		if (!mCurrentDeviceSelected.isEmpty()) {
+			logs = SoftLogExtractor.filterByIds(logs, ids);
+		}
+
+		// Filter by hour
+		if (mDateFilter.isFilteringByTimestamp()) {
+			logs = SoftLogExtractor.filterByHour(logs,
+					new TSLimits(mDateFilter.getStartHour(), mDateFilter.getEndHour()));
+		}
+
+		// Ignore Consumption
+		logs = SoftLogExtractor.ignoreLowConsumptionLogs(logs, Float.parseFloat(mFTFElectricThreshold.getText()));
+
+		return logs;
 	}
 
 	private void resetLogData() {
-		mCleanedLogs.clear();
-		mFTFRemainingLogs.setText(mCleanedLogs.size() + " logs");
+		mFTFRemainingLogs.setText("0 logs");
 		mCurrentDeviceSelected.clear();
 		mDSCDeviceInfo.resetViews();
-		mFTFElectricThreshold.setEditable(false);
 		mDeviceSelector.resetDevicesList();
-		mRLCleaning.setVisible(false);
+		mRLCleaning.setText("");
 		mButtonBar.setEnabled(false);
-		mDateFilter.setVisible(false);
-		notifyDataChanged();
+		mDateFilter.reset();
 	}
 
 	@Override
 	public void select(Device pDevice) {
 		if (!mCurrentDeviceSelected.contains(pDevice)) {
 			mCurrentDeviceSelected.add(pDevice);
-			notifyDataChanged();
 		}
 	}
 
@@ -274,14 +317,7 @@ public class TabLog extends AbstractTab implements DeviceSelectorListener, Choic
 	public void unselect(Device pDevice) {
 		if (mCurrentDeviceSelected.contains(pDevice)) {
 			mCurrentDeviceSelected.remove(pDevice);
-			notifyDataChanged();
 		}
-	}
-
-	@Override
-	public void notifyDataChanged() {
-		mFTFElectricThreshold.setEditable(
-				mCurrentDeviceSelected.stream().anyMatch(device -> device.getType().equals(DeviceType.ElectricMeter)));
 	}
 
 	@Override

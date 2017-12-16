@@ -1,5 +1,6 @@
 package ui.components;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -18,24 +19,42 @@ public class DateFiler extends CustomComponent implements ItemListener {
 
 	private static final long serialVersionUID = 1L;
 
-	// UI
 	private JComboBox<String> mDatePicker = new JComboBox<String>();
-	private JCheckBox mJCheckBox = new JCheckBox("All day long");
-	private JFormattedTextField mJFTFStartHour = new JFormattedTextField("##:##"),
-			mJFTFEndHour = new JFormattedTextField("##:##");
+	private JCheckBox mJCBAllDay = new JCheckBox("All day long");
+	// TODO isItUseful ?
+	private JFormattedTextField mJFTFStartHour = new JFormattedTextField("##:##") {
 
-	private List<String> mDates = new ArrayList<>();
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public void setEditable(boolean pEditabled) {
+			super.setEditable(pEditabled);
+			if (!pEditabled) {
+				setBackground(Color.LIGHT_GRAY);
+			} else {
+				setBackground(Color.WHITE);
+			}
+		}
+	}, mJFTFEndHour = new JFormattedTextField("##:##") {
+
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public void setEditable(boolean pEditabled) {
+			super.setEditable(pEditabled);
+			if (!pEditabled) {
+				setBackground(Color.LIGHT_GRAY);
+			} else {
+				setBackground(Color.WHITE);
+			}
+		}
+	};
+
+	private List<String> mDates;
 
 	public DateFiler() {
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-	}
-
-	public JComboBox<String> getDatePicker() {
-		return mDatePicker;
-	}
-
-	public void setDatePicker(JComboBox<String> pDatePicker) {
-		this.mDatePicker = pDatePicker;
+		this.mDates = new ArrayList<>();
 	}
 
 	public List<String> getDates() {
@@ -61,9 +80,36 @@ public class DateFiler extends CustomComponent implements ItemListener {
 		return this.mDates.get(position);
 	}
 
-	protected void build() {
+	public void reset() {
+		mDates.clear();
+		build();
+	}
+
+	public boolean isFilteringByTimestamp() {
+		return !mJCBAllDay.isSelected();
+	}
+
+	public String getStartHour() {
+		return mJFTFStartHour.getText();
+	}
+
+	public String getEndHour() {
+		return mJFTFEndHour.getText();
+	}
+
+	public void setEnabled(boolean pEnabled) {
+		this.mDatePicker.setEnabled(pEnabled);
+		this.mJCBAllDay.setEnabled(pEnabled);
+	}
+
+	public void build() {
+		removeAll();
 		mDatePicker.removeAllItems();
-		if (this.mDates.size() > 1) {
+		setEnabled(!this.mDates.isEmpty());
+
+		if (this.mDates.isEmpty()) {
+			mDatePicker.addItem("None");
+		} else if (this.mDates.size() > 1) {
 			mDatePicker.addItem("All days");
 		}
 		this.mDates.forEach(date -> {
@@ -75,21 +121,21 @@ public class DateFiler extends CustomComponent implements ItemListener {
 		this.mDatePicker.setMaximumSize(new Dimension(30 * maxWidth / 100, Configuration.ITEM_HEIGHT));
 		add(this.mDatePicker);
 
-		this.mJCheckBox.setSelected(true);
-		this.mJCheckBox.addItemListener(this);
-		this.mJCheckBox.setMaximumSize(new Dimension(20 * maxWidth / 100, Configuration.ITEM_HEIGHT));
-		add(this.mJCheckBox);
+		this.mJCBAllDay.setSelected(true);
+		this.mJCBAllDay.addItemListener(this);
+		this.mJCBAllDay.setMaximumSize(new Dimension(20 * maxWidth / 100, Configuration.ITEM_HEIGHT));
+		add(this.mJCBAllDay);
 
 		this.mJFTFStartHour.setEditable(false);
 		this.mJFTFStartHour.setValue("00:00");
-		this.mJFTFStartHour.setMaximumSize(new Dimension(20 * maxWidth / 100, Configuration.ITEM_HEIGHT));
+		this.mJFTFStartHour.setMaximumSize(new Dimension(15 * maxWidth / 100, Configuration.ITEM_HEIGHT));
 		this.mJFTFStartHour.setHorizontalAlignment(SwingConstants.CENTER);
 		add(this.mJFTFStartHour);
 
 		this.mJFTFEndHour.setEditable(false);
 		this.mJFTFEndHour.setValue("23:59");
 		this.mJFTFEndHour.setHorizontalAlignment(SwingConstants.CENTER);
-		this.mJFTFEndHour.setMaximumSize(new Dimension(20 * maxWidth / 100, Configuration.ITEM_HEIGHT));
+		this.mJFTFEndHour.setMaximumSize(new Dimension(15 * maxWidth / 100, Configuration.ITEM_HEIGHT));
 		add(this.mJFTFEndHour);
 
 		return;

@@ -1,7 +1,6 @@
 package operators.extractors;
 
 import java.io.File;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -39,11 +38,18 @@ public class SoftLogExtractor extends FileExtractor {
 		}
 	}
 
-	public static List<SoftLog> cleanUpLogs(List<SoftLog> pLogs, List<String> pDeviceIds, float pThreshold,
-			TSLimits pTSLimits) throws ParseException {
+	public static List<SoftLog> filterByDay(List<SoftLog> pLogs, String pDayLabel) {
+		return sortLogsByDate(
+				pLogs.stream().filter(log -> log.getDayLabel().equals(pDayLabel)).collect(Collectors.toList()));
+	}
 
-		return sortLogsByDate(cleanUpLogs(pLogs, pDeviceIds, pThreshold).stream()
-				.filter(log -> log.isBetween(pTSLimits)).collect(Collectors.toList()));
+	public static List<SoftLog> filterByHour(List<SoftLog> pLogs, TSLimits pTSLimits) {
+		return sortLogsByDate(pLogs.stream().filter(log -> log.isBetweenHours(pTSLimits)).collect(Collectors.toList()));
+	}
+
+	public static List<SoftLog> filterByIds(List<SoftLog> pLogs, List<String> pDeviceIds) {
+		return sortLogsByDate(pLogs.stream().filter(log -> pDeviceIds.contains(log.getDevice().getId()))
+				.collect(Collectors.toList()));
 	}
 
 	public static List<SoftLog> ignoreLowConsumptionLogs(List<SoftLog> pLogs, float pThreshold) {

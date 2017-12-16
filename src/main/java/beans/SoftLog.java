@@ -3,6 +3,7 @@ package beans;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.TimeZone;
@@ -95,15 +96,41 @@ public class SoftLog {
 		return DateFormater.formatDate(this.mDate, DateFormater.SHORT_MONTH_FORMAT);
 	}
 
-	public boolean isBetween(TSLimits pTsLimits) {
+	public boolean isBetweenDates(TSLimits pTsLimits) {
 		return pTsLimits.contains(this.mDate);
+	}
+
+	public boolean isBetweenHours(TSLimits pTsLimits) {
+		Calendar calendar = Calendar.getInstance();
+
+		Calendar cStart = Calendar.getInstance();
+		cStart.setTimeInMillis(pTsLimits.getTSStart());
+
+		Calendar cEnd = Calendar.getInstance();
+		cEnd.setTimeInMillis(pTsLimits.getTSEnd());
+		
+//		if(cEnd.get(Calendar.HOUR_OF_DAY) == 23 && cEnd.get(Calendar.MINUTE))
+
+		calendar.setTime(this.mDate);
+		calendar.set(Calendar.HOUR_OF_DAY, cStart.get(Calendar.HOUR_OF_DAY));
+		calendar.set(Calendar.MINUTE, cStart.get(Calendar.MINUTE));
+		calendar.set(Calendar.SECOND, cStart.get(Calendar.SECOND));
+		calendar.set(Calendar.MILLISECOND, cStart.get(Calendar.MILLISECOND));
+		long bb = calendar.getTimeInMillis();
+
+		calendar.set(Calendar.HOUR_OF_DAY, cEnd.get(Calendar.HOUR_OF_DAY));
+		calendar.set(Calendar.MINUTE, cEnd.get(Calendar.MINUTE));
+		calendar.set(Calendar.SECOND, cEnd.get(Calendar.SECOND));
+		calendar.set(Calendar.MILLISECOND, cEnd.get(Calendar.MILLISECOND));
+		long cc = calendar.getTimeInMillis();
+		return isBetweenDates(new TSLimits(bb, cc));
 	}
 
 	@Override
 	public String toString() {
 		return "SoftLog [mDate=" + mDate + ", mValue=" + mValue + ", mMeaning=" + mState + ", mDevice=" + mDevice + "]";
 	}
-	
+
 	public static Comparator<SoftLog> mCompareDate = new Comparator<SoftLog>() {
 		@Override
 		public int compare(SoftLog o1, SoftLog o2) {

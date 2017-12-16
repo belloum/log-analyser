@@ -71,7 +71,6 @@ public class DataSetComponent extends CustomComponent {
 
 	protected void build() {
 		super.build();
-		// TODO update here
 		int a = 20 * mMaxWidth / 100;
 		setMaximumSize(new Dimension(a, mProperties.size() * Configuration.ITEM_HEIGHT));
 
