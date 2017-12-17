@@ -101,5 +101,4 @@ public class HExtract {
 		return ChartFactory.createBarChart("Logs", "timestamp", "occurrence", dataset, PlotOrientation.VERTICAL, false,
 				true, false);
 	}
-
 }

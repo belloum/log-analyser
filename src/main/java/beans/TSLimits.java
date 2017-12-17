@@ -80,7 +80,7 @@ public class TSLimits {
 	}
 
 	public static String getFriendlyLabel(TSLimits pTsLimits) {
-		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 		return String.format(Locale.FRANCE, "%s - %s", sdf.format(pTsLimits.getTSStart()),
 				sdf.format(pTsLimits.getTSEnd()));
 	}

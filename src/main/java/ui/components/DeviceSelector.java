@@ -58,7 +58,7 @@ public class DeviceSelector extends CustomComponent implements ItemListener {
 			this.mListener = pListener;
 		} else {
 			throw new IllegalArgumentException(
-					String.format("%s  must implemet DeviceSelectorListener", pListener.getClass().getName()));
+					String.format("%s  must implement DeviceSelectorListener", pListener.getClass().getName()));
 		}
 	}
 

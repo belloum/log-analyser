@@ -25,13 +25,10 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 
-import org.jfree.chart.ChartPanel;
-
 import beans.SoftLog;
 import beans.TSLimits;
 import beans.devices.Device;
 import beans.participants.Participant;
-import operators.extractors.HExtract;
 import operators.extractors.LogExtractor;
 import operators.extractors.ParticipantExtractor;
 import operators.extractors.RawLogFormater;
@@ -44,11 +41,13 @@ import ui.components.DeviceSelector;
 import ui.components.DeviceSelector.DeviceSelectorListener;
 import ui.components.FileChooserWithResult;
 import ui.components.FileChooserWithResult.ChoiceListener;
+import ui.components.HistogramViewer;
+import ui.components.HistogramViewer.HistogramListener;
 import ui.components.ResultLabel;
 import ui.components.ResultLabel.ResultType;
 import utils.Configuration;
 
-public class TabLog extends AbstractTab implements DeviceSelectorListener, ChoiceListener {
+public class TabLog extends AbstractTab implements DeviceSelectorListener, ChoiceListener, HistogramListener {
 
 	private static final long serialVersionUID = 1L;
 
@@ -65,8 +64,33 @@ public class TabLog extends AbstractTab implements DeviceSelectorListener, Choic
 	private ButtonBar mButtonBar;
 	private JFormattedTextField mFTFElectricThreshold, mFTFRemainingLogs;
 	private ResultLabel mRLCleaning;
+	private HistogramViewer mHistogramPanel;
 
-	private JPanel mForChart;
+	private JFileChooser mJFChooser = new JFileChooser(Configuration.RESOURCES_FOLDER) {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public void approveSelection() {
+			File f = getSelectedFile();
+			if (f.exists() && getDialogType() == SAVE_DIALOG) {
+				int result = JOptionPane.showConfirmDialog(this, "The file exists, overwrite?", "Existing file",
+						JOptionPane.YES_NO_CANCEL_OPTION);
+				switch (result) {
+				case JOptionPane.YES_OPTION:
+					super.approveSelection();
+					return;
+				case JOptionPane.NO_OPTION:
+					return;
+				case JOptionPane.CLOSED_OPTION:
+					return;
+				case JOptionPane.CANCEL_OPTION:
+					cancelSelection();
+					return;
+				}
+			}
+			super.approveSelection();
+		}
+	};
 
 	private Participant mParticipant;
 	private File mSelectedFile;
@@ -98,6 +122,7 @@ public class TabLog extends AbstractTab implements DeviceSelectorListener, Choic
 		pright.add(mDateFilter, BorderLayout.PAGE_START);
 
 		mDeviceSelector = new DeviceSelector();
+		mDeviceSelector.setListener(this);
 		pright.add(mDeviceSelector, BorderLayout.CENTER);
 
 		pright.setMaximumSize(new Dimension(MAX_WIDTH * 75 / 100, pright.getPreferredSize().height));
@@ -143,35 +168,10 @@ public class TabLog extends AbstractTab implements DeviceSelectorListener, Choic
 		jB.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JFileChooser jfc = new JFileChooser(Configuration.RESOURCES_FOLDER) {
-					private static final long serialVersionUID = 1L;
+				mJFChooser.setDialogTitle("Save SoftLog file");
 
-					@Override
-					public void approveSelection() {
-						File f = getSelectedFile();
-						if (f.exists() && getDialogType() == SAVE_DIALOG) {
-							int result = JOptionPane.showConfirmDialog(this, "The file exists, overwrite?",
-									"Existing file", JOptionPane.YES_NO_CANCEL_OPTION);
-							switch (result) {
-							case JOptionPane.YES_OPTION:
-								super.approveSelection();
-								return;
-							case JOptionPane.NO_OPTION:
-								return;
-							case JOptionPane.CLOSED_OPTION:
-								return;
-							case JOptionPane.CANCEL_OPTION:
-								cancelSelection();
-								return;
-							}
-						}
-						super.approveSelection();
-					}
-				};
-				jfc.setDialogTitle("Save SoftLog file");
-
-				if (jfc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
-					File output = jfc.getSelectedFile();
+				if (mJFChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+					File output = mJFChooser.getSelectedFile();
 					try {
 						if (!output.getName().contains(".json")) {
 							output = new File(output.getParent(), String.format("%s.json", output.getName()));
@@ -209,35 +209,8 @@ public class TabLog extends AbstractTab implements DeviceSelectorListener, Choic
 		jP.setMaximumSize(jP.getPreferredSize());
 
 		// HISTO
-		jP = new JPanel(new BorderLayout());
-		jP.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		jP.setPreferredSize(new Dimension(MAX_WIDTH, 5 * Configuration.ITEM_HEIGHT));
-
-		JButton jDraw = new JButton("Draw");
-		jDraw.setPreferredSize(new Dimension(jP.getPreferredSize().width * 20 / 100, Configuration.ITEM_HEIGHT));
-		jDraw.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				try {
-					ChartPanel chP = new ChartPanel(
-							HExtract.getHistograms(Integer.parseInt(mFTFElectricThreshold.getValue().toString()),
-									extractCleanedSoftLogList()));
-					mForChart.add(chP, BorderLayout.CENTER);
-					mForChart.validate();
-				} catch (Exception e1) {
-					System.out.println(e1);
-				}
-			}
-		});
-		jP.add(jDraw, BorderLayout.LINE_END);
-
-		mForChart = new JPanel(new BorderLayout());
-		mForChart.setBorder(BorderFactory.createLineBorder(Color.RED));
-		jP.add(mForChart, BorderLayout.LINE_START);
-		mForChart
-				.setPreferredSize(new Dimension(jP.getPreferredSize().width * 80 / 100, 3 * Configuration.ITEM_HEIGHT));
-		add(jP);
+		mHistogramPanel = new HistogramViewer(this, MAX_WIDTH, 12 * Configuration.ITEM_HEIGHT);
+		add(mHistogramPanel);
 
 		resetLogData();
 	}
@@ -262,9 +235,9 @@ public class TabLog extends AbstractTab implements DeviceSelectorListener, Choic
 		mDeviceSelector.setCheckBoxDevices(pDevices);
 		mCurrentDeviceSelected.addAll(pDevices);
 		mDeviceSelector.setVisible(true);
-		mDeviceSelector.setListener(this);
 
 		mButtonBar.setEnabled(true);
+		mHistogramPanel.setEnabled(true);
 	}
 
 	private List<SoftLog> extractCleanedSoftLogList() throws Exception {
@@ -303,6 +276,7 @@ public class TabLog extends AbstractTab implements DeviceSelectorListener, Choic
 		mDeviceSelector.resetDevicesList();
 		mRLCleaning.setText("");
 		mButtonBar.setEnabled(false);
+		mHistogramPanel.setEnabled(false);
 		mDateFilter.reset();
 	}
 
@@ -337,6 +311,21 @@ public class TabLog extends AbstractTab implements DeviceSelectorListener, Choic
 		} catch (Exception exception) {
 			System.out.println("Invalid file: " + exception.getMessage());
 			mFCLog.getResultLabel().printResult(exception.getMessage(), ResultType.ERROR);
+		}
+	}
+
+	@Override
+	public void saveHistogram() {
+
+	}
+
+	@Override
+	public List<SoftLog> fillHistogram() {
+		try {
+			return extractCleanedSoftLogList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new IllegalArgumentException(e.toString());
 		}
 	}
 }
