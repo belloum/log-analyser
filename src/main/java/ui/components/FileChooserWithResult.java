@@ -27,7 +27,6 @@ public class FileChooserWithResult extends CustomComponent {
 
 	private File mSelectedFile;
 	private JTextArea mJTAPathFile = new JTextArea(SELECT_A_FILE);
-	private Integer mMaxWidth;
 	private JFileChooser mJFileChooser = new JFileChooser();
 	private ResultLabel mJLResults = new ResultLabel("");
 	private JButton mJButton = new JButton(DEFAULT_BUTTON_TEXT);
@@ -47,9 +46,13 @@ public class FileChooserWithResult extends CustomComponent {
 
 	public FileChooserWithResult(File pCurrentDirectory, String pButtonLabel, ChoiceListener pFCListener,
 			Integer pMaxWidth) {
-		setLayout(new BorderLayout());
+		this(pCurrentDirectory, pButtonLabel, pFCListener, new Dimension(pMaxWidth, Configuration.ITEM_HEIGHT));
+	}
 
-		this.mMaxWidth = pMaxWidth;
+	public FileChooserWithResult(File pCurrentDirectory, String pButtonLabel, ChoiceListener pFCListener,
+			Dimension pDimension) {
+		super(pDimension, new BorderLayout());
+
 		this.mJFileChooser.setCurrentDirectory(pCurrentDirectory);
 		this.mJTAPathFile.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 
@@ -131,7 +134,7 @@ public class FileChooserWithResult extends CustomComponent {
 	protected void build() {
 		JPanel jPan = new JPanel(new BorderLayout());
 		add(jPan, BorderLayout.PAGE_START);
-		jPan.setPreferredSize(new Dimension(mMaxWidth, Configuration.ITEM_HEIGHT));
+		jPan.setPreferredSize(getMaximumSize());
 
 		jPan.add(mJTAPathFile, BorderLayout.LINE_START);
 		mJTAPathFile.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -139,13 +142,13 @@ public class FileChooserWithResult extends CustomComponent {
 		jPan.add(mJButton, BorderLayout.LINE_END);
 		add(mJLResults, BorderLayout.PAGE_END);
 
-		mJTAPathFile.setPreferredSize(new Dimension(80 * mMaxWidth / 100, Configuration.ITEM_HEIGHT));
+		mJTAPathFile.setPreferredSize(new Dimension(80 * getMaximumSize().width / 100, Configuration.ITEM_HEIGHT));
 		mJTAPathFile.setMinimumSize(mJTAPathFile.getPreferredSize());
 
-		mJButton.setPreferredSize(new Dimension(15 * mMaxWidth / 100, Configuration.ITEM_HEIGHT));
+		mJButton.setPreferredSize(new Dimension(15 * getMaximumSize().width / 100, Configuration.ITEM_HEIGHT));
 		mJButton.setMinimumSize(mJButton.getPreferredSize());
 
-		mJLResults.setPreferredSize(new Dimension(mMaxWidth, Configuration.ITEM_HEIGHT));
+		mJLResults.setPreferredSize(new Dimension(getMaximumSize().width, Configuration.ITEM_HEIGHT));
 		mJLResults.setMinimumSize(mJLResults.getPreferredSize());
 
 		setPreferredSize(getPreferredSize());

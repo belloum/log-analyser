@@ -1,7 +1,6 @@
 package ui.components;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -14,11 +13,8 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
-import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 
 import org.jfree.chart.ChartPanel;
@@ -32,32 +28,14 @@ public class HistogramViewer extends CustomComponent {
 
 	private static final long serialVersionUID = 1L;
 	private HistogramListener mListener;
-	private JButton mJBDrawHisto = new JButton("Draw histogram");
-	private JButton mJBSaveHisto = new JButton("Save histogram");
-	private JButton mJBExportCSV = new JButton("Export as CSV");
+	private JButton mJBDrawHisto, mJBSaveHisto, mJBExportCSV;
 	private JCheckBox mJCBSplitting = new JCheckBox("Split by device");
 	private ResultLabel mRLHistogram = new ResultLabel();
 
-	private JFormattedTextField mJFTFSlotInterval = new JFormattedTextField("##") {
-
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public void setEditable(boolean pEditabled) {
-			super.setEditable(pEditabled);
-			if (!pEditabled) {
-				setBackground(Color.LIGHT_GRAY);
-			} else {
-				setBackground(Color.WHITE);
-			}
-		}
-	};
+	private InputValue mInputThreshold = new InputValue("##");
 
 	public HistogramViewer(HistogramListener pHistogramListener, Integer pWidth, Integer pHeight) {
-		setLayout(new BorderLayout());
-		setMaximumSize(new Dimension(pWidth, pHeight));
-		setMinimumSize(getMaximumSize());
-		setPreferredSize(getMaximumSize());
+		super(new Dimension(pWidth, pHeight), new BorderLayout());
 
 		if (pHistogramListener instanceof HistogramListener) {
 			this.mListener = pHistogramListener;
@@ -70,7 +48,7 @@ public class HistogramViewer extends CustomComponent {
 
 	@Override
 	public void build() {
-		removeAll();
+		super.build();
 
 		// Left panel
 		JPanel left = new JPanel(new BorderLayout());
@@ -87,79 +65,45 @@ public class HistogramViewer extends CustomComponent {
 		CustomComponent.setJLabelFontStyle(jLabel, Font.BOLD);
 		right.add(jLabel);
 
-		right.add(mJFTFSlotInterval);
-		mJFTFSlotInterval.setHorizontalAlignment(SwingConstants.CENTER);
-		mJFTFSlotInterval.setValue(60);
-		mJFTFSlotInterval.setMaximumSize(
-				new Dimension(mJFTFSlotInterval.getParent().getMaximumSize().width / 2, Configuration.ITEM_HEIGHT));
+		right.add(mInputThreshold);
+		mInputThreshold.setValue(60);
+		mInputThreshold.setMaximumSize(
+				new Dimension(mInputThreshold.getParent().getMaximumSize().width / 2, Configuration.ITEM_HEIGHT));
 
 		right.add(mJCBSplitting);
 
-		right.add(mJBDrawHisto);
-		mJBDrawHisto.addActionListener(new ActionListener() {
+		mJBDrawHisto = new MyButton("Draw histogram", new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
 					ChartPanel chP = new ChartPanel(Histogram.draw(
-							new Histogram(Integer.parseInt(mJFTFSlotInterval.getText()), mListener.fillHistogram()),
+							new Histogram(Integer.parseInt(mInputThreshold.getText()), mListener.fillHistogram()),
 							mJCBSplitting.isSelected()));
 					left.add(chP, BorderLayout.CENTER);
 					left.validate();
 				} catch (Exception exception) {
-					System.out.println(exception);
-					exception.printStackTrace();
+					System.out.println("Unable to save file: " + exception);
+					mRLHistogram.printResult(exception.getMessage(), ResultType.ERROR);
 				}
 			}
 		});
-		right.add(mJBSaveHisto);
-		mJBSaveHisto.addActionListener(new ActionListener() {
+		right.add(mJBDrawHisto);
+
+		mJBSaveHisto = new MyButton("Save histogram", new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Deal with saving");
-			}
-		});
+				FileChooser fc = new FileChooser(Configuration.RESOURCES_FOLDER, "Save histogram");
 
-		right.add(mJBExportCSV);
-		mJBExportCSV.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JFileChooser jfc = new JFileChooser(Configuration.RESOURCES_FOLDER) {
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					public void approveSelection() {
-						File f = getSelectedFile();
-						if (f.exists() && getDialogType() == SAVE_DIALOG) {
-							int result = JOptionPane.showConfirmDialog(this, "The file exists, overwrite?",
-									"Existing file", JOptionPane.YES_NO_CANCEL_OPTION);
-							switch (result) {
-							case JOptionPane.YES_OPTION:
-								super.approveSelection();
-								return;
-							case JOptionPane.NO_OPTION:
-								return;
-							case JOptionPane.CLOSED_OPTION:
-								return;
-							case JOptionPane.CANCEL_OPTION:
-								cancelSelection();
-								return;
-							}
-						}
-						super.approveSelection();
-					}
-				};
-				jfc.setDialogTitle("Save CSV file");
-
-				if (jfc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
-					File output = jfc.getSelectedFile();
+				if (fc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+					File output = fc.getSelectedFile();
 					try {
-						if (!output.getName().contains(".csv")) {
-							output = new File(output.getParent(), String.format("%s.csv", output.getName()));
+						if (!output.getName().contains(".jpg")) {
+							output = new File(output.getParent(), String.format("%s.jpg", output.getName()));
 						}
-						Histogram.saveCSVFile(
-								new Histogram(Integer.parseInt(mJFTFSlotInterval.getText()), mListener.fillHistogram()),
+						Histogram.saveChart(
+								new Histogram(Integer.parseInt(mInputThreshold.getText()), mListener.fillHistogram()),
 								output);
 						mRLHistogram.printResult(
 								new StringBuffer(output.getPath()).append(" has been saved.").toString(),
@@ -171,24 +115,49 @@ public class HistogramViewer extends CustomComponent {
 				}
 			}
 		});
+		right.add(mJBSaveHisto);
+
+		mJBExportCSV = new MyButton("Export as CSV", new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				FileChooser fc = new FileChooser(Configuration.RESOURCES_FOLDER, "Save CSV file");
+
+				if (fc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+					File output = fc.getSelectedFile();
+					try {
+						if (!output.getName().contains(".csv")) {
+							output = new File(output.getParent(), String.format("%s.csv", output.getName()));
+						}
+						Histogram.saveCSVFile(
+								new Histogram(Integer.parseInt(mInputThreshold.getText()), mListener.fillHistogram()),
+								output);
+						mRLHistogram.printResult(
+								new StringBuffer(output.getPath()).append(" has been saved.").toString(),
+								ResultType.SUCCESS);
+					} catch (Exception exception) {
+						System.out.println("Unable to save file: " + exception);
+						mRLHistogram.printResult(exception.getMessage(), ResultType.ERROR);
+					}
+				}
+			}
+		});
+		right.add(mJBExportCSV);
 
 		add(left, BorderLayout.WEST);
 		add(right, BorderLayout.EAST);
 		add(mRLHistogram, BorderLayout.PAGE_END);
 
 		validate();
-
 		return;
 	}
 
 	@Override
 	public void setEnabled(boolean pEnabled) {
-		super.setEnabled(pEnabled);
 		mJBDrawHisto.setEnabled(pEnabled);
 		mJBSaveHisto.setEnabled(pEnabled);
 		mJBExportCSV.setEnabled(pEnabled);
 		mJCBSplitting.setEnabled(pEnabled);
-		mJFTFSlotInterval.setEnabled(pEnabled);
+		mInputThreshold.setEnabled(pEnabled);
 	}
 
 	public interface HistogramListener {

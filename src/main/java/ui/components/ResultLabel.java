@@ -17,7 +17,6 @@ public class ResultLabel extends JLabel {
 
 	public ResultLabel() {
 		super();
-		setVisible(false);
 	}
 
 	public ResultLabel(String pText) {

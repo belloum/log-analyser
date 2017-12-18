@@ -3,6 +3,7 @@ package ui.components;
 import java.awt.Dimension;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -28,14 +29,32 @@ public class DeviceSelector extends CustomComponent implements ItemListener {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 	}
 
-	public DeviceSelector(List<Device> pDevices) {
+	public DeviceSelector(Dimension pDimension, List<Device> pDevices) {
+		super(pDimension);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		setPreferredSize(new Dimension(pDimension.width, (pDevices.size() / this.ITEM_BY_LINE) * pDimension.height));
+		setCheckBoxDevices(pDevices);
+		build();
+	}
+
+	public DeviceSelector(Dimension pDimension, List<Device> pDevices, DeviceSelectorListener pDeviceSelectorListener) {
+		this(pDimension, pDevices);
+		if (pDeviceSelectorListener instanceof DeviceSelectorListener) {
+			this.mListener = pDeviceSelectorListener;
+		} else {
+			throw new IllegalArgumentException(String.format("%s  must implement DeviceSelectorListener",
+					pDeviceSelectorListener.getClass().getName()));
+		}
+	}
+
+	public DeviceSelector(List<Device> pDevices) {
+		this();
 		setCheckBoxDevices(pDevices);
 	}
 
 	public void setCheckBoxDevices(List<Device> pDevices) {
-		resetDevicesList();
-		setVisible(true);
+		mDevices.clear();
+		mLCheck.clear();
 		pDevices.forEach(device -> {
 			JCheckBox jCheckDevice = new JCheckBox(device.getId());
 			jCheckDevice.setSelected(true);
@@ -43,45 +62,40 @@ public class DeviceSelector extends CustomComponent implements ItemListener {
 			mDevices.put(device.getId(), device);
 			mLCheck.add(jCheckDevice);
 		});
+	}
+
+	public void updateDeviceList(List<Device> pDevices) {
+		setCheckBoxDevices(pDevices);
 		build();
 	}
 
 	public void resetDevicesList() {
-		removeAll();
-		mDevices.clear();
-		mLCheck.clear();
+		setCheckBoxDevices(new ArrayList<Device>());
 		build();
-	}
-
-	public void setListener(DeviceSelectorListener pListener) {
-		if (pListener instanceof DeviceSelectorListener) {
-			this.mListener = pListener;
-		} else {
-			throw new IllegalArgumentException(
-					String.format("%s  must implement DeviceSelectorListener", pListener.getClass().getName()));
-		}
 	}
 
 	protected void build() {
 		super.build();
-		int a = getParent().getPreferredSize().width;
-
 		JPanel jPanel = null;
 
 		for (int i = 0; i < this.mLCheck.size(); i++) {
 			if (i % this.ITEM_BY_LINE == 0) {
 				jPanel = new JPanel();
 				jPanel.setLayout(new BoxLayout(jPanel, BoxLayout.X_AXIS));
-				jPanel.setMaximumSize(new Dimension(a, Configuration.ITEM_HEIGHT));
-				jPanel.setMinimumSize(new Dimension(a, Configuration.ITEM_HEIGHT));
+				jPanel.setMaximumSize(new Dimension(getMaximumSize().width, Configuration.ITEM_HEIGHT));
+				jPanel.setMinimumSize(new Dimension(getMaximumSize().width, Configuration.ITEM_HEIGHT));
 				add(jPanel);
 			}
 			JCheckBox value = this.mLCheck.get(i);
-			value.setPreferredSize(new Dimension(a / this.ITEM_BY_LINE, Configuration.ITEM_HEIGHT));
-			value.setMaximumSize(new Dimension(a / this.ITEM_BY_LINE, Configuration.ITEM_HEIGHT));
-			value.setMinimumSize(new Dimension(a / this.ITEM_BY_LINE, Configuration.ITEM_HEIGHT));
+			value.setPreferredSize(
+					new Dimension(getMaximumSize().width / this.ITEM_BY_LINE, Configuration.ITEM_HEIGHT));
+			value.setMaximumSize(new Dimension(getMaximumSize().width / this.ITEM_BY_LINE, Configuration.ITEM_HEIGHT));
+			value.setMinimumSize(new Dimension(getMaximumSize().width / this.ITEM_BY_LINE, Configuration.ITEM_HEIGHT));
 			jPanel.add(value);
 		}
+
+		setVisible(false);
+		setVisible(true);
 
 		return;
 	}

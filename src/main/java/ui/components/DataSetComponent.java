@@ -16,35 +16,28 @@ import utils.Configuration;
 public class DataSetComponent extends CustomComponent {
 
 	private static final long serialVersionUID = 1L;
-	private Integer mMaxWidth;
 
-	private LinkedHashMap<String, Object> mProperties;
+	private LinkedHashMap<String, Object> mProperties = new LinkedHashMap<>();
 
 	public DataSetComponent(Integer pMaxWidth) {
+		super(pMaxWidth);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		this.mProperties = new LinkedHashMap<>();
-		this.mMaxWidth = pMaxWidth;
+	}
+
+	public DataSetComponent(Integer pMaxWidth, List<String> pLabels) {
+		this(pMaxWidth);
+		setLabels(pLabels);
+		build();
 	}
 
 	public void setLabels(List<String> pPropertyLabels) {
 		pPropertyLabels.forEach(property -> {
 			mProperties.put(property, "-");
 		});
-		build();
-	}
-
-	public DataSetComponent(LinkedHashMap<String, Object> pProperties, Integer pMaxWidth) {
-		this(pMaxWidth);
-		this.mProperties = pProperties;
-		build();
 	}
 
 	public List<String> getLabels() {
-		if (this.mProperties != null) {
-			return new ArrayList<>(this.mProperties.keySet());
-		} else {
-			throw new IllegalArgumentException("Null properties");
-		}
+		return new ArrayList<>(this.mProperties.keySet());
 	}
 
 	public void setValue(String pKey, Object pValue) {
@@ -70,26 +63,26 @@ public class DataSetComponent extends CustomComponent {
 	}
 
 	protected void build() {
-		super.build();
-		int a = 20 * mMaxWidth / 100;
-		setMaximumSize(new Dimension(a, mProperties.size() * Configuration.ITEM_HEIGHT));
+		removeAll();
 
 		this.mProperties.forEach((key, value) -> {
 
 			JPanel jPanel = new JPanel(new BorderLayout());
 			add(jPanel);
-			jPanel.setPreferredSize(new Dimension(a, Configuration.ITEM_HEIGHT));
+			jPanel.setPreferredSize(new Dimension(getMaximumSize().width, Configuration.ITEM_HEIGHT));
 
 			JLabel jLabel = new JLabel(key);
-			jLabel.setPreferredSize(new Dimension(a / 2, Configuration.ITEM_HEIGHT));
+			jLabel.setPreferredSize(new Dimension(getMaximumSize().width / 2, Configuration.ITEM_HEIGHT));
 			setJLabelFontStyle(jLabel, Font.BOLD);
 			jPanel.add(jLabel, BorderLayout.LINE_START);
 
 			jLabel = new JLabel(value.toString());
-			jLabel.setMaximumSize(new Dimension(a / 2, Configuration.ITEM_HEIGHT));
+			jLabel.setMaximumSize(new Dimension(getMaximumSize().width / 2, Configuration.ITEM_HEIGHT));
 			jPanel.add(jLabel, BorderLayout.LINE_END);
 			jPanel.add(jLabel);
 		});
+
+		validate();
 
 		return;
 	}

@@ -1,5 +1,6 @@
 package beans;
 
+import java.awt.Color;
 import java.io.File;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
@@ -77,6 +79,11 @@ public class Histogram extends LinkedHashMap<TSLimits, Integer> {
 	}
 
 	public static JFreeChart draw(Histogram pHistogram, boolean pSplitByDevice) throws Exception {
+		return draw(pHistogram, pSplitByDevice, null, null, null);
+	}
+
+	public static JFreeChart draw(Histogram pHistogram, boolean pSplitByDevice, String pTitle, String xLabel,
+			String yLabel) throws Exception {
 
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
@@ -98,12 +105,18 @@ public class Histogram extends LinkedHashMap<TSLimits, Integer> {
 			});
 		}
 
-		// /System.out.println(formatAsCSV(pHistogram));
-		// return ChartFactory.createBarChart("Logs", "timestamp", "occurrence",
-		// dataset, PlotOrientation.VERTICAL, false,
-		// false, false);
-		return ChartFactory.createBarChart(null, null, null, dataset, PlotOrientation.VERTICAL, pSplitByDevice, false,
-				false);
+		((SoftLog) pHistogram.mDataSet.get(0)).getDayLabel();
+		if (StringUtils.isNotEmpty(pTitle)) {
+			pTitle = new StringBuffer(pTitle).append("\n").append(((SoftLog) pHistogram.mDataSet.get(0)).getDayLabel())
+					.append(" - ")
+					.append(((SoftLog) pHistogram.mDataSet.get(pHistogram.mDataSet.size() - 1)).getDayLabel())
+					.toString();
+		}
+
+		JFreeChart chart = ChartFactory.createBarChart(pTitle, yLabel, xLabel, dataset, PlotOrientation.VERTICAL,
+				pSplitByDevice, false, false);
+		chart.getPlot().setBackgroundPaint(Color.WHITE);
+		return chart;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -127,6 +140,20 @@ public class Histogram extends LinkedHashMap<TSLimits, Integer> {
 		});
 
 		return strB.toString();
+	}
+
+	public static boolean saveChart(Histogram pHistogram, File output) {
+		System.out.println("Saving " + output.getName() + " in " + output.getParent());
+		try {
+			ChartUtils.saveChartAsJPEG(
+					new File(output.getParent(), output.getName().replaceAll(".jpg", "_splitted.jpg")),
+					draw(pHistogram, true, "Sensors", "occurences", "time"), 1500, 600);
+			ChartUtils.saveChartAsJPEG(output, draw(pHistogram, false, "Logs", "occurences", "time"), 1500, 600);
+			return true;
+		} catch (Exception e) {
+			System.err.println("Problem occurred creating chart.");
+			return false;
+		}
 	}
 
 	public static boolean saveCSVFile(Histogram pHistogram, File pOutputFile) {

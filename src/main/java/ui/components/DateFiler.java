@@ -1,6 +1,5 @@
 package ui.components;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -10,8 +9,6 @@ import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
-import javax.swing.SwingConstants;
 
 import utils.Configuration;
 
@@ -21,40 +18,26 @@ public class DateFiler extends CustomComponent implements ItemListener {
 
 	private JComboBox<String> mDatePicker = new JComboBox<String>();
 	private JCheckBox mJCBAllDay = new JCheckBox("All day long");
-	// TODO isItUseful ?
-	private JFormattedTextField mJFTFStartHour = new JFormattedTextField("##:##") {
+	private InputValue mInputStartHour = new InputValue("##:##");
+	private InputValue mInputEndHour = new InputValue("##:##");
 
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public void setEditable(boolean pEditabled) {
-			super.setEditable(pEditabled);
-			if (!pEditabled) {
-				setBackground(Color.LIGHT_GRAY);
-			} else {
-				setBackground(Color.WHITE);
-			}
-		}
-	}, mJFTFEndHour = new JFormattedTextField("##:##") {
-
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public void setEditable(boolean pEditabled) {
-			super.setEditable(pEditabled);
-			if (!pEditabled) {
-				setBackground(Color.LIGHT_GRAY);
-			} else {
-				setBackground(Color.WHITE);
-			}
-		}
-	};
-
-	private List<String> mDates;
+	private List<String> mDates = new ArrayList<>();
 
 	public DateFiler() {
+		super();
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-		this.mDates = new ArrayList<>();
+	}
+
+	public DateFiler(Integer pMaxWidth) {
+		super(pMaxWidth);
+		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+		build();
+	}
+
+	public DateFiler(Dimension pDimension) {
+		super(pDimension);
+		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+		build();
 	}
 
 	public List<String> getDates() {
@@ -90,11 +73,11 @@ public class DateFiler extends CustomComponent implements ItemListener {
 	}
 
 	public String getStartHour() {
-		return mJFTFStartHour.getText();
+		return mInputStartHour.getText();
 	}
 
 	public String getEndHour() {
-		return mJFTFEndHour.getText();
+		return mInputEndHour.getText();
 	}
 
 	public void setEnabled(boolean pEnabled) {
@@ -116,27 +99,26 @@ public class DateFiler extends CustomComponent implements ItemListener {
 			mDatePicker.addItem(date);
 		});
 
-		int maxWidth = getParent().getPreferredSize().width;
-
-		this.mDatePicker.setMaximumSize(new Dimension(30 * maxWidth / 100, Configuration.ITEM_HEIGHT));
+		this.mDatePicker.setMaximumSize(new Dimension(30 * getMaximumSize().width / 100, Configuration.ITEM_HEIGHT));
 		add(this.mDatePicker);
 
 		this.mJCBAllDay.setSelected(true);
 		this.mJCBAllDay.addItemListener(this);
-		this.mJCBAllDay.setMaximumSize(new Dimension(20 * maxWidth / 100, Configuration.ITEM_HEIGHT));
+		this.mJCBAllDay.setMaximumSize(new Dimension(20 * getMaximumSize().width / 100, Configuration.ITEM_HEIGHT));
 		add(this.mJCBAllDay);
 
-		this.mJFTFStartHour.setEditable(false);
-		this.mJFTFStartHour.setValue("00:00");
-		this.mJFTFStartHour.setMaximumSize(new Dimension(15 * maxWidth / 100, Configuration.ITEM_HEIGHT));
-		this.mJFTFStartHour.setHorizontalAlignment(SwingConstants.CENTER);
-		add(this.mJFTFStartHour);
+		this.mInputStartHour.setEditable(false);
+		this.mInputStartHour.setValue("00:00");
+		this.mInputStartHour
+				.setMaximumSize(new Dimension(15 * getMaximumSize().width / 100, Configuration.ITEM_HEIGHT));
+		add(this.mInputStartHour);
 
-		this.mJFTFEndHour.setEditable(false);
-		this.mJFTFEndHour.setValue("23:59");
-		this.mJFTFEndHour.setHorizontalAlignment(SwingConstants.CENTER);
-		this.mJFTFEndHour.setMaximumSize(new Dimension(15 * maxWidth / 100, Configuration.ITEM_HEIGHT));
-		add(this.mJFTFEndHour);
+		this.mInputEndHour.setEditable(false);
+		this.mInputEndHour.setValue("23:59");
+		this.mInputEndHour.setMaximumSize(new Dimension(15 * getMaximumSize().width / 100, Configuration.ITEM_HEIGHT));
+		add(this.mInputEndHour);
+
+		validate();
 
 		return;
 	}
@@ -144,13 +126,13 @@ public class DateFiler extends CustomComponent implements ItemListener {
 	@Override
 	public void itemStateChanged(ItemEvent e) {
 		if (ItemEvent.DESELECTED == e.getStateChange()) {
-			this.mJFTFStartHour.setEditable(true);
-			this.mJFTFEndHour.setEditable(true);
+			this.mInputStartHour.setEditable(true);
+			this.mInputEndHour.setEditable(true);
 		} else {
-			this.mJFTFStartHour.setValue("00:00");
-			this.mJFTFStartHour.setEditable(false);
-			this.mJFTFEndHour.setValue("23:59");
-			this.mJFTFEndHour.setEditable(false);
+			this.mInputStartHour.setValue("00:00");
+			this.mInputStartHour.setEditable(false);
+			this.mInputEndHour.setValue("23:59");
+			this.mInputEndHour.setEditable(false);
 		}
 	}
 }
