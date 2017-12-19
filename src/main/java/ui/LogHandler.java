@@ -3,8 +3,10 @@ package ui;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import javax.swing.JTabbedPane;
 
 import tabs.TabLog;
+import tabs.TabRequest;
 import utils.Configuration;
 
 public class LogHandler extends JFrame {
@@ -37,7 +39,10 @@ public class LogHandler extends JFrame {
 		setVisible(true);
 		setBounds(100, 100, Configuration.MAX_WIDTH, Configuration.MAX_HEIGHT);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		add(new TabLog("Logs").getContentPane());
+		JTabbedPane tabbedPane = new JTabbedPane();
+		tabbedPane.addTab("Requests", new TabRequest("Requests").getContentPane());
+		tabbedPane.addTab("Logs", new TabLog("Logs").getContentPane());
+		add(tabbedPane);
 	}
 
 }

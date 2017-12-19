@@ -11,8 +11,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map.Entry;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,131 +35,6 @@ import beans.devices.Sensor.Type;
  *
  */
 public class LogExtractor extends FileExtractor {
-
-	/**
-	 * Gets an elasticdump request which enables to extract logs of the date and
-	 * participant specified in parameters
-	 * 
-	 * @param formattedPeriod
-	 *            The formatted period to extract
-	 *            <ul>
-	 *            <li>For a day: YYYY.MM.DD</li>
-	 *            <li>For a month: YYYY.MM.*</li>
-	 *            </ul>
-	 * @param veraId
-	 *            The vera id must be a 8-number-length string
-	 * @param silent
-	 *            A boolean for displaying output of elasticdump cmd
-	 * @return The requests to be launched from production server for log
-	 *         extraction
-	 * @throws Exception
-	 *             Exceptions are thrown if
-	 *             <ul>
-	 *             <li>formattedPeriod does not match the specified formats</li>
-	 *             <li>vera does not match the specified formats</li>
-	 *             </ul>
-	 */
-	public static String getRequests(String formattedPeriod, String veraId, boolean silent) throws Exception {
-		Pattern dayPattern = Pattern.compile("\\d{4}.\\d{2}.\\d{2}$");
-		Pattern monthPattern = Pattern.compile("\\d{4}.\\d{2}.[*]$");
-		Pattern veraPattern = Pattern.compile("\\d{8}$");
-		Matcher dayMatcher = dayPattern.matcher(formattedPeriod);
-		Matcher monthMatcher = monthPattern.matcher(formattedPeriod);
-		Matcher veraMatcher = veraPattern.matcher(veraId);
-
-		if (!dayMatcher.find() && !monthMatcher.find())
-			throw new Exception("Invalid period");
-		else if (!veraMatcher.find())
-			throw new Exception("Invalid vera id");
-		else {
-			StringBuilder fileBuilder = new StringBuilder(formattedPeriod.replace(".", "_"));
-			fileBuilder.append(".json");
-			String outputFile = fileBuilder.toString();
-			String silentMod = silent ? " --quiet" : "";
-
-			return String.format(Locale.FRANCE,
-					"elasticdump --input=http://localhost:9200/logstash-%s/event --sourceOnly --output=%s --searchBody '{\"query\":{\"term\":{\"vera_serial\":\"%s\"}}}'%s",
-					formattedPeriod, outputFile, veraId, silentMod);
-		}
-	}
-
-	/**
-	 * Gets an elasticdump request which enables to extract logs of the date and
-	 * participant specified in parameters
-	 * 
-	 * @param formattedPeriod
-	 *            The formatted period to extract
-	 *            <ul>
-	 *            <li>For a day: YYYY.MM.DD</li>
-	 *            <li>For a month: YYYY.MM.*</li>
-	 *            </ul>
-	 * @param outputFile
-	 *            The output file which contains extracted logs
-	 * @param veraId
-	 *            The vera id must be a 8-number-length string
-	 * @param silent
-	 *            A boolean for displaying output of elasticdump cmd
-	 * @return The requests to be launched from production server for log
-	 *         extraction
-	 * @throws Exception
-	 *             Exceptions are thrown if
-	 *             <ul>
-	 *             <li>formattedPeriod does not match the specified formats</li>
-	 *             <li>vera does not match the specified formats</li>
-	 *             </ul>
-	 */
-	public static String getRequests(String formattedPeriod, String outputFile, String veraId, boolean silent)
-			throws Exception {
-		StringBuilder request = new StringBuilder(getRequests(formattedPeriod, veraId, silent));
-		request.append("; ");
-		request.append("cat ");
-		request.append(formattedPeriod.replace(".", "_"));
-		request.append(".json");
-		request.append(" >> ");
-		request.append(outputFile);
-		request.append(";");
-		request.append("echo ");
-		request.append(String.format("%s has been extracted", formattedPeriod));
-		return request.toString();
-	}
-
-	/**
-	 * Gets an elasticdump request which enables to extract logs of the periods
-	 * and participant specified in parameters
-	 * 
-	 * @param periods
-	 *            Table of periods to extract
-	 *            <ul>
-	 *            <li>For a day: YYYY.MM.DD</li>
-	 *            <li>For a month: YYYY.MM.*</li>
-	 *            </ul>
-	 * @param outputFile
-	 *            The output file which contains extracted logs
-	 * @param veraId
-	 *            The vera id must be a 8-number-length string
-	 * @param silent
-	 *            A boolean for displaying output of elasticdump cmd
-	 * @return The requests to be launched from production server for log
-	 *         extraction
-	 * @throws Exception
-	 *             Exceptions are thrown if
-	 *             <ul>
-	 *             <li>formattedPeriod does not match the specified formats</li>
-	 *             <li>vera does not match the specified formats</li>
-	 *             </ul>
-	 */
-	public static String getRequests(String[] periods, String outputFile, String veraId, boolean silent)
-			throws Exception {
-
-		StringBuilder strB = new StringBuilder();
-		for (String period : periods) {
-			strB.append(LogExtractor.getRequests(period, outputFile, veraId, silent));
-			strB.append(";");
-		}
-		strB.append("du -sh ");
-		strB.append(outputFile);
-		return strB.toString();
-	}
 
 	/**
 	 * Extract JSONArray from the file extracted from elastic search
@@ -199,7 +72,7 @@ public class LogExtractor extends FileExtractor {
 	 *             <li>File content can not be cast to JSONArray</li>
 	 *             </ul>
 	 */
-	public static List<MyLog> extractLogs(File extractedFile) throws Exception  {
+	public static List<MyLog> extractLogs(File extractedFile) throws Exception {
 		List<MyLog> myLogs = new ArrayList<>();
 		JSONArray logs = extractJSON(extractedFile);
 		for (int i = 0; i < logs.length(); i++) {
@@ -213,8 +86,8 @@ public class LogExtractor extends FileExtractor {
 	}
 
 	/**
-	 * Enables to set a minimal consumption threshold in order to ignore low
-	 * value for electric consumption.
+	 * Enables to set a minimal consumption threshold in order to ignore low value
+	 * for electric consumption.
 	 * 
 	 * @param listToSorted
 	 *            The list of logs to be sorted
@@ -518,9 +391,9 @@ public class LogExtractor extends FileExtractor {
 	}
 
 	public static boolean validateRawLogFile(File pRawLogFile) throws Exception {
-		
+
 		extractJSON(pRawLogFile);
-		
+
 		try {
 			if (!extractLogs(pRawLogFile).isEmpty()) {
 				return true;

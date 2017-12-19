@@ -5,7 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import beans.TSLimits;
+import beans.Period;
+import exceptions.PeriodException;
 
 public class DateFormater {
 
@@ -20,7 +21,7 @@ public class DateFormater {
 		return new SimpleDateFormat(pFormat).format(pDate);
 	}
 
-	public static TSLimits getTimestampLimitsOfDay(String pDay) throws ParseException {
+	public static Period getTimestampLimitsOfDay(String pDay) throws ParseException, PeriodException {
 		Calendar calendar = Calendar.getInstance();
 
 		calendar.setTime(new SimpleDateFormat(SHORT_DAY_FORMAT).parse(pDay));
@@ -34,6 +35,6 @@ public class DateFormater {
 		calendar.set(Calendar.SECOND, 59);
 		calendar.set(Calendar.MILLISECOND, 999);
 		long end = calendar.getTimeInMillis();
-		return new TSLimits(start, end);
+		return new Period(start, end);
 	}
 }

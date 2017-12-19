@@ -11,8 +11,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import beans.Period;
 import beans.SoftLog;
-import beans.TSLimits;
 import beans.devices.Device;
 import beans.devices.Device.DeviceType;
 import utils.Utils;
@@ -43,7 +43,7 @@ public class SoftLogExtractor extends FileExtractor {
 				pLogs.stream().filter(log -> log.getDayLabel().equals(pDayLabel)).collect(Collectors.toList()));
 	}
 
-	public static List<SoftLog> filterByHour(List<SoftLog> pLogs, TSLimits pTSLimits) {
+	public static List<SoftLog> filterByHour(List<SoftLog> pLogs, Period pTSLimits) {
 		return sortLogsByDate(pLogs.stream().filter(log -> log.isBetweenHours(pTSLimits)).collect(Collectors.toList()));
 	}
 

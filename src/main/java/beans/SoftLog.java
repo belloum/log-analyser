@@ -15,6 +15,7 @@ import beans.devices.ContactSensor.ContactSensorState;
 import beans.devices.Device;
 import beans.devices.ElectricMeter.ElectricMeterState;
 import beans.devices.MotionDetector.MotionDetectorState;
+import exceptions.PeriodException;
 import exceptions.RawLogException;
 import utils.DateFormater;
 
@@ -96,34 +97,36 @@ public class SoftLog {
 		return DateFormater.formatDate(this.mDate, DateFormater.SHORT_MONTH_FORMAT);
 	}
 
-	public boolean isBetweenDates(TSLimits pTsLimits) {
+	public boolean isBetweenDates(Period pTsLimits) {
 		return pTsLimits.contains(this.mDate);
 	}
 
-	public boolean isBetweenHours(TSLimits pTsLimits) {
+	public boolean isBetweenHours(Period pTsLimits) {
 		Calendar calendar = Calendar.getInstance();
 
 		Calendar cStart = Calendar.getInstance();
-		cStart.setTimeInMillis(pTsLimits.getTSStart());
+		cStart.setTime(pTsLimits.getStartDate());
 
 		Calendar cEnd = Calendar.getInstance();
-		cEnd.setTimeInMillis(pTsLimits.getTSEnd());
-		
-//		if(cEnd.get(Calendar.HOUR_OF_DAY) == 23 && cEnd.get(Calendar.MINUTE))
+		cEnd.setTime(pTsLimits.getEndDate());
 
 		calendar.setTime(this.mDate);
 		calendar.set(Calendar.HOUR_OF_DAY, cStart.get(Calendar.HOUR_OF_DAY));
 		calendar.set(Calendar.MINUTE, cStart.get(Calendar.MINUTE));
 		calendar.set(Calendar.SECOND, cStart.get(Calendar.SECOND));
 		calendar.set(Calendar.MILLISECOND, cStart.get(Calendar.MILLISECOND));
-		long bb = calendar.getTimeInMillis();
+		Date bb = calendar.getTime();
 
 		calendar.set(Calendar.HOUR_OF_DAY, cEnd.get(Calendar.HOUR_OF_DAY));
 		calendar.set(Calendar.MINUTE, cEnd.get(Calendar.MINUTE));
 		calendar.set(Calendar.SECOND, cEnd.get(Calendar.SECOND));
 		calendar.set(Calendar.MILLISECOND, cEnd.get(Calendar.MILLISECOND));
-		long cc = calendar.getTimeInMillis();
-		return isBetweenDates(new TSLimits(bb, cc));
+		Date cc = calendar.getTime();
+		try {
+			return isBetweenDates(new Period(bb, cc));
+		} catch (PeriodException e) {
+			return false;
+		}
 	}
 
 	@Override

@@ -14,6 +14,11 @@ public class InputValue extends JFormattedTextField {
 		setHorizontalAlignment(SwingConstants.CENTER);
 	}
 
+	public InputValue() {
+		super();
+		setHorizontalAlignment(SwingConstants.CENTER);
+	}
+
 	@Override
 	public void setEditable(boolean pEditabled) {
 		super.setEditable(pEditabled);

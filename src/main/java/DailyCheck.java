@@ -1,5 +1,6 @@
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Scanner;
@@ -10,6 +11,7 @@ import operators.csv.CSVReport;
 import operators.extractors.LogExtractor;
 import operators.extractors.ParticipantExtractor;
 import operators.extractors.ReportExtractor;
+import operators.extractors.RequestExtractor;
 
 public class DailyCheck {
 
@@ -70,8 +72,8 @@ public class DailyCheck {
 				String keyDate = String.format("%02d/%02d/%d", calendar.get(Calendar.DAY_OF_MONTH),
 						calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.YEAR));
 				keyDate = "29/08/2017";
-				DailyReport diasuiteReport = ReportExtractor.extractReport(new File(LOG_REPORTS, DAILY_REPORT_EXTRACTED),
-						keyDate);
+				DailyReport diasuiteReport = ReportExtractor
+						.extractReport(new File(LOG_REPORTS, DAILY_REPORT_EXTRACTED), keyDate);
 				System.out.println(diasuiteReport.toString());
 				scriptReport.compareTo(diasuiteReport);
 			}
@@ -82,7 +84,8 @@ public class DailyCheck {
 	private static List<String> getYesterdayRequest(Participant participant, String yesterday) throws Exception {
 
 		String[] periods = new String[] { yesterday.replace(".json", "") };
-		String cmd = LogExtractor.getRequests(periods, yesterday + ".json", participant.getVera(), false);
+		String cmd = RequestExtractor.extractLogsAmongPeriods(Arrays.asList(periods), yesterday + ".json",
+				participant.getVera(), false);
 		System.out.println(cmd);
 
 		return null;

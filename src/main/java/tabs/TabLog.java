@@ -23,12 +23,9 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 
+import beans.Period;
 import beans.SoftLog;
-import beans.TSLimits;
 import beans.devices.Device;
-import beans.participants.Participant;
-import operators.extractors.LogExtractor;
-import operators.extractors.ParticipantExtractor;
 import operators.extractors.RawLogFormater;
 import operators.extractors.SoftLogExtractor;
 import ui.components.ButtonBar;
@@ -71,16 +68,12 @@ public class TabLog extends AbstractTab implements DeviceSelectorListener, Choic
 
 	private FileChooser mFChooser = new FileChooser(Configuration.RESOURCES_FOLDER);
 
-	private Participant mParticipant;
 	private File mSelectedFile;
 	private List<Device> mCurrentDeviceSelected = new ArrayList<>();
 
 	public TabLog(String title) throws Exception {
 		super(title);
 		setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
-
-		mParticipant = ParticipantExtractor.extractParticipant(Configuration.PARTICIPANT_FILE, "4010");
-		System.out.println(LogExtractor.getRequests("2017.12.*", mParticipant.getVera(), true));
 
 		// Browse RawLog file
 		add(mFCLog);
@@ -228,7 +221,7 @@ public class TabLog extends AbstractTab implements DeviceSelectorListener, Choic
 		// Filter by hour
 		if (mDateFilter.isFilteringByTimestamp()) {
 			logs = SoftLogExtractor.filterByHour(logs,
-					new TSLimits(mDateFilter.getStartHour(), mDateFilter.getEndHour()));
+					new Period(mDateFilter.getStartHour(), mDateFilter.getEndHour()));
 		}
 
 		// Ignore Consumption

@@ -1,5 +1,6 @@
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -12,6 +13,7 @@ import operators.extractors.LogExtractor;
 import operators.extractors.ParticipantExtractor;
 import operators.extractors.ReportExtractor;
 import operators.extractors.ReportExtractor.ReportType;
+import operators.extractors.RequestExtractor;
 
 public class Main {
 
@@ -120,7 +122,8 @@ public class Main {
 	public static String getLogExtractionRequest(String[] periodsToExtract, String outputFile, String veraId,
 			boolean silentRequests) throws Exception {
 
-		String cmd = LogExtractor.getRequests(periodsToExtract, outputFile, veraId, silentRequests);
+		String cmd = RequestExtractor.extractLogsAmongPeriods(Arrays.asList(periodsToExtract), outputFile, veraId,
+				silentRequests);
 		System.out.println(cmd);
 		return cmd;
 	}
