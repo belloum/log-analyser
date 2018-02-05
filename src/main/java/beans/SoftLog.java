@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import org.json.JSONException;
@@ -85,12 +86,24 @@ public class SoftLog {
 		return mDevice;
 	}
 
+	public String getDeviceId() {
+		return mDevice.getId();
+	}
+
 	public void setDevice(Device pDevice) {
 		this.mDevice = pDevice;
 	}
 
+	public String getHourLabel() {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(this.mDate);
+		return String.format("%02d:00 - %02d:00", calendar.get(Calendar.HOUR_OF_DAY),
+				calendar.get(Calendar.HOUR_OF_DAY) + 1);
+		// return String.format("%s:00", new SimpleDateFormat("HH").format(this.mDate));
+	}
+
 	public String getDayLabel() {
-		return DateFormater.formatDate(this.mDate, DateFormater.SHORT_DAY_FORMAT);
+		return new SimpleDateFormat("yyyy.MM.dd, E", Locale.ENGLISH).format(this.mDate);
 	}
 
 	public String getMonth() {

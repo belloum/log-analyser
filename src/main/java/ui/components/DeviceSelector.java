@@ -32,9 +32,16 @@ public class DeviceSelector extends CustomComponent implements ItemListener {
 	public DeviceSelector(Dimension pDimension, List<Device> pDevices) {
 		super(pDimension);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		setPreferredSize(new Dimension(pDimension.width, (pDevices.size() / this.ITEM_BY_LINE) * pDimension.height));
 		setCheckBoxDevices(pDevices);
 		build();
+	}
+
+	public void setEnabled(String pLabel, boolean pEnabled) {
+		this.mLCheck.stream().filter(check -> check.getText().equals(pLabel)).findFirst().get().setEnabled(pEnabled);
+	}
+
+	public void setSelected(boolean pSelected) {
+		this.mLCheck.stream().forEach(box -> box.setSelected(pSelected));
 	}
 
 	public DeviceSelector(Dimension pDimension, List<Device> pDevices, DeviceSelectorListener pDeviceSelectorListener) {
@@ -50,6 +57,11 @@ public class DeviceSelector extends CustomComponent implements ItemListener {
 	public DeviceSelector(List<Device> pDevices) {
 		this();
 		setCheckBoxDevices(pDevices);
+	}
+
+	public void setMaxItemByLine(int pMaxItem) {
+		this.ITEM_BY_LINE = pMaxItem;
+		build();
 	}
 
 	public void setCheckBoxDevices(List<Device> pDevices) {
@@ -74,6 +86,12 @@ public class DeviceSelector extends CustomComponent implements ItemListener {
 		build();
 	}
 
+	private void adaptSize() {
+		int nbLine = (int) Math.ceil((double) this.mDevices.size() / (double) this.ITEM_BY_LINE);
+		setPreferredSize(new Dimension(getMaximumSize().width, nbLine * Configuration.ITEM_HEIGHT));
+		setMaximumSize(getPreferredSize());
+	}
+
 	protected void build() {
 		super.build();
 		JPanel jPanel = null;
@@ -96,7 +114,7 @@ public class DeviceSelector extends CustomComponent implements ItemListener {
 
 		setVisible(false);
 		setVisible(true);
-
+		adaptSize();
 		return;
 	}
 

@@ -17,8 +17,8 @@ public class FileExtractor {
 	 *            The file to read
 	 * @return The content of file as String
 	 * @throws IOException
-	 *             Exception is thrown if the specified file does not exist or
-	 *             if its content can not be red
+	 *             Exception is thrown if the specified file does not exist or if
+	 *             its content can not be red
 	 */
 	public static String readFile(File pFile) throws IOException {
 		FileInputStream in = new FileInputStream(pFile);

@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.function.Predicate;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -46,6 +47,11 @@ public class FileChooserWithResult extends CustomComponent {
 
 	public FileChooserWithResult(File pCurrentDirectory, String pButtonLabel, ChoiceListener pFCListener,
 			Integer pMaxWidth) {
+		this(pCurrentDirectory, pButtonLabel, pFCListener, new Dimension(pMaxWidth, Configuration.ITEM_HEIGHT));
+	}
+
+	public FileChooserWithResult(File pCurrentDirectory, String pButtonLabel, ChoiceListener pFCListener,
+			Integer pMaxWidth, Predicate<?> pPredicate) {
 		this(pCurrentDirectory, pButtonLabel, pFCListener, new Dimension(pMaxWidth, Configuration.ITEM_HEIGHT));
 	}
 

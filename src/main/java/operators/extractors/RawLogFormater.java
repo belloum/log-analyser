@@ -14,7 +14,7 @@ import exceptions.RawLogException;
 
 public class RawLogFormater extends FileExtractor {
 
-	private static void validateRawLogFile(File pRawLogFile) throws RawLogException {
+	public static void validateRawLogFile(File pRawLogFile) throws RawLogException {
 		JSONArray jArray = extractJSON(pRawLogFile);
 		for (int i = 0; i < jArray.length(); i++) {
 			try {
@@ -38,7 +38,25 @@ public class RawLogFormater extends FileExtractor {
 		}
 	}
 
-	public static List<SoftLog> extractLogs(File pRawLogFile) throws Exception {
+	public static String extractVeraId(File pRawLogFile) throws RawLogException {
+		JSONArray jArr = extractJSON(pRawLogFile);
+		try {
+			return (jArr.length() > 0) ? jArr.getJSONObject(0).getString("vera_serial") : "no_vera";
+		} catch (Exception e) {
+			throw new RawLogException(e.getMessage());
+		}
+	}
+
+	public static String extractUserId(File pRawLogFile) throws RawLogException {
+		JSONArray jArr = extractJSON(pRawLogFile);
+		try {
+			return (jArr.length() > 0) ? jArr.getJSONObject(0).getString("user") : "no_user";
+		} catch (Exception e) {
+			throw new RawLogException(e.getMessage());
+		}
+	}
+
+	public static List<SoftLog> extractLogs(File pRawLogFile) throws RawLogException {
 		validateRawLogFile(pRawLogFile);
 		List<SoftLog> myLogs = new ArrayList<>();
 		JSONArray logs = extractJSON(pRawLogFile);

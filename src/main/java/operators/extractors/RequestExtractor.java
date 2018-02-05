@@ -11,7 +11,7 @@ public class RequestExtractor {
 
 	private final static Pattern mDayPattern = Pattern.compile("\\d{4}.\\d{2}.\\d{2}$");
 	private final static Pattern mMonthPattern = Pattern.compile("\\d{4}.\\d{2}.[*]$");
-	private final static Pattern mVeraPattern = Pattern.compile("\\d{8}$");
+	private final static Pattern mVeraPattern = Pattern.compile("^\\d{8}$");
 
 	private final static String URL_REQUEST_FORMAT = "elasticdump --input=http://localhost:9200/logstash-%s/event --sourceOnly --output=%s --searchBody '{\"query\":{\"term\":{\"vera_serial\":\"%s\"}}}'%s";
 
@@ -19,10 +19,11 @@ public class RequestExtractor {
 			throws RequestException {
 
 		if (!mDayPattern.matcher(pPeriod).find() && !mMonthPattern.matcher(pPeriod).find()) {
-			throw new RequestException(RequestException.PERIOD_DOES_NOT_MATCH_PATERN);
+			throw new RequestException(new StringBuffer(RequestException.PERIOD_DOES_NOT_MATCH_PATERN)
+					.append(" - current is: ").append(pPeriod).toString());
 		} else if (!mVeraPattern.matcher(pVeraId).find())
 			throw new RequestException(new StringBuffer(RequestException.VERA_DOES_NOT_MATCH_PATERN)
-					.append(" - current is: ").append(pPeriod).toString());
+					.append(" - current is: ").append(pVeraId).toString());
 		else {
 			String outputFile = String.format("%s.json", pPeriod.replace(".", "_"));
 			String silentMod = pSilent ? " --quiet" : "";
@@ -31,8 +32,8 @@ public class RequestExtractor {
 		}
 	}
 
-	public static String extractLogsAmongPeriods(List<String> pPeriods, String pOutputFile, String pVeraId, boolean pSilent)
-			throws RequestException {
+	public static String extractLogsAmongPeriods(List<String> pPeriods, String pOutputFile, String pVeraId,
+			boolean pSilent) throws RequestException {
 
 		StringBuilder strB = new StringBuilder();
 		pPeriods.forEach(period -> {
@@ -52,9 +53,17 @@ public class RequestExtractor {
 		String inputFile = String.format("%s.json", pPeriod.replace(".", "_"));
 
 		String[] cmds = new String[] { extractLogsAmongPeriod(pPeriod, pVeraId, pSilent),
-				String.format("cat %s >> %s", inputFile, pOutputFileName),
-				String.format("echo %s has been extracted", pPeriod), String.format("rm -f %s", inputFile) };
+				addSrcContentToDestFile(inputFile, pOutputFileName),
+				String.format("echo %s has been extracted", pPeriod), removeFile(inputFile) };
 		return StringUtils.join(cmds, ";");
+	}
+
+	public static String removeFile(String pFilename) {
+		return String.format("rm -f %s", pFilename);
+	}
+
+	public static String addSrcContentToDestFile(String pSrcFile, String pDestFile) {
+		return String.format("cat %s >> %s", pSrcFile, pDestFile);
 	}
 
 }

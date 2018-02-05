@@ -15,6 +15,8 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -103,13 +105,28 @@ public class TabRequest extends AbstractTab {
 		JPanel participantSelect = new JPanel();
 		participantSelect.setLayout(new BoxLayout(participantSelect, BoxLayout.X_AXIS));
 		JLabel jL = new JLabel(" Pick a vera number");
-		CustomComponent.setJLabelFontStyle(jL, Font.BOLD);
 		jL.setMaximumSize(jL.getPreferredSize());
 		mIVera = new InputValue();
+		mIVera.addCaretListener(new CaretListener() {
+
+			@Override
+			public void caretUpdate(CaretEvent e) {
+				if (StringUtils.isNotEmpty(mIVera.getText())) {
+					mParticipantsPicker.setSelectedIndex(0);
+				}
+			}
+		});
 		mIVera.setMaximumSize(new Dimension(Configuration.BUTTON_WIDTH, Configuration.ITEM_HEIGHT));
 		mIVera.setPreferredSize(mIVera.getMaximumSize());
+
+		JLabel selectParticipant = new JLabel("Select a participant");
+		selectParticipant.setMaximumSize(selectParticipant.getPreferredSize());
+		participantSelect.add(selectParticipant);
+
 		participantSelect.add(mParticipantsPicker);
-		participantSelect.add(new JLabel("OR"));
+		JLabel or = new JLabel("OR");
+		CustomComponent.setJLabelFontStyle(or, Font.BOLD);
+		participantSelect.add(or);
 		participantSelect.add(jL);
 		participantSelect.add(mIVera);
 		participantSelect

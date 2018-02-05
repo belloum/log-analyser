@@ -10,7 +10,7 @@ import exceptions.PeriodException;
 
 public class DateFormater {
 
-	public final static String SHORT_DAY_FORMAT = "yyyy.MM.dd";
+	public final static String SHORT_DAY_FORMAT = "yyyy.MM.dd, E";
 	public final static String SHORT_MONTH_FORMAT = "yyyy.MM";
 
 	public static String formatDate(long pTimestamp, String pFormat) {

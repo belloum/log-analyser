@@ -1,9 +1,11 @@
 package ui.components;
 
 import java.io.File;
+import java.util.List;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class FileChooser extends JFileChooser {
 
@@ -16,6 +18,12 @@ public class FileChooser extends JFileChooser {
 	public FileChooser(File pCurrentDirectory, String pTitle) {
 		this(pCurrentDirectory);
 		setDialogTitle(pTitle);
+	}
+
+	public FileChooser(File pCurrentDirectory, String pTitle, List<FileNameExtensionFilter> filters) {
+		this(pCurrentDirectory, pTitle);
+		filters.forEach(filter -> setFileFilter(filter));
+		setAcceptAllFileFilterUsed(false);
 	}
 
 	@Override

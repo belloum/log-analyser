@@ -38,9 +38,9 @@ public class HExtract {
 			}
 
 			String lastLabel = Period.getFriendlyLabel(histogramItems.getLast());
-			if (!lastLabel.contains("23:59:59")) {
+			if (!lastLabel.contains("23:59")) {
 				histogramItems.removeLast();
-				histogramItems.add(new Period(lastLabel.split(" - ")[0], "23:59:59"));
+				histogramItems.add(new Period(lastLabel.split(" - ")[0], "23:59"));
 			}
 
 			return histogramItems;

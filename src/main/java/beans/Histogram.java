@@ -23,23 +23,41 @@ import operators.extractors.SoftLogExtractor;
 
 public class Histogram extends LinkedHashMap<Period, Integer> {
 
+	private static final Integer MIN_DELAY = 1;
+	private static final Integer MAX_DELAY = 24 * 60;
+
 	private static final long serialVersionUID = 1L;
 	private Integer mMinuteSlot;
 	private List<?> mDataSet;
 
+	private HistogramProgressListener mProgressListener;
+
+	public void setBuildingListener(HistogramProgressListener pListener) {
+		this.mProgressListener = pListener;
+	}
+
 	public Histogram(Integer pMinuteSlot) throws HistogramException, PeriodException {
-		if (pMinuteSlot > 0 && pMinuteSlot <= 24 * 60) {
-			this.mMinuteSlot = pMinuteSlot;
-			this.mDataSet = new ArrayList<>();
-			buildSlots();
-		} else {
-			throw new HistogramException(HistogramException.INVALID_INTERVAL);
-		}
+		this(pMinuteSlot, new ArrayList<>(), null);
 	}
 
 	public Histogram(Integer pMinuteSlot, List<?> pDatas) throws HistogramException, PeriodException {
-		this(pMinuteSlot);
+		this(pMinuteSlot, pDatas, null);
+	}
+
+	public Histogram(Integer pMinuteSlot, List<?> pDatas, HistogramProgressListener pListener)
+			throws HistogramException, PeriodException {
+
+		if (pMinuteSlot >= MIN_DELAY && pMinuteSlot <= MAX_DELAY) {
+			this.mMinuteSlot = pMinuteSlot;
+		} else {
+			throw new HistogramException(HistogramException.INVALID_INTERVAL);
+		}
+
 		this.mDataSet = pDatas;
+		this.mProgressListener = pListener;
+
+		buildSlots();
+
 		fillHistogram(pDatas);
 	}
 
@@ -67,11 +85,27 @@ public class Histogram extends LinkedHashMap<Period, Integer> {
 		}
 
 		histogramItems.forEach(tsLimits -> put(tsLimits, 0));
+
 	}
 
 	private void fillHistogram(List<?> pDatas) {
-		forEach((tsLimits, value) -> put(tsLimits,
-				(int) pDatas.stream().filter(log -> ((SoftLog) log).isBetweenHours(tsLimits)).count()));
+		if (mProgressListener != null) {
+			mProgressListener.startFillingSlots();
+		}
+
+		int index = 0;
+		for (Period tsLimits : keySet()) {
+			put(tsLimits, (int) pDatas.stream().filter(log -> ((SoftLog) log).isBetweenHours(tsLimits)).count());
+			index++;
+			if (mProgressListener != null) {
+				mProgressListener.progressBulding(((float) index * 100) / size());
+			}
+		}
+
+		if (mProgressListener != null) {
+			mProgressListener.finishFillingSlots();
+		}
+
 	}
 
 	public static JFreeChart draw(Histogram pHistogram, boolean pSplitByDevice) throws Exception {
@@ -155,4 +189,13 @@ public class Histogram extends LinkedHashMap<Period, Integer> {
 	public static boolean saveCSVFile(Histogram pHistogram, File pOutputFile) {
 		return FileExtractor.saveFile(formatAsCSV(pHistogram), pOutputFile);
 	}
+
+	public interface HistogramProgressListener {
+		public void startFillingSlots();
+
+		public void finishFillingSlots();
+
+		public void progressBulding(float pProgress);
+	}
+
 }
