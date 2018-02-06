@@ -10,9 +10,9 @@ import org.json.JSONObject;
 
 import ui.components.MyButton;
 import ui.last.FileSelector;
-import ui.last.tabs.ConfigurableTab;
+import ui.last.tabs.Configurable;
 
-public class Menu extends JPanel implements ConfigurableTab {
+public class Menu extends JPanel implements Configurable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -28,7 +28,7 @@ public class Menu extends JPanel implements ConfigurableTab {
 			sections = configuration();
 		} catch (Exception e) {
 			System.err.println(String.format("Unfound menu in configuration file %s",
-					ConfigurableTab.configurationFile().getName()));
+					Configurable.configurationFile().getName()));
 			sections = new JSONObject();
 		}
 

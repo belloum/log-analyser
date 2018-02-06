@@ -18,7 +18,7 @@ import utils.Utils;
 /**
  * Force tabs to have a header
  */
-public abstract class MyCustomTab extends JPanel implements ConfigurableTab {
+public abstract class MyCustomTab extends JPanel implements Configurable {
 
 	/**
 	 * 
@@ -37,7 +37,7 @@ public abstract class MyCustomTab extends JPanel implements ConfigurableTab {
 		} catch (final Exception e) {
 			final String error = String.format("Unable to find configuration file (%s): %s", this.getClass().getName(),
 					e.getMessage());
-			Utils.errorLog(error);
+			Utils.errorLog(error, this.getClass());
 			System.err.println(error);
 		}
 
@@ -57,7 +57,7 @@ public abstract class MyCustomTab extends JPanel implements ConfigurableTab {
 
 	protected void error(final String pErrorMsg) {
 		if (!StringUtils.isEmpty(pErrorMsg)) {
-			Utils.errorLog(pErrorMsg);
+			Utils.errorLog(pErrorMsg, this.getClass());
 			System.err.println("Error: " + pErrorMsg);
 			mError.setVisible(true);
 			mError.setText(pErrorMsg);
@@ -80,7 +80,7 @@ public abstract class MyCustomTab extends JPanel implements ConfigurableTab {
 
 	@Override
 	public JSONObject configuration() throws Exception {
-		return new JSONObject(FileExtractor.readFile(ConfigurableTab.configurationFile())).getJSONObject("tabs")
+		return new JSONObject(FileExtractor.readFile(Configurable.configurationFile())).getJSONObject("tabs")
 				.getJSONObject(configurationSection());
 	}
 

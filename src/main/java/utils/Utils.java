@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -20,10 +21,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import beans.SoftLog;
 import operators.extractors.FileExtractor;
-import ui.last.tabs.ConfigurableTab;
+import operators.extractors.SoftLogExtractor;
+import ui.last.tabs.Configurable;
 
-public class Utils implements ConfigurableTab {
+public class Utils implements Configurable {
 
 	public static LinkedHashMap<String, ?> sortMap(Map<String, ?> pMap) {
 		return pMap.entrySet().stream().sorted(Map.Entry.comparingByKey()).collect(Collectors.toMap(Map.Entry::getKey,
@@ -41,25 +44,51 @@ public class Utils implements ConfigurableTab {
 		clpbrd.setContents(stringSelection, null);
 	}
 
-	public static void log(String pMsg) {
+	public static boolean saveTempLogFile(List<SoftLog> pCleanedList) throws JSONException, IOException {
+		return SoftLogExtractor.saveLogList(pCleanedList, tempLogFile());
+	}
+
+	public static File tempLogFile() throws JSONException, IOException {
+		File pFile = new File(new JSONObject(FileExtractor.readFile(Configurable.configurationFile()))
+				.getJSONObject("settings").getString("temp_file"));
+
+		if (!pFile.exists()) {
+			pFile.createNewFile();
+		}
+
+		return pFile;
+	}
+
+	private static File logFile() throws JSONException, IOException {
+		return new File(new JSONObject(FileExtractor.readFile(Configurable.configurationFile()))
+				.getJSONObject("settings").getString("log_file"));
+	}
+
+	private static File errorLogFile() throws JSONException, IOException {
+		return new File(new JSONObject(FileExtractor.readFile(Configurable.configurationFile()))
+				.getJSONObject("settings").getString("error_log_file"));
+	}
+
+	@SuppressWarnings("rawtypes")
+	public static void log(String pMsg, Class pClass) {
 		try {
-			updateLogFile(new File(new JSONObject(FileExtractor.readFile(ConfigurableTab.configurationFile()))
-					.getJSONObject("settings").getString("log_file")), pMsg);
+			updateLogFile(logFile(), pMsg, pClass);
 		} catch (JSONException | IOException e) {
 			System.err.println("Unable to write on log file: " + e);
 		}
 	}
 
-	public static void errorLog(String pMsg) {
+	@SuppressWarnings("rawtypes")
+	public static void errorLog(String pMsg, Class pClass) {
 		try {
-			updateLogFile(new File(new JSONObject(FileExtractor.readFile(ConfigurableTab.configurationFile()))
-					.getJSONObject("settings").getString("error_log_file")), pMsg);
+			updateLogFile(errorLogFile(), pMsg, pClass);
 		} catch (JSONException | IOException e) {
 			System.err.println("Unable to write on log file: " + e);
 		}
 	}
 
-	private static void updateLogFile(File pFile, String pMsg) {
+	@SuppressWarnings("rawtypes")
+	private static void updateLogFile(File pFile, String pMsg, Class pClass) {
 		try {
 			if (!pFile.exists()) {
 				pFile.createNewFile();
@@ -67,8 +96,8 @@ public class Utils implements ConfigurableTab {
 
 			FileOutputStream fop = new FileOutputStream(pFile, true);
 			if (StringUtils.isNotEmpty(pMsg)) {
-				fop.write(String.format("[%s] %s", new SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(new Date()), pMsg)
-						.getBytes());
+				fop.write(String.format("[%s][%s] %s", new SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(new Date()),
+						pClass.getSimpleName(), pMsg).getBytes());
 			}
 
 			fop.write(System.getProperty("line.separator").getBytes());

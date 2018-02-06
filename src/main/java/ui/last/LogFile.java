@@ -26,27 +26,43 @@ public class LogFile extends File {
 	private List<DeviceType> mDeviceTypes;
 	private Integer mDayCount;
 
-	public LogFile(String pChildPath) throws RawLogException {
-		super(pChildPath);
-		extractData();
-	}
-
 	public LogFile(File pFile) throws RawLogException {
-		this(pFile.getAbsolutePath());
+		this(pFile, null);
 	}
 
-	public LogFile(File pParent, String pChild) throws RawLogException {
-		super(pParent, pChild);
-		extractData();
-	}
+	public LogFile(File pFile, LogExtractorListener pListener) throws RawLogException {
+		super(pFile.getPath());
 
-	private void extractData() throws RawLogException {
-		this.mUser = RawLogFormater.extractUserId(this);
-		this.mVeraId = RawLogFormater.extractVeraId(this);
-		this.mSoftLogs = SoftLogExtractor.sortLogsByDate(RawLogFormater.extractLogs(this));
-		this.mDevices = SoftLogExtractor.getDevices(mSoftLogs);
-		this.mDeviceTypes = SoftLogExtractor.getDeviceTypes(mSoftLogs);
-		this.mDayCount = SoftLogExtractor.getDayCount(mSoftLogs);
+		if (pListener != null) {
+			pListener.startExtraction();
+		}
+
+		this.mSoftLogs = SoftLogExtractor.sortLogsByDate(RawLogFormater.extractLogs(pFile, pListener));
+
+		this.mDevices = SoftLogExtractor.getDevices(this.mSoftLogs);
+		if (pListener != null) {
+			pListener.deviceExtracted(this.mDevices);
+		}
+
+		this.mDeviceTypes = SoftLogExtractor.getDeviceTypes(this.mSoftLogs);
+		if (pListener != null) {
+			pListener.devieTypeExtracted(this.mDeviceTypes);
+		}
+
+		this.mDayCount = SoftLogExtractor.getDayCount(this.mSoftLogs);
+		if (pListener != null) {
+			pListener.dayExtracted(this.mDayCount);
+		}
+
+		this.mUser = RawLogFormater.extractUserId(pFile);
+		if (pListener != null) {
+			pListener.userExtracted(this.mUser);
+		}
+
+		this.mVeraId = RawLogFormater.extractVeraId(pFile);
+		if (pListener != null) {
+			pListener.veraExtracted(this.mVeraId);
+		}
 	}
 
 	public List<SoftLog> getSoftLogs() {

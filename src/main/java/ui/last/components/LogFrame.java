@@ -1,11 +1,11 @@
 package ui.last.components;
 
 import java.awt.BorderLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -14,16 +14,22 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import org.json.JSONException;
+
+import beans.SoftLog;
+import beans.devices.Device;
+import beans.devices.Device.DeviceType;
 import exceptions.RawLogException;
-import ui.components.CustomComponent;
+import operators.extractors.SoftLogExtractor;
 import ui.components.FileChooser;
 import ui.components.MyButton;
 import ui.last.FileSelector;
+import ui.last.LogExtractorListener;
 import ui.last.LogFile;
 import utils.Configuration;
 import utils.Utils;
 
-public class LogFrame extends JPanel {
+public class LogFrame extends JPanel implements LogExtractorListener {
 
 	// TODO Show progress while checking validity
 
@@ -35,10 +41,12 @@ public class LogFrame extends JPanel {
 	private FileSelector mFileListener;
 
 	private static final String NO_FILE_SELECTED = "No file selected";
+	private static final String SELECT_A_FILE = "Select a file";
 	private static final int IMG_DIMENSION = 40;
 
-	private JLabel mFileName = new JLabel(NO_FILE_SELECTED);
-	private JLabel mLogCount = new JLabel("0");
+	private LegendValueLabel mFileName = new LegendValueLabel("Name", NO_FILE_SELECTED);
+	private LegendValueLabel mLogCount = new LegendValueLabel("Logs", "0");
+	private ProgressBarWithLabel mProgressBar = new ProgressBarWithLabel();
 
 	public LogFrame() {
 		setLayout(new BorderLayout());
@@ -51,72 +59,149 @@ public class LogFrame extends JPanel {
 		try {
 			add(new JLabel(new ImageIcon(Utils.scaleImg(Configuration.IMAGE_LOG_FILE, IMG_DIMENSION, IMG_DIMENSION))),
 					BorderLayout.PAGE_START);
-		} catch (IOException ignored) {
+		} catch (final IOException ignored) {
+			Utils.errorLog("Image not found", this.getClass());
 			System.err.println("Hay una problema");
 		}
 
-		JPanel logInfo = new JPanel(new GridBagLayout());
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.fill = GridBagConstraints.BOTH;
-		gbc.weightx = 1;
-		gbc.weighty = 1;
-
-		// Name
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		logInfo.add(CustomComponent.boldLabel("Name"), gbc);
-		gbc.gridy++;
-		logInfo.add(mFileName, gbc);
-
-		// Log
-		gbc.gridx = 0;
-		gbc.gridy++;
-		logInfo.add(CustomComponent.boldLabel("Logs"), gbc);
-		gbc.gridy++;
-		logInfo.add(mLogCount, gbc);
-
-		add(logInfo, BorderLayout.CENTER);
+		JPanel info = new JPanel(new GridLayout(3, 1));
+		info.add(mFileName);
+		info.add(mLogCount);
 
 		final FileChooser fileChooser = new FileChooser(Configuration.RESOURCES_FOLDER, "Select a log file",
 				Arrays.asList(new FileNameExtensionFilter("Log file", "json")));
 
-		add(new MyButton("Select a file", event -> {
+		// button
+		info.add(new MyButton(SELECT_A_FILE, event -> {
 			if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 				checkLogFile(fileChooser.getSelectedFile());
 			}
-		}), BorderLayout.PAGE_END);
+		}));
 
+		add(info, BorderLayout.CENTER);
+		add(mProgressBar, BorderLayout.PAGE_END);
+
+		mProgressBar.setVisible(false);
 	}
 
-	public void addFileSelectorListener(FileSelector pSelector) {
+	public void addFileSelectorListener(final FileSelector pSelector) {
 		this.mFileListener = pSelector;
 	}
 
-	public void checkLogFile(File pSelectedFile) {
-		// FIXME start progress
+	public void checkLogFile(final File pSelectedFile) {
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				LogFrame.this.mProgressBar.showProgress();
+				try {
+					validFile(new LogFile(pSelectedFile, LogFrame.this));
+				} catch (final RawLogException e) {
+					System.err.println(e.getMessage());
+					invalidFile(pSelectedFile, e.getMessage());
+				} finally {
+					LogFrame.this.mProgressBar.hideProgress();
+				}
+			}
+		}).start();
+	}
+
+	public void validFile(final LogFile pLogFile) throws RawLogException {
+		mFileName.setValue(pLogFile.getName());
+		mLogCount.setValue(String.format("%d", pLogFile.getLogCount()));
+
 		try {
-			validFile(new LogFile(pSelectedFile));
-		} catch (RawLogException e) {
-			System.err.println(e.getMessage());
-			invalidFile(pSelectedFile, e.getMessage());
-		}
-		// FIXME stop progress
-	}
-
-	public void validFile(LogFile pLogFile) throws RawLogException {
-		mFileName.setText(pLogFile.getName());
-		mLogCount.setText(String.format("%d", pLogFile.getLogCount()));
-		if (mFileListener != null) {
-			mFileListener.validFile(pLogFile);
+			if (saveLogFile(pLogFile)) {
+				if (mFileListener != null) {
+					mFileListener.validFile(pLogFile);
+				}
+			} else {
+				throw new RawLogException("Unable to save cleaned list to tempory file");
+			}
+		} catch (JSONException | IOException | RawLogException e) {
+			e.printStackTrace();
 		}
 	}
 
-	public void invalidFile(File pInvalidFile, String pCause) {
-		mLogCount.setText("0");
-		mFileName.setText(NO_FILE_SELECTED);
+	public void invalidFile(final File pInvalidFile, final String pCause) {
+		mLogCount.setValue("0");
+		mFileName.setValue(NO_FILE_SELECTED);
 		if (mFileListener != null) {
 			mFileListener.invalidFile(pInvalidFile, pCause);
 		}
 	}
 
+	private boolean saveLogFile(LogFile pLogFile) throws JSONException, IOException {
+
+		float pThreshold = 20f;
+		ignoreLowConsumptionLogs();
+		List<SoftLog> cleanList = SoftLogExtractor.ignoreLowConsumptionLogs(pLogFile.getSoftLogs(), pThreshold);
+
+		cleanLogsResult(pLogFile.getSoftLogs().size(), cleanList.size());
+
+		saveCleanFile();
+		return Utils.saveTempLogFile(cleanList);
+	}
+
+	@Override
+	public void startExtraction() {
+		this.mProgressBar.setProgressText("Start extraction");
+		if (mFileListener != null) {
+			mFileListener.checkingFile();
+		}
+	}
+
+	@Override
+	public void userExtracted(String pUser) {
+		this.mProgressBar.setProgressText("Extract user");
+	}
+
+	@Override
+	public void veraExtracted(String pVera) {
+	}
+
+	@Override
+	public void startLogExtraction() {
+		this.mProgressBar.setProgressText("Extract logs");
+	}
+
+	@Override
+	public void logExtractionProgress(int pProgress) {
+		this.mProgressBar.setProgressValue(pProgress);
+	}
+
+	@Override
+	public void deviceExtracted(List<Device> pDevices) {
+		this.mProgressBar.setProgressText("Extract devices");
+	}
+
+	@Override
+	public void devieTypeExtracted(List<DeviceType> pDeviceType) {
+		this.mProgressBar.setProgressText("Extract device types");
+	}
+
+	@Override
+	public void dayExtracted(int dayCount) {
+		this.mProgressBar.setProgressText("Extract days");
+	}
+
+	@Override
+	public void formatLogs() {
+		this.mProgressBar.setProgressText("Format logs");
+	}
+
+	@Override
+	public void ignoreLowConsumptionLogs() {
+		this.mProgressBar.setProgressText("Ignore low consumption logs");
+	}
+
+	@Override
+	public void cleanLogsResult(int pOldCount, int pNewCount) {
+		this.mProgressBar.setProgressText(String.format("%d logs removed", (pOldCount - pNewCount)));
+	}
+
+	@Override
+	public void saveCleanFile() {
+		this.mProgressBar.setProgressText("Save file");
+	}
 }

@@ -52,6 +52,12 @@ public abstract class CustomComponent extends JPanel {
 		return pJlLabel;
 	}
 
+	public static JLabel boldLabel() {
+		JLabel pJlLabel = new JLabel();
+		pJlLabel.setFont(new Font(pJlLabel.getFont().getName(), Font.BOLD, pJlLabel.getFont().getSize()));
+		return pJlLabel;
+	}
+
 	public void addMultiLineText(List<String> pItems, int pItemByLine, JPanel pContainer) {
 		List<String> line = new ArrayList<>();
 		for (int i = 0; i < pItems.size(); i++) {

@@ -8,5 +8,7 @@ public interface FileSelector {
 
 	public void invalidFile(File pInvalidFile, String pCause);
 
+	public void checkingFile();
+	
 	public LogFile getLogFile();
 }

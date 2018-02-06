@@ -10,7 +10,6 @@ public class Configuration {
 	public static final File IMAGES_FOLDER = new File(RESOURCES_FOLDER, "img/");
 
 	public static final File PARTICIPANT_FILE = new File(RESOURCES_FOLDER, "userboxes.json");
-	public static final File SETTINGS_FILE = new File(RESOURCES_FOLDER, "settings.json");
 	public static final File RAW_LOG_FILE = new File(RESOURCES_FOLDER, "raw-logs.json");
 
 	public static final File IMAGE_LOG_FILE = new File(IMAGES_FOLDER, "log.png");

@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ItemEvent;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -16,6 +17,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.border.BevelBorder;
 
+import org.json.JSONException;
+
 import ui.components.MyButton;
 import ui.last.FileSelector;
 import ui.last.components.activityresults.MealResultPanel;
@@ -26,11 +29,11 @@ import ui.last.routines.settings.panels.RoutineParameterPanel;
 import ui.last.routines.settings.panels.newe.MealParametersPanel;
 import ui.last.routines.settings.panels.newe.WakeAndBedParametersPanel;
 import utils.Configuration;
+import utils.Utils;
 
 public class RoutineTab2 extends LogTab {
 
 	// TODO Invalid hour > error message
-	// FIXME Clean file is ugly
 	// TODO helper for decision, show the biggest sender
 	// TODO Progress
 
@@ -47,13 +50,16 @@ public class RoutineTab2 extends LogTab {
 
 	private Routine mCurrentRoutine;
 	private RoutineParameterPanel mRoutineSetting;
-	private final File mCleanFile;
+	private File mCleanFile;
 
-	// TODO _cleaned
-	public RoutineTab2(FileSelector pFileSelector) {
+	public RoutineTab2(final FileSelector pFileSelector) {
 		super(pFileSelector);
-		mCleanFile = new File(getLogFile().getParent(), getLogFile().getName().replaceAll(".json", "_cleaned.json"));
-		updateRoutineFrame(Routine.WakeUp);
+		try {
+			mCleanFile = Utils.tempLogFile();
+			updateRoutineFrame(Routine.WakeUp);
+		} catch (JSONException | IOException e) {
+			System.out.println("Unable to find temp file");
+		}
 	}
 
 	@Override
@@ -85,12 +91,12 @@ public class RoutineTab2 extends LogTab {
 				.forEach(routine -> mRoutinesList.put(routine, String.format("No description for %s", routine.name())));
 	}
 
-	private void updateRoutineFrame(Routine pRoutine) {
+	private void updateRoutineFrame(final Routine pRoutine) {
 		mRoutineDesc.setText(mRoutinesList.get(pRoutine));
 		mRoutineDesc.validate();
 		mRightPanel.removeAll();
 
-		JPanel settings = new JPanel(new BorderLayout());
+		final JPanel settings = new JPanel(new BorderLayout());
 		settings.setBorder(BorderFactory.createTitledBorder("Settings"));
 
 		mResultsPanel = new JPanel(new BorderLayout());
@@ -123,7 +129,7 @@ public class RoutineTab2 extends LogTab {
 		List<ActivityResult> results = new ArrayList<>();
 		try {
 			results = mRoutineSetting.getResults(mCleanFile);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			System.err.println(e);
 			error(e.getMessage());
 		}
@@ -145,16 +151,16 @@ public class RoutineTab2 extends LogTab {
 
 	@Override
 	protected Component content() {
-		JPanel content = new JPanel(new BorderLayout());
+		final JPanel content = new JPanel(new BorderLayout());
 
-		int histoWidth = 1 * (Configuration.MAX_WIDTH - Configuration.LEFT_MENU_WIDTH) / 4;
-		int histoHeight = Configuration.MAX_HEIGHT;
-		Dimension dim = new Dimension(histoWidth, histoHeight);
+		final int histoWidth = 1 * (Configuration.MAX_WIDTH - Configuration.LEFT_MENU_WIDTH) / 4;
+		final int histoHeight = Configuration.MAX_HEIGHT;
+		final Dimension dim = new Dimension(histoWidth, histoHeight);
 
 		/*
 		 * Routine panel
 		 */
-		JPanel leftPanel = new JPanel(new BorderLayout());
+		final JPanel leftPanel = new JPanel(new BorderLayout());
 		leftPanel.setBounds(0, 0, dim.width, dim.height);
 		leftPanel.setPreferredSize(dim);
 		leftPanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
@@ -166,7 +172,7 @@ public class RoutineTab2 extends LogTab {
 		mRoutinesList.forEach((routine, routineDesc) -> routines.addItem(routine));
 		routines.addItemListener(event -> {
 			if (event.getStateChange() == ItemEvent.SELECTED) {
-				Routine routine = Routine.valueOf(event.getItem().toString());
+				final Routine routine = Routine.valueOf(event.getItem().toString());
 				mCurrentRoutine = routine;
 				updateRoutineFrame(routine);
 			}

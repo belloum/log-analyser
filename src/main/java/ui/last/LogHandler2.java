@@ -58,7 +58,7 @@ public class LogHandler2 extends JFrame implements MenuSelector, FileSelector {
 	 */
 	public LogHandler2() throws Exception {
 		super("Log Handler");
-		Utils.log("Start application");
+		Utils.log("Start application", this.getClass());
 		setLayout(new BorderLayout());
 		setResizable(false);
 		setVisible(true);
@@ -68,7 +68,7 @@ public class LogHandler2 extends JFrame implements MenuSelector, FileSelector {
 	}
 
 	private void init() {
-		Utils.log("init parameters");
+		Utils.log("init parameters", this.getClass());
 		JPanel leftFrame = new JPanel(new BorderLayout());
 		leftFrame.setBounds(0, 0, Configuration.LEFT_MENU_WIDTH, Configuration.MAX_HEIGHT);
 		leftFrame.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
@@ -112,6 +112,16 @@ public class LogHandler2 extends JFrame implements MenuSelector, FileSelector {
 	}
 
 	@Override
+	public LogFile getLogFile() {
+		return this.mLogFile;
+	}
+
+	@Override
+	public void checkingFile() {
+		mMenu.disableMenu();
+	}
+
+	@Override
 	public void goTo(String pSection) {
 		JPanel jPanel = new JPanel(new BorderLayout());
 		if (pSection.equalsIgnoreCase(OverviewTab.class.getSimpleName())) {
@@ -133,11 +143,6 @@ public class LogHandler2 extends JFrame implements MenuSelector, FileSelector {
 		mRightContent.removeAll();
 		mRightContent.add(jPanel, BorderLayout.CENTER);
 		mRightContent.validate();
-	}
-
-	@Override
-	public LogFile getLogFile() {
-		return this.mLogFile;
 	}
 
 }
