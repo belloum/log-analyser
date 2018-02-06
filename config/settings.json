@@ -18,7 +18,7 @@
 		"4":{
 			"label":"Devices",
 			"need_file":true,
-			"class_name":"DeviceTab2"
+			"class_name":"DeviceTab"
 		},
 		"5":{
 			"label":"Histograms",
@@ -28,7 +28,7 @@
 		"6":{
 			"label":"Routines",
 			"need_file":true,
-			"class_name":"RoutineTab2"
+			"class_name":"RoutineTab"
 		},
 		"7":{
 			"label":"Settings",

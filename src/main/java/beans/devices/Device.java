@@ -3,7 +3,7 @@ package beans.devices;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import exceptions.RawLogException;
+import loganalyser.exceptions.RawLogException;
 
 public class Device {
 

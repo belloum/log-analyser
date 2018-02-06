@@ -74,6 +74,7 @@ public abstract class CSVCleaner {
 	 *             <li>CSV-file is empty</li>
 	 *             </ul>
 	 */
+	@SuppressWarnings("deprecation")
 	public CSVCleaner(File csvFile) throws Exception {
 
 		if (!csvFile.exists())
@@ -108,8 +109,7 @@ public abstract class CSVCleaner {
 	}
 
 	/**
-	 * Parse all the CSV and returns the number of columns of the cleaned CSV
-	 * file
+	 * Parse all the CSV and returns the number of columns of the cleaned CSV file
 	 * 
 	 * @return Number of necessary columns
 	 */
@@ -134,8 +134,7 @@ public abstract class CSVCleaner {
 	}
 
 	/**
-	 * Gets informations such as number of lines, columns and days of the
-	 * CSV-file
+	 * Gets informations such as number of lines, columns and days of the CSV-file
 	 * 
 	 * @return A string that can be print
 	 * 
@@ -199,8 +198,8 @@ public abstract class CSVCleaner {
 	}
 
 	/**
-	 * Get the cleaned CSV-file from the CSV-file in parameter. This method must
-	 * be implemented to deal with:
+	 * Get the cleaned CSV-file from the CSV-file in parameter. This method must be
+	 * implemented to deal with:
 	 * <ul>
 	 * <li>{@link SleepPeriod} in {@link CSVSleep}</li>
 	 * <li>{@link DailyActivity} in {@link CSVDailyActivity}</li>
@@ -218,15 +217,15 @@ public abstract class CSVCleaner {
 	public abstract boolean exportCSV(File file) throws Exception;
 
 	/**
-	 * Export the final cleaned CSV-file with {@link SleepPeriod} list
-	 * (extracted with {@link CSVSleep}), {@link Exit} list (extracted with
-	 * {@link CSVExit}) and {@link DailyActivity} scores (extracted with
+	 * Export the final cleaned CSV-file with {@link SleepPeriod} list (extracted
+	 * with {@link CSVSleep}), {@link Exit} list (extracted with {@link CSVExit})
+	 * and {@link DailyActivity} scores (extracted with
 	 * {@link CSVDailyActivity}).<br>
 	 * </br>
 	 * Use this method to get aggregated datas along the same period as the
-	 * BreakfastCSV-file period. If some days are missing in the other CSV-file,
-	 * the {@link DailyActivity} scores are null and the {@link Exit} list and
-	 * the {@link SleepPeriod} list are emprty.<br>
+	 * BreakfastCSV-file period. If some days are missing in the other CSV-file, the
+	 * {@link DailyActivity} scores are null and the {@link Exit} list and the
+	 * {@link SleepPeriod} list are emprty.<br>
 	 * </br>
 	 * 
 	 * @param participantFolder

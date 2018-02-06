@@ -16,10 +16,11 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 import beans.devices.Device;
-import exceptions.HistogramException;
-import exceptions.PeriodException;
-import operators.extractors.FileExtractor;
-import operators.extractors.SoftLogExtractor;
+import loganalyser.beans.SoftLog;
+import loganalyser.exceptions.HistogramException;
+import loganalyser.exceptions.PeriodException;
+import loganalyser.operators.FileExtractor;
+import loganalyser.operators.SoftLogExtractor;
 
 public class Histogram extends LinkedHashMap<Period, Integer> {
 

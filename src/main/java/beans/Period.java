@@ -6,7 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import exceptions.PeriodException;
+import loganalyser.exceptions.PeriodException;
 
 public class Period {
 
