@@ -5,12 +5,12 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import loganalyser.beans.activityresults.ActivityResult;
 import loganalyser.old.ui.CustomComponent;
+import loganalyser.ui.components.LegendValueLabel;
 import loganalyser.ui.components.MyTable;
 
 public class WakeAndGoBedResultPanel extends ActivityResultPanel {
@@ -26,26 +26,22 @@ public class WakeAndGoBedResultPanel extends ActivityResultPanel {
 
 	@Override
 	protected JPanel genericResult(List<ActivityResult> pActivityResults) {
+		double mean = 100 * pActivityResults.stream().mapToDouble(o -> o.getScore() / pActivityResults.size()).sum();
 
-		JPanel head = new JPanel(new GridLayout(2, 4));
-
-		head.add(CustomComponent.boldLabel("Success"));
-		head.add(new JLabel(
+		JPanel headResult = new JPanel(new GridLayout(2, 3, 0, 0));
+		// Line 1
+		headResult.add(CustomComponent.boldLabel("Scores"));
+		headResult.add(new LegendValueLabel("0 %",
+				String.format("%d", (int) pActivityResults.stream().filter(m -> m.getScore() < 0.8f).count())));
+		headResult.add(new LegendValueLabel("100 %",
 				String.format("%d", (int) pActivityResults.stream().filter(m -> m.getScore() >= 0.8f).count())));
 
-		head.add(CustomComponent.boldLabel("Failure"));
-		head.add(new JLabel(
-				String.format("%d", (int) pActivityResults.stream().filter(m -> m.getScore() < 0.8f).count())));
+		// Line 2
+		headResult.add(new LegendValueLabel("Mean", String.format("%.2f %%", mean)));
+		headResult.add(new JPanel());
+		headResult.add(new JPanel());
 
-		head.add(CustomComponent.boldLabel("Mean"));
-		head.add(new JLabel(String.format("%.2f %%",
-				100 * pActivityResults.stream().mapToDouble(o -> o.getScore() / pActivityResults.size()).sum())));
-
-		// Fill offset with blank panels
-		head.add(new JPanel());
-		head.add(new JPanel());
-
-		return head;
+		return headResult;
 	}
 
 	@Override

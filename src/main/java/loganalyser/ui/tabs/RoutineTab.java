@@ -127,6 +127,7 @@ public class RoutineTab extends LogTab {
 
 	private void displayResult() {
 		List<ActivityResult> results = new ArrayList<>();
+		hideError();
 		mResultsPanel.removeAll();
 
 		try {

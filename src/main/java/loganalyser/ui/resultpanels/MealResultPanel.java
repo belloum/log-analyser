@@ -1,21 +1,19 @@
 package loganalyser.ui.resultpanels;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import loganalyser.beans.activityresults.ActivityResult;
 import loganalyser.beans.activityresults.MealResult;
 import loganalyser.old.ui.CustomComponent;
+import loganalyser.ui.components.LegendValueLabel;
 import loganalyser.ui.components.MyTable;
 
-//TODO Use GridLayout
 public class MealResultPanel extends ActivityResultPanel {
 
 	/**
@@ -31,107 +29,30 @@ public class MealResultPanel extends ActivityResultPanel {
 	protected JPanel genericResult(List<ActivityResult> pActivityResults) {
 		float successRate = (float) (pActivityResults.stream().filter(meal -> meal.isSuccess()).count() * 100)
 				/ (float) pActivityResults.size();
-		float mean = (float) pActivityResults.stream().mapToDouble(o -> o.getScore() / pActivityResults.size()).sum();
+		double mean = 100 * pActivityResults.stream().mapToDouble(o -> o.getScore() / pActivityResults.size()).sum();
 
-		/*
-		 * Show global results
-		 */
-		JPanel headResult = new JPanel(new GridBagLayout());
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.fill = GridBagConstraints.BOTH;
-		gbc.weightx = 1;
-		gbc.weighty = 1;
+		JPanel headResult = new JPanel(new GridLayout(2, 5, 0, 0));
 
-		/*
-		 * Failure 0% label
-		 */
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		headResult.add(CustomComponent.boldLabel(new JLabel("Failure 0%")), gbc);
+		// Line 1
+		headResult.add(CustomComponent.boldLabel("Scores"));
+		headResult.add(new LegendValueLabel("0 %",
+				String.format("%d", (int) pActivityResults.stream().filter(m -> m.getScore() < 0.2f).count())));
 
-		/*
-		 * Failure 0% value
-		 */
-		gbc.gridx = 1;
-		headResult.add(
-				new JLabel(
-						String.format("%d", (int) pActivityResults.stream().filter(m -> m.getScore() < 0.2f).count())),
-				gbc);
+		headResult.add(new LegendValueLabel("20 %", String.format("%d",
+				(int) pActivityResults.stream().filter(m -> m.getScore() < 0.8f && m.getScore() >= 0.2f).count())));
 
-		/*
-		 * Failure 20% label
-		 */
-		gbc.gridx = 0;
-		gbc.gridy = 1;
-		headResult.add(CustomComponent.boldLabel(new JLabel("Failure 20%")), gbc);
+		headResult.add(new LegendValueLabel("80 %",
+				String.format("%d", (int) pActivityResults.stream().filter(m -> m.getScore() == 0.8f).count())));
 
-		/*
-		 * Failure 20% value
-		 */
-		gbc.gridx = 1;
-		headResult.add(new JLabel(String.format("%d",
-				(int) pActivityResults.stream().filter(m -> m.getScore() < 0.8f && m.getScore() >= 0.2f).count())),
-				gbc);
+		headResult.add(new LegendValueLabel("100 %",
+				String.format("%d", (int) pActivityResults.stream().filter(m -> m.getScore() == 1f).count())));
 
-		/*
-		 * Success 80% label
-		 */
-		gbc.gridx = 0;
-		gbc.gridy = 2;
-		headResult.add(CustomComponent.boldLabel(new JLabel("Success 80%")), gbc);
-
-		/*
-		 * Success 80% value
-		 */
-		gbc.gridx = 1;
-		headResult.add(
-				new JLabel(
-						String.format("%d", (int) pActivityResults.stream().filter(m -> m.getScore() == 0.8f).count())),
-				gbc);
-
-		/*
-		 * Success 100% label
-		 */
-		gbc.weighty = 0;
-		gbc.gridx = 0;
-		gbc.gridy = 3;
-		headResult.add(CustomComponent.boldLabel(new JLabel("Success 100%")), gbc);
-
-		/*
-		 * Success 100% value
-		 */
-		gbc.gridx = 1;
-		headResult.add(
-				new JLabel(
-						String.format("%d", (int) pActivityResults.stream().filter(m -> m.getScore() == 1f).count())),
-				gbc);
-
-		/*
-		 * Mean label
-		 */
-		gbc.gridx = 2;
-		gbc.gridy = 0;
-		gbc.weighty = 2;
-		headResult.add(CustomComponent.boldLabel(new JLabel("Mean")), gbc);
-
-		/*
-		 * Mean value
-		 */
-		gbc.gridx = 3;
-		headResult.add(new JLabel(String.format("%.2f %%", 100 * mean)), gbc);
-
-		/*
-		 * Success rate label
-		 */
-		gbc.gridx = 2;
-		gbc.gridy = 2;
-		headResult.add(CustomComponent.boldLabel(new JLabel("Success rate")), gbc);
-
-		/*
-		 * Success rate value
-		 */
-		gbc.gridx = 3;
-		headResult.add(new JLabel(String.format("%.2f %%", successRate)), gbc);
+		// Line 2
+		headResult.add(new LegendValueLabel("Mean", String.format("%.2f %%", mean)));
+		headResult.add(new LegendValueLabel("Success rate", String.format("%.2f %%", successRate)));
+		headResult.add(new JPanel());
+		headResult.add(new JPanel());
+		headResult.add(new JPanel());
 
 		return headResult;
 	}

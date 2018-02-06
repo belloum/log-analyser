@@ -14,7 +14,7 @@ public class TabHeaderWithProgress extends TabHeader {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	// FIXME must be replace by a circular indeterminate progress
+	// FIXME Replace by a circular indeterminate progress
 	private JLabel mJLabel;
 	private JProgressBar mJProgress;
 
