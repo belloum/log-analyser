@@ -23,11 +23,11 @@ import loganalyser.beans.Routine;
 import loganalyser.beans.activityresults.ActivityResult;
 import loganalyser.old.ui.MyButton;
 import loganalyser.operators.FileSelector;
-import loganalyser.ui.panels.results.MealResultPanel;
-import loganalyser.ui.panels.results.WakeAndGoBedResultPanel;
-import loganalyser.ui.panels.settings.MealParametersPanel;
-import loganalyser.ui.panels.settings.RoutineParameterPanel;
-import loganalyser.ui.panels.settings.WakeAndBedParametersPanel;
+import loganalyser.ui.resultpanels.MealResultPanel;
+import loganalyser.ui.resultpanels.WakeAndGoBedResultPanel;
+import loganalyser.ui.resultpanels.settings.MealParametersPanel;
+import loganalyser.ui.resultpanels.settings.RoutineParameterPanel;
+import loganalyser.ui.resultpanels.settings.WakeAndBedParametersPanel;
 import loganalyser.utils.Configuration;
 import loganalyser.utils.Utils;
 
@@ -127,26 +127,28 @@ public class RoutineTab extends LogTab {
 
 	private void displayResult() {
 		List<ActivityResult> results = new ArrayList<>();
+		mResultsPanel.removeAll();
+
 		try {
 			results = mRoutineSetting.getResults(mCleanFile);
+
+			switch (mCurrentRoutine) {
+			case Meal:
+				mResultsPanel.add(new MealResultPanel(results), BorderLayout.CENTER);
+				break;
+			case WakeUp:
+			case GoToBed:
+				mResultsPanel.add(new WakeAndGoBedResultPanel(results), BorderLayout.CENTER);
+				break;
+			}
 		} catch (final Exception e) {
 			System.err.println(e);
 			error(e.getMessage());
+			mResultsPanel.add(new JPanel(), BorderLayout.CENTER);
+		} finally {
+			mResultsPanel.validate();
 		}
 
-		mResultsPanel.removeAll();
-
-		switch (mCurrentRoutine) {
-		case Meal:
-			mResultsPanel.add(new MealResultPanel(results), BorderLayout.CENTER);
-			break;
-		case WakeUp:
-		case GoToBed:
-			mResultsPanel.add(new WakeAndGoBedResultPanel(results), BorderLayout.CENTER);
-			break;
-		}
-
-		mResultsPanel.validate();
 	}
 
 	@Override
@@ -187,6 +189,12 @@ public class RoutineTab extends LogTab {
 		content.add(mRightPanel, BorderLayout.CENTER);
 
 		return content;
+	}
+
+	@Override
+	protected void error(String pErrorMsg) {
+		super.error(pErrorMsg);
+		mRightPanel.add(getError(), BorderLayout.PAGE_END);
 	}
 
 	@Override

@@ -27,7 +27,7 @@ import loganalyser.ui.tabs.RoutineTab;
 import loganalyser.utils.Configuration;
 import loganalyser.utils.Utils;
 
-//TODO: use log file
+//FIXME: use log file
 public class LogHandler2 extends JFrame implements MenuSelector, FileSelector {
 
 	private static final long serialVersionUID = 1L;

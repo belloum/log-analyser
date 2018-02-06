@@ -31,8 +31,6 @@ import loganalyser.utils.Utils;
 
 public class LogFrame extends JPanel implements LogExtractorListener {
 
-	// TODO Show progress while checking validity
-
 	/**
 	 * 
 	 */

@@ -1,4 +1,4 @@
-package loganalyser.ui.panels.settings;
+package loganalyser.ui.resultpanels.settings;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import org.apache.commons.lang3.StringUtils;
 
 import beans.devices.Device;
+import beans.devices.Device.DeviceType;
 import loganalyser.beans.Routine;
 import loganalyser.beans.activityresults.ActivityResult;
 import loganalyser.beans.activityresults.MealResult;
@@ -111,6 +112,12 @@ public class MealParametersPanel extends RoutineParameterPanel implements Marker
 	public List<ActivityResult> getResults(File pFileToUse) throws Exception {
 		return Arrays.asList(executeScript(script(getRoutine(), pFileToUse))).stream().map(line -> new MealResult(line))
 				.collect(Collectors.toList());
+	}
+
+	@Override
+	protected List<Device> getRoutineDevices() {
+		return super.getRoutineDevices().stream().filter(device -> device.getType().equals(DeviceType.ContactSensor)
+				|| device.getType().equals(DeviceType.ElectricMeter)).collect(Collectors.toList());
 	}
 
 }

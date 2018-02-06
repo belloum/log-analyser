@@ -1,4 +1,4 @@
-package loganalyser.ui.panels.results;
+package loganalyser.ui.resultpanels;
 
 import java.awt.BorderLayout;
 import java.util.List;

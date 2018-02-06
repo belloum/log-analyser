@@ -45,7 +45,7 @@ public abstract class MyCustomTab extends JPanel implements Configurable {
 
 		add(mHeader, BorderLayout.PAGE_START);
 		mError = new ErrorLabel();
-		add(mError, BorderLayout.PAGE_END);
+		add(getError(), BorderLayout.PAGE_END);
 	}
 
 	protected abstract Component content();
@@ -59,14 +59,14 @@ public abstract class MyCustomTab extends JPanel implements Configurable {
 		if (!StringUtils.isEmpty(pErrorMsg)) {
 			Utils.errorLog(pErrorMsg, this.getClass());
 			System.err.println("Error: " + pErrorMsg);
-			mError.setVisible(true);
-			mError.setText(pErrorMsg);
+			getError().setVisible(true);
+			getError().setText(pErrorMsg);
 			validate();
 		}
 	}
 
 	protected void hideError() {
-		mError.setVisible(false);
+		getError().setVisible(false);
 		validate();
 	}
 
@@ -82,6 +82,10 @@ public abstract class MyCustomTab extends JPanel implements Configurable {
 	public JSONObject configuration() throws Exception {
 		return new JSONObject(FileExtractor.readFile(Configurable.configurationFile())).getJSONObject("tabs")
 				.getJSONObject(configurationSection());
+	}
+
+	public ErrorLabel getError() {
+		return this.mError;
 	}
 
 }
