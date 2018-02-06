@@ -1,6 +1,7 @@
 package loganalyser.ui.components;
 
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
@@ -52,6 +53,7 @@ public class MyTable extends JTable {
 		setEnabled(false);
 		getTableHeader().setReorderingAllowed(false);
 		getTableHeader().setResizingAllowed(false);
+		setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		setAutoCreateRowSorter(true);
 	}
 
