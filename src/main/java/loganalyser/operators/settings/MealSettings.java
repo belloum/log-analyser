@@ -51,7 +51,11 @@ public class MealSettings extends RoutineSettings {
 	@Override
 	public void validParameters() throws Exception {
 		super.validParameters();
-		if (!containsKey(PRIMARY_MARKERS) || StringUtils.isEmpty(get(PRIMARY_MARKERS).toString())
+		if (HOUR_FORMAT.parse(getStartHour()).after(HOUR_FORMAT.parse(getEndHour()))) {
+			throw new Exception("Start time is after end time");
+		} else if (HOUR_FORMAT.parse(getStartHour()).equals(HOUR_FORMAT.parse(getEndHour()))) {
+			throw new Exception("Start time and end time are equals");
+		} else if (!containsKey(PRIMARY_MARKERS) || StringUtils.isEmpty(get(PRIMARY_MARKERS).toString())
 				|| getPrimaryMarkers().isEmpty()) {
 			throw new Exception("Invalid primary markers");
 		} else if (!containsKey(SECONDARY_MARKERS) || StringUtils.isEmpty(get(SECONDARY_MARKERS).toString())

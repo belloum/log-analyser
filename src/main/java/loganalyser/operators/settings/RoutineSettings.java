@@ -13,7 +13,7 @@ public abstract class RoutineSettings extends HashMap<String, Object> {
 	private static final long serialVersionUID = 1L;
 
 	private static final String DEFAULT_HOUR = "00:00";
-	private static final SimpleDateFormat HOUR_FORMAT = new SimpleDateFormat("HH:mm");
+	protected static final SimpleDateFormat HOUR_FORMAT = new SimpleDateFormat("HH:mm");
 
 	private final static String START_HOUR = "start_hour";
 	private final static String END_HOUR = "end_hour";
@@ -49,10 +49,6 @@ public abstract class RoutineSettings extends HashMap<String, Object> {
 			throw new Exception("Invalid start hour");
 		} else if (!containsKey(END_HOUR) || StringUtils.isEmpty(getEndHour())) {
 			throw new Exception("Invalid end hour");
-		} else if (HOUR_FORMAT.parse(getStartHour()).after(HOUR_FORMAT.parse(getEndHour()))) {
-			throw new Exception("Start time is after end time");
-		} else if (HOUR_FORMAT.parse(getStartHour()).equals(HOUR_FORMAT.parse(getEndHour()))) {
-			throw new Exception("Start time and end time are equals");
 		} else {
 			return;
 		}

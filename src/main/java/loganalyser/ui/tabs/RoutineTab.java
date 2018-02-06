@@ -33,7 +33,7 @@ import loganalyser.utils.Utils;
 
 public class RoutineTab extends LogTab {
 
-	// TODO Invalid hour > error message
+	// FIXME Invalid hour > error message
 	// TODO helper for decision, show the biggest sender
 	// TODO Progress
 
@@ -94,6 +94,8 @@ public class RoutineTab extends LogTab {
 	private void updateRoutineFrame(final Routine pRoutine) {
 		mRoutineDesc.setText(mRoutinesList.get(pRoutine));
 		mRoutineDesc.validate();
+		hideError();
+
 		mRightPanel.removeAll();
 
 		final JPanel settings = new JPanel(new BorderLayout());
@@ -118,17 +120,16 @@ public class RoutineTab extends LogTab {
 		settings.add(mRoutineSetting, BorderLayout.CENTER);
 		settings.add(new MyButton("Compute", event -> displayResult()), BorderLayout.PAGE_END);
 
-		mResultsPanel.validate();
-
 		mRightPanel.add(settings, BorderLayout.PAGE_START);
 		mRightPanel.add(mResultsPanel, BorderLayout.CENTER);
+		mRightPanel.add(getError(), BorderLayout.PAGE_END);
 		mRightPanel.validate();
 	}
 
 	private void displayResult() {
 		List<ActivityResult> results = new ArrayList<>();
-		hideError();
 		mResultsPanel.removeAll();
+		hideError();
 
 		try {
 			results = mRoutineSetting.getResults(mCleanFile);
@@ -145,11 +146,8 @@ public class RoutineTab extends LogTab {
 		} catch (final Exception e) {
 			System.err.println(e);
 			error(e.getMessage());
-			mResultsPanel.add(new JPanel(), BorderLayout.CENTER);
-		} finally {
-			mResultsPanel.validate();
 		}
-
+		mResultsPanel.validate();
 	}
 
 	@Override
@@ -195,7 +193,7 @@ public class RoutineTab extends LogTab {
 	@Override
 	protected void error(String pErrorMsg) {
 		super.error(pErrorMsg);
-		mRightPanel.add(getError(), BorderLayout.PAGE_END);
+		// mRightPanel.add(getError(), BorderLayout.PAGE_END);
 	}
 
 	@Override
