@@ -18,7 +18,6 @@ import javax.swing.border.BevelBorder;
 
 import ui.components.MyButton;
 import ui.last.FileSelector;
-import ui.last.components.TabHeader;
 import ui.last.components.activityresults.MealResultPanel;
 import ui.last.components.activityresults.WakeAndGoBedResultPanel;
 import ui.last.results.ActivityResult;
@@ -185,8 +184,8 @@ public class RoutineTab2 extends LogTab {
 	}
 
 	@Override
-	protected TabHeader header() {
-		return new TabHeader("Routine", "Please, enter a description for this tab ...", Configuration.IMAGE_ROUTINE);
+	public String configurationSection() {
+		return "routine";
 	}
 }
 // 245 - 4:44

@@ -3,35 +3,41 @@ package ui.last.tabs;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.GridLayout;
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Pattern;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jdesktop.swingx.JXLabel;
+import org.json.JSONObject;
 
 import exceptions.RequestException;
+import operators.extractors.newe.RequestExtractor;
 import ui.components.CustomComponent;
 import ui.components.InputValue;
 import ui.components.MyButton;
-import ui.last.components.TabHeader;
 import utils.Configuration;
+import utils.Utils;
 
 public class RequestTab extends MyCustomTab {
 
 	private static final long serialVersionUID = 1L;
 
 	// "45109548"
+	// TODO Request report
 	private static final Pattern VERA_PATTERN = Pattern.compile("^\\d{8}$");
+	private static final SimpleDateFormat DAY_FORMAT = new SimpleDateFormat("yyyy.MM.dd");
 
 	private String mVeraId;
+	private String mSDate = DAY_FORMAT.format(new Date());
+	private String mEDate = mSDate;
 	private String mOutputFilename = Configuration.DEFAULT_OUTPUT_FILENAME;
 
 	private enum RequestType {
@@ -63,39 +69,20 @@ public class RequestTab extends MyCustomTab {
 		return content;
 	}
 
-	private void copyToClipboard() {
-		final StringSelection stringSelection = new StringSelection(mRequestArea.getText());
-		final Clipboard clpbrd = Toolkit.getDefaultToolkit().getSystemClipboard();
-		clpbrd.setContents(stringSelection, null);
-	}
-
-	private String reuqest(final RequestType pRequestType) {
-		String request = null;
-		String outputFile = mOutputFilename.endsWith(".json") ? mOutputFilename
-				: String.format("%s.json", mOutputFilename);
-		switch (pRequestType) {
-		case LogRequest:
-			// elasticdump --input=http://localhost:9200/logstash-$d.*/event --sourceOnly
-			// --output=$d.json --searchBody
-			// "{\"query\":{\"term\":{\"vera_serial\":\"$v\"}}}"
-			request = String.format(
-					"elasticdump --input=http://localhost:9200/logstash-%s/event --sourceOnly --output=%s --searchBody \"{\\\"query\\\":{\\\"term\\\":{\\\"vera_serial\\\":\\\"%s\\\"}}}\"",
-					"2018.01.*", outputFile, mVeraId);
-			break;
-		case ReportRequest:
-			request = "Not implemented yet";
-			break;
-		}
-		System.out.println(request);
-		return request;
-	}
-
 	private void extractRequest(final RequestType pRequestType) {
 		try {
 			validParameters();
 			hideError();
-			mRequestArea.setText(reuqest(pRequestType));
-		} catch (Exception e) {
+			switch (pRequestType) {
+			case LogRequest:
+				mRequestArea.setText(RequestExtractor.logRequests(mOutputFilename, mVeraId, mSDate, mEDate));
+				break;
+			case ReportRequest:
+				mRequestArea.setText(RequestExtractor.reportRequests(mOutputFilename, mVeraId, mSDate, mEDate));
+				break;
+			}
+
+		} catch (final Exception e) {
 			error(e.getMessage());
 		}
 	}
@@ -105,69 +92,57 @@ public class RequestTab extends MyCustomTab {
 			throw new RequestException(RequestException.VERA_DOES_NOT_MATCH_PATERN);
 		} else if (StringUtils.isEmpty(mOutputFilename)) {
 			throw new RequestException(RequestException.NO_OUTPUT_FILE);
+		} else if (StringUtils.isEmpty(mSDate)) {
+			throw new RequestException(RequestException.INVALID_START_DAY_FORMAT);
+		} else if (StringUtils.isEmpty(mEDate)) {
+			throw new RequestException(RequestException.INVALID_END_DAY_FORMAT);
+		} else if (DAY_FORMAT.parse(mSDate).after(DAY_FORMAT.parse(mEDate))) {
+			throw new RequestException(RequestException.INVALID_PERIOD);
 		}
-	}
-
-	@Override
-	protected TabHeader header() {
-		return new TabHeader("Request Maker", "Please, enter a description for this tab ...",
-				Configuration.IMAGE_HISTO);
 	}
 
 	private JPanel settingsPanel() {
 		final JPanel settings = new JPanel(new BorderLayout());
 
-		final InputValue mStartHour = new InputValue("00");
-		mStartHour.getDocument().addDocumentListener(new DocumentListener() {
+		final InputValue mStartDate = new InputValue(mSDate);
+		mStartDate.getDocument().addDocumentListener(new DocumentListener() {
 
 			@Override
 			public void removeUpdate(final DocumentEvent e) {
-				// if (validHour(mStartHour.getText())) {
-				// mSettings.setStartHour(mStartHour.getText());
-				// }
+				mSDate = validDate(mStartDate.getText()) ? mStartDate.getText() : null;
 			}
 
 			@Override
 			public void insertUpdate(final DocumentEvent e) {
-				// if (validHour(mStartHour.getText())) {
-				// mSettings.setStartHour(mStartHour.getText());
-				// }
+				mSDate = validDate(mStartDate.getText()) ? mStartDate.getText() : null;
 			}
 
 			@Override
 			public void changedUpdate(final DocumentEvent e) {
-				// if (validHour(mStartHour.getText())) {
-				// mSettings.setStartHour(mStartHour.getText());
-				// }
+				mSDate = validDate(mStartDate.getText()) ? mStartDate.getText() : null;
 			}
 		});
 
-		final InputValue mEndHour = new InputValue("00");
-		mEndHour.getDocument().addDocumentListener(new DocumentListener() {
+		final InputValue mEndDate = new InputValue(mEDate);
+		mEndDate.getDocument().addDocumentListener(new DocumentListener() {
 
 			@Override
 			public void removeUpdate(final DocumentEvent e) {
-				// if (validHour(mEndHour.getText())) {
-				// mSettings.setEndHour(mEndHour.getText());
-				// }
+				mEDate = validDate(mEndDate.getText()) ? mEndDate.getText() : null;
 			}
 
 			@Override
 			public void insertUpdate(final DocumentEvent e) {
-				// if (validHour(mEndHour.getText())) {
-				// mSettings.setEndHour(mEndHour.getText());
-				// }
+				mEDate = validDate(mEndDate.getText()) ? mEndDate.getText() : null;
 			}
 
 			@Override
 			public void changedUpdate(final DocumentEvent e) {
-				// if (validHour(mEndHour.getText())) {
-				// mSettings.setEndHour(mEndHour.getText());
-				// }
+				mEDate = validDate(mEndDate.getText()) ? mEndDate.getText() : null;
 			}
 		});
 
-		final InputValue mVera = new InputValue("00");
+		final InputValue mVera = new InputValue();
 		mVera.getDocument().addDocumentListener(new DocumentListener() {
 
 			@Override
@@ -207,11 +182,11 @@ public class RequestTab extends MyCustomTab {
 
 		final JPanel start = new JPanel(new BorderLayout());
 		start.add(CustomComponent.boldLabel(String.format("%s\t\t", "Start date")), BorderLayout.WEST);
-		start.add(mStartHour, BorderLayout.CENTER);
+		start.add(mStartDate, BorderLayout.CENTER);
 
 		final JPanel end = new JPanel(new BorderLayout());
 		end.add(CustomComponent.boldLabel(String.format("%s\t\t", "End date")), BorderLayout.WEST);
-		end.add(mEndHour, BorderLayout.CENTER);
+		end.add(mEndDate, BorderLayout.CENTER);
 
 		final JPanel vera = new JPanel(new BorderLayout());
 		vera.add(CustomComponent.boldLabel(String.format("%s\t\t", "Vera id")), BorderLayout.WEST);
@@ -243,12 +218,14 @@ public class RequestTab extends MyCustomTab {
 		final JPanel instructions = new JPanel(new BorderLayout());
 		instructions.setBorder(BorderFactory.createTitledBorder("Instructions"));
 
-		final JPanel indexes = new JPanel(new GridLayout(Configuration.INSTRUCTIONS.size(), 1));
-		final JPanel values = new JPanel(new GridLayout(Configuration.INSTRUCTIONS.size(), 1));
+		JSONObject steps = settings().getJSONObject("steps");
 
-		for (int i = 0; i < Configuration.INSTRUCTIONS.size(); i++) {
-			indexes.add(CustomComponent.boldLabel(String.format("%d\t\t", (i + 1))));
-			final JXLabel instruct = new JXLabel(Configuration.INSTRUCTIONS.get(i));
+		final JPanel indexes = new JPanel(new GridLayout(steps.length(), 1));
+		final JPanel values = new JPanel(new GridLayout(steps.length(), 1));
+
+		for (int i = 1; i <= steps.length(); i++) {
+			indexes.add(CustomComponent.boldLabel(String.format("%d\t\t", i)));
+			final JXLabel instruct = new JXLabel(steps.getString(String.valueOf(i)));
 			instruct.setLineWrap(true);
 			values.add(instruct);
 		}
@@ -263,18 +240,37 @@ public class RequestTab extends MyCustomTab {
 
 		final JPanel requestPanel = new JPanel(new BorderLayout());
 
-		requestPanel.add(new MyButton("Copy to clipboard", event -> copyToClipboard()), BorderLayout.PAGE_START);
+		requestPanel.add(
+				new MyButton("Copy to clipboard",
+						event -> Utils.copyToClipboard(mRequestArea.getText().replaceAll("\n", ""))),
+				BorderLayout.PAGE_START);
 
-		mRequestArea = new JTextArea(2, 3);
+		final JScrollPane scroll = new JScrollPane();
+		mRequestArea = new JTextArea();
 		mRequestArea.setBorder(BorderFactory.createTitledBorder("Request"));
 		mRequestArea.setEditable(false);
 		mRequestArea.setLineWrap(true);
-		requestPanel.add(mRequestArea, BorderLayout.CENTER);
+		scroll.getViewport().add(mRequestArea);
+		requestPanel.add(scroll, BorderLayout.CENTER);
 
 		return requestPanel;
 	}
 
-	private boolean validVera(String pVeraId) {
+	private boolean validVera(final String pVeraId) {
 		return VERA_PATTERN.matcher(pVeraId).find();
+	}
+
+	private boolean validDate(final String pDate) {
+		try {
+			DAY_FORMAT.parse(pDate);
+			return true;
+		} catch (final Exception e) {
+			return false;
+		}
+	}
+
+	@Override
+	public String configurationSection() {
+		return "request";
 	}
 }

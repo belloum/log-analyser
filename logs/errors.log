@@ -1,0 +1,5 @@
+[2018.02.06 02:58:07] JSONObject[""] not found.
+[2018.02.06 02:59:11] Unable to find configuration file: JSONObject[""] not found.
+[2018.02.06 03:01:52] Unable to find configuration file (Tab=ui.last.tabs.FileDetailsTab): JSONObject[""] not found.
+[2018.02.06 03:02:24] Unable to find configuration file (ui.last.tabs.FileDetailsTab): JSONObject[""] not found.
+[2018.02.06 03:19:02] INVALID FILE: 2017_12_01-17_cleaned.json, JSONObject["user"] not found.

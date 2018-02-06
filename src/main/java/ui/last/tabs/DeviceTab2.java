@@ -26,7 +26,6 @@ import ui.components.CustomComponent;
 import ui.last.FileSelector;
 import ui.last.components.ComponentWithImage;
 import ui.last.components.MyTable;
-import ui.last.components.TabHeader;
 import utils.Configuration;
 
 //TODO implements Runnable to fill view
@@ -173,8 +172,8 @@ public class DeviceTab2 extends LogTab {
 	}
 
 	@Override
-	protected TabHeader header() {
-		return new TabHeader("Devices", "Please, enter a description for this tab ...", Configuration.IMAGE_SENSOR);
+	public String configurationSection() {
+		return "device";
 	}
 
 }

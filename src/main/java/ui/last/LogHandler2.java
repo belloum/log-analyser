@@ -4,8 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.io.File;
-import java.util.Arrays;
-import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
@@ -20,25 +18,17 @@ import ui.last.components.Menu;
 import ui.last.components.Menu.MenuSelector;
 import ui.last.tabs.DeviceTab2;
 import ui.last.tabs.FileDetailsTab;
+import ui.last.tabs.HistogramTab;
 import ui.last.tabs.OverviewTab;
 import ui.last.tabs.RequestTab;
-import ui.last.tabs.HistogramTab;
 import ui.last.tabs.RoutineTab2;
 import utils.Configuration;
+import utils.Utils;
 
+//TODO: use log file
 public class LogHandler2 extends JFrame implements MenuSelector, FileSelector {
 
 	private static final long serialVersionUID = 1L;
-	private static final String OVERVIEW = "Overview";
-	private static final String FILE_DETAILS = "File details";
-	private static final String DEVICE = "Devices";
-	private static final String HISTOGRAM = "Histograms";
-	private static final String ROUTINES = "Routines";
-	private static final String SETTINGS = "Settings";
-	private static final String REQUEST_MAKER = "Request maker";
-
-	private static final List<String> SECTIONS = Arrays.asList(OVERVIEW, REQUEST_MAKER, FILE_DETAILS, DEVICE, HISTOGRAM,
-			ROUTINES, SETTINGS);
 
 	private JPanel mRightContent;
 	private String mErrorMsg;
@@ -68,17 +58,17 @@ public class LogHandler2 extends JFrame implements MenuSelector, FileSelector {
 	 */
 	public LogHandler2() throws Exception {
 		super("Log Handler");
+		Utils.log("Start application");
 		setLayout(new BorderLayout());
 		setResizable(false);
 		setVisible(true);
 		setBounds(0, 50, Configuration.MAX_WIDTH, Configuration.MAX_HEIGHT);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
 		init();
 	}
 
 	private void init() {
-
+		Utils.log("init parameters");
 		JPanel leftFrame = new JPanel(new BorderLayout());
 		leftFrame.setBounds(0, 0, Configuration.LEFT_MENU_WIDTH, Configuration.MAX_HEIGHT);
 		leftFrame.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
@@ -88,7 +78,7 @@ public class LogHandler2 extends JFrame implements MenuSelector, FileSelector {
 		mFilePanel.addFileSelectorListener(this);
 		leftFrame.add(mFilePanel, BorderLayout.PAGE_START);
 
-		mMenu = new Menu(SECTIONS);
+		mMenu = new Menu();
 		mMenu.addNavigationListener(this);
 		leftFrame.add(mMenu, BorderLayout.CENTER);
 
@@ -101,14 +91,8 @@ public class LogHandler2 extends JFrame implements MenuSelector, FileSelector {
 				new Dimension(Configuration.MAX_WIDTH - Configuration.LEFT_MENU_WIDTH, Configuration.MAX_HEIGHT));
 		add(mRightContent, BorderLayout.EAST);
 
-		resetMenu();
-		goTo(OVERVIEW);
-	}
-
-	private void resetMenu() {
 		mMenu.disableMenu();
-		mMenu.enablePosition(true, SECTIONS.indexOf(OVERVIEW));
-		mMenu.enablePosition(true, SECTIONS.indexOf(REQUEST_MAKER));
+		goTo(OverviewTab.class.getSimpleName());
 	}
 
 	@Override
@@ -116,45 +100,36 @@ public class LogHandler2 extends JFrame implements MenuSelector, FileSelector {
 		this.mLogFile = pLogFile;
 		mMenu.setEnabled(true);
 		mErrorMsg = null;
-		goTo(FILE_DETAILS);
+		goTo(FileDetailsTab.class.getSimpleName());
 	}
 
 	@Override
 	public void invalidFile(File pInvalidFile, String pCause) {
 		mLogFile = null;
 		mErrorMsg = String.format("INVALID FILE: %s, %s", pInvalidFile.getName(), pCause);
-		System.err.println(mErrorMsg);
 		mMenu.disableMenu();
-		goTo(OVERVIEW);
+		goTo(OverviewTab.class.getSimpleName());
 	}
 
 	@Override
 	public void goTo(String pSection) {
 		JPanel jPanel = new JPanel(new BorderLayout());
-		switch (pSection) {
-		case OVERVIEW:
+		if (pSection.equalsIgnoreCase(OverviewTab.class.getSimpleName())) {
 			jPanel = StringUtils.isEmpty(mErrorMsg) ? new OverviewTab() : new OverviewTab(mErrorMsg);
-			mErrorMsg = null;
-			break;
-		case FILE_DETAILS:
+		} else if (pSection.equalsIgnoreCase(FileDetailsTab.class.getSimpleName())) {
 			jPanel = new FileDetailsTab(this);
-			break;
-		case DEVICE:
+		} else if (pSection.equalsIgnoreCase(DeviceTab2.class.getSimpleName())) {
 			jPanel = new DeviceTab2(this);
-			break;
-		case HISTOGRAM:
+		} else if (pSection.equalsIgnoreCase(HistogramTab.class.getSimpleName())) {
 			jPanel = new HistogramTab(this);
-			break;
-		case ROUTINES:
+		} else if (pSection.equalsIgnoreCase(RoutineTab2.class.getSimpleName())) {
 			jPanel = new RoutineTab2(this);
-			break;
-		case REQUEST_MAKER:
+		} else if (pSection.equalsIgnoreCase(RequestTab.class.getSimpleName())) {
 			jPanel = new RequestTab();
-			break;
-		default:
+		} else {
 			jPanel.add(new JLabel("Not implemented but who cares ?"));
-			break;
 		}
+
 		mRightContent.removeAll();
 		mRightContent.add(jPanel, BorderLayout.CENTER);
 		mRightContent.validate();

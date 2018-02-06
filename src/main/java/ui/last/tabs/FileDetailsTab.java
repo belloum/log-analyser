@@ -18,7 +18,6 @@ import ui.components.CustomComponent;
 import ui.last.FileSelector;
 import ui.last.components.ComponentWithImage;
 import ui.last.components.ProgressPanel;
-import ui.last.components.TabHeader;
 import utils.Configuration;
 
 public class FileDetailsTab extends LogTab {
@@ -36,7 +35,7 @@ public class FileDetailsTab extends LogTab {
 	private ProgressPanel flopInfo;
 	private ProgressPanel veraInfo;
 
-	public FileDetailsTab(FileSelector pFileSelector) {
+	public FileDetailsTab(final FileSelector pFileSelector) {
 		super(pFileSelector);
 		fileInfo.start();
 		userInfo.start();
@@ -47,9 +46,9 @@ public class FileDetailsTab extends LogTab {
 		veraInfo.start();
 	}
 
-	private JPanel fillGeneralFileInfo(JProgressBar pProgressBar) {
+	private JPanel fillGeneralFileInfo(final JProgressBar pProgressBar) {
 
-		JPanel info = new JPanel(new GridLayout(3, 2));
+		final JPanel info = new JPanel(new GridLayout(3, 2));
 
 		// Name
 		info.add(CustomComponent.boldLabel("Name"));
@@ -69,9 +68,9 @@ public class FileDetailsTab extends LogTab {
 		return new ComponentWithImage(Configuration.IMAGE_FILE, info);
 	}
 
-	private JPanel fillVeraInfo(JProgressBar pProgressBar) {
+	private JPanel fillVeraInfo(final JProgressBar pProgressBar) {
 
-		JPanel info = new JPanel(new GridLayout(1, 2));
+		final JPanel info = new JPanel(new GridLayout(1, 2));
 		info.add(CustomComponent.boldLabel("Vera"));
 		info.add(new JLabel(getLogFile().getVeraId()));
 		pProgressBar.setValue(100);
@@ -79,9 +78,9 @@ public class FileDetailsTab extends LogTab {
 		return new ComponentWithImage(Configuration.IMAGE_VERA, info);
 	}
 
-	private JPanel fillUserInfo(JProgressBar pProgressBar) {
+	private JPanel fillUserInfo(final JProgressBar pProgressBar) {
 
-		JPanel info = new JPanel(new GridLayout(1, 2));
+		final JPanel info = new JPanel(new GridLayout(1, 2));
 		info.add(CustomComponent.boldLabel("User"));
 		info.add(new JLabel(getLogFile().getUserId()));
 		pProgressBar.setValue(100);
@@ -89,9 +88,9 @@ public class FileDetailsTab extends LogTab {
 		return new ComponentWithImage(Configuration.IMAGE_AVATAR, info);
 	}
 
-	private JPanel fillDeviceInfo(JProgressBar pProgressBar) {
+	private JPanel fillDeviceInfo(final JProgressBar pProgressBar) {
 
-		JPanel info = new JPanel(new GridLayout(getLogFile().getDeviceTypeCount() + 1, 3));
+		final JPanel info = new JPanel(new GridLayout(getLogFile().getDeviceTypeCount() + 1, 3));
 		info.add(CustomComponent.boldLabel("Device type"));
 		info.add(CustomComponent.boldLabel("Device"));
 		info.add(CustomComponent.boldLabel("Logs"));
@@ -108,14 +107,14 @@ public class FileDetailsTab extends LogTab {
 		return new ComponentWithImage(Configuration.IMAGE_SENSOR, info);
 	}
 
-	private JPanel fillExtremInfo(Integer pExtremum, JProgressBar pProgressBar) {
+	private JPanel fillExtremInfo(final Integer pExtremum, final JProgressBar pProgressBar) {
 
-		JPanel info = new JPanel(new GridLayout(3, 3));
+		final JPanel info = new JPanel(new GridLayout(3, 3));
 
-		File extremImage = pExtremum == TOP ? Configuration.IMAGE_WARM : Configuration.IMAGE_COLD;
-		Device extremSender = pExtremum == TOP ? getLogFile().getTopSender() : getLogFile().getFlopSender();
-		String extremDay = pExtremum == TOP ? getLogFile().getTopDay() : getLogFile().getFlopDay();
-		String extremHour = pExtremum == TOP ? getLogFile().getTopHour() : getLogFile().getFlopHour();
+		final File extremImage = pExtremum == TOP ? Configuration.IMAGE_WARM : Configuration.IMAGE_COLD;
+		final Device extremSender = pExtremum == TOP ? getLogFile().getTopSender() : getLogFile().getFlopSender();
+		final String extremDay = pExtremum == TOP ? getLogFile().getTopDay() : getLogFile().getFlopDay();
+		final String extremHour = pExtremum == TOP ? getLogFile().getTopHour() : getLogFile().getFlopHour();
 
 		// Device
 		info.add(CustomComponent.boldLabel("Device"));
@@ -135,9 +134,9 @@ public class FileDetailsTab extends LogTab {
 		return new ComponentWithImage(extremImage, info);
 	}
 
-	private JPanel fillPeriodInfo(JProgressBar pProgressBar) {
+	private JPanel fillPeriodInfo(final JProgressBar pProgressBar) {
 
-		JPanel info = new JPanel(new GridLayout(3, 2));
+		final JPanel info = new JPanel(new GridLayout(3, 2));
 
 		info.add(CustomComponent.boldLabel("Period"));
 		info.add(new JLabel(getLogFile().getPeriod()));
@@ -156,14 +155,14 @@ public class FileDetailsTab extends LogTab {
 
 	@Override
 	protected Component content() {
-		JPanel content = new JPanel(new GridLayout(2, 1));
+		final JPanel content = new JPanel(new GridLayout(2, 1));
 
 		// FILE
-		JPanel head = new JPanel(new GridLayout(2, 1));
+		final JPanel head = new JPanel(new GridLayout(2, 1));
 		head.add(fileInfo);
 
 		// VERA AND USER
-		JPanel userAndVera = new JPanel(new GridLayout(1, 2));
+		final JPanel userAndVera = new JPanel(new GridLayout(1, 2));
 		userAndVera.add(userInfo);
 		userAndVera.add(veraInfo);
 		head.add(userAndVera);
@@ -171,7 +170,7 @@ public class FileDetailsTab extends LogTab {
 		// HEAD
 		content.add(head);
 
-		JPanel jpanel = new JPanel(new GridLayout(2, 2));
+		final JPanel jpanel = new JPanel(new GridLayout(2, 2));
 
 		// BOTTOM
 		jpanel.add(deviceInfo);
@@ -181,11 +180,6 @@ public class FileDetailsTab extends LogTab {
 		content.add(jpanel);
 
 		return content;
-	}
-
-	@Override
-	protected TabHeader header() {
-		return new TabHeader("General", "Please, enter a description for this tab ...", Configuration.IMAGE_SENSOR);
 	}
 
 	@Override
@@ -263,6 +257,11 @@ public class FileDetailsTab extends LogTab {
 			}
 		});
 
+	}
+
+	@Override
+	public String configurationSection() {
+		return "file_details";
 	}
 
 }

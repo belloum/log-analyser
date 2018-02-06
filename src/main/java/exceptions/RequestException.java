@@ -11,6 +11,11 @@ public class RequestException extends Exception {
 			INVALID_REQUEST);
 	public static final String PERIOD_DOES_NOT_MATCH_PATERN = String
 			.format("%s: Period must match one of these patterns: yyyy.mm.dd ; yyyy.mm.*", INVALID_REQUEST);
+	public static final String INVALID_START_DAY_FORMAT = String.format("%s: %s must match pattern: yyyy.mm.dd",
+			INVALID_REQUEST, "Start day");
+	public static final String INVALID_END_DAY_FORMAT = String.format("%s: %s must match pattern: yyyy.mm.dd",
+			INVALID_REQUEST, "End day");
+	public static final String INVALID_PERIOD = String.format("%s: Start date is after end date", INVALID_REQUEST);
 
 	/**
 	 * Instantiates a new <code>RequestException</code>.

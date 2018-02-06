@@ -2,8 +2,6 @@ package utils;
 
 import java.awt.Color;
 import java.io.File;
-import java.util.Arrays;
-import java.util.List;
 
 public class Configuration {
 
@@ -12,6 +10,7 @@ public class Configuration {
 	public static final File IMAGES_FOLDER = new File(RESOURCES_FOLDER, "img/");
 
 	public static final File PARTICIPANT_FILE = new File(RESOURCES_FOLDER, "userboxes.json");
+	public static final File SETTINGS_FILE = new File(RESOURCES_FOLDER, "settings.json");
 	public static final File RAW_LOG_FILE = new File(RESOURCES_FOLDER, "raw-logs.json");
 
 	public static final File IMAGE_LOG_FILE = new File(IMAGES_FOLDER, "log.png");
@@ -27,11 +26,6 @@ public class Configuration {
 	public static final File IMAGE_VERA = new File(IMAGES_FOLDER, "vera.png");
 
 	public static final Color RED_COLOR = Color.decode("#F44336");
-
-	private static final String INSTRUCTION_1 = "Instruction 1";
-	private static final String INSTRUCTION_2 = "Instruction 2";
-	private static final String INSTRUCTION_3 = "Instruction 3";
-	public static final List<String> INSTRUCTIONS = Arrays.asList(INSTRUCTION_1, INSTRUCTION_2, INSTRUCTION_3);
 
 	// REQUEST
 	public static final String DEFAULT_OUTPUT_FILENAME = "output.json";

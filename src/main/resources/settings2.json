@@ -1,0 +1,101 @@
+{
+	"menu": {
+		"1": {
+			"label":"Overview",
+			"need_file":false,
+			"class_name":"OverviewTab"
+		},
+		"2":{
+			"label":"Request Assistant",
+			"need_file":false,
+			"class_name":"RequestTab"
+		},
+		"3":{
+			"label":"File details",
+			"need_file":true,
+			"class_name":"FileDetailsTab"
+		},
+		"4":{
+			"label":"Devices",
+			"need_file":true,
+			"class_name":"DeviceTab2"
+		},
+		"5":{
+			"label":"Histograms",
+			"need_file":true,
+			"class_name":"HistogramTab"
+		},
+		"6":{
+			"label":"Routines",
+			"need_file":true,
+			"class_name":"RoutineTab2"
+		},
+		"7":{
+			"label":"Settings",
+			"need_file":false,
+			"class_name":"SettingsTab"
+		}
+	},
+	"tabs": {
+		"overview":{
+			"title":"Overview",
+			"description":"This is my new description for this tab",
+			"img":"avatar.png",
+			"sections":{
+				"log":{
+					"description":"This is the description I chose for the log and I will keep it.",
+					"title":"Logs"
+					},
+				"routine":{
+					"description":"This is the description I chose for the routine and I will keep it.",
+					"title":"Routines"
+					},
+				"device":{
+					"description":"This is the description I have chosen for the device and I will keep it.",
+					"title":"Devices"
+					},
+				"histogram":{
+					"description":"This is the description I chose for the histogram and I will keep it.",
+					"title":"Histograms"
+					}
+			}
+		},
+		"request": {
+			"title":"Request Assistant",
+			"description":"The Request Assistant will help you to extract logs from the remote production server. By specifying the extraction period and the vera identifier, you will be able to gather logs in a specified file.",
+			"img":"server.png",
+			"steps":{
+				"1":"Pick start and end dates of the desired extraction period. Dates must match the pattern yyyy.mm.dd.",
+				"2":"Pick a valid vera identifier. Must be a 8-integers-length string.",
+				"3":"Give a name to the file where the extracted logs will be gathered.",
+				"4":"Select your kind of request. The Request helper will format them for you.",
+				"5":"Copy the requests and execute them from a terminal, through SSH on production server, must be `diasuitebox-prod1`.",
+				"6":"Get the file back from remote server to your local computer through SFTP or SCP."
+			}
+		},
+		"file_details": {
+			"title":"File Details",
+			"description":"Retrieve the main information about the current log file.",
+			"img":"sensors.png"
+		},
+		"device": {
+			"title":"Devices",
+			"description":"The device tab enables to see the repartition of logs within the devices, the hours of day or days. Select a device in the list and get its repartition. That kind of information is relevant when you need to compute routines and find out the best configurations.",
+			"img":"sensors.png"
+		},
+		"histogram": {
+			"title":"Histograms",
+			"description":"The histograms tab enables to draw and visualize the repartitions of logs within days. Bar charts can be drawn by day or for all over period. Moreover, by specifying a splitting mode, only specified devices can be shown. Furthermore, time slots and electrical threshold are configurable.",
+			"img":"histo.png"
+		},
+		"routine": {
+			"title":"Routines",
+			"description":"The routine tab enables to compute scores of daily monitored activities so as to find out the best configuration of markers that leads to the most relevant activity monitoring.",
+			"img":"routine.png"
+		}
+	},
+	"settings":{
+		"log_file":"logs/storyboard.log",
+		"error_log_file":"logs/errors.log"
+	}
+}

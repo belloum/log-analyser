@@ -5,11 +5,10 @@ import java.awt.Component;
 import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import ui.last.components.TabHeader;
-import utils.Configuration;
+import org.jdesktop.swingx.JXLabel;
+import org.json.JSONObject;
 
 public class OverviewTab extends MyCustomTab {
 
@@ -29,28 +28,37 @@ public class OverviewTab extends MyCustomTab {
 	protected Component content() {
 		JPanel content = new JPanel(new GridLayout(4, 1));
 
-		JLabel logText = new JLabel("This is a useless description");
-		logText.setBorder(BorderFactory.createTitledBorder("Log description"));
-		content.add(logText);
+		JSONObject json = settings().getJSONObject("sections").getJSONObject("log");
 
-		JLabel routineTxt = new JLabel("This is a routine description");
-		routineTxt.setBorder(BorderFactory.createTitledBorder("Routine description"));
-		content.add(routineTxt);
+		JXLabel logs = new JXLabel(json.getString("description"));
+		logs.setLineWrap(true);
+		logs.setBorder(BorderFactory.createTitledBorder(json.getString("title")));
+		content.add(logs);
 
-		JLabel device = new JLabel("This is a useless description");
-		device.setBorder(BorderFactory.createTitledBorder("Device description"));
+		json = settings().getJSONObject("sections").getJSONObject("routine");
+		JXLabel routine = new JXLabel(json.getString("description"));
+		routine.setLineWrap(true);
+		routine.setBorder(BorderFactory.createTitledBorder(json.getString("title")));
+		content.add(routine);
+
+		json = settings().getJSONObject("sections").getJSONObject("device");
+		JXLabel device = new JXLabel(json.getString("description"));
+		device.setLineWrap(true);
+		device.setBorder(BorderFactory.createTitledBorder(json.getString("title")));
 		content.add(device);
 
-		JLabel histText = new JLabel("This is a histogram description");
-		histText.setBorder(BorderFactory.createTitledBorder("Histo description"));
-		content.add(histText);
+		json = settings().getJSONObject("sections").getJSONObject("histogram");
+		JXLabel histograms = new JXLabel(json.getString("description"));
+		histograms.setLineWrap(true);
+		histograms.setBorder(BorderFactory.createTitledBorder(json.getString("title")));
+		content.add(histograms);
 
 		return content;
 	}
 
 	@Override
-	protected TabHeader header() {
-		return new TabHeader("Overview", "Please, enter a description for this tab ...", Configuration.IMAGE_HISTO);
+	public String configurationSection() {
+		return "overview";
 	}
 
 }

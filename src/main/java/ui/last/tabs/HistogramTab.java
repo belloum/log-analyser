@@ -37,7 +37,6 @@ import ui.components.InputValue;
 import ui.components.MyButton;
 import ui.last.FileSelector;
 import ui.last.components.ErrorLabel;
-import ui.last.components.TabHeader;
 import ui.last.components.TabHeaderWithProgress;
 import utils.Configuration;
 
@@ -271,9 +270,9 @@ public class HistogramTab extends LogTab implements ItemListener, HistogramProgr
 	}
 
 	@Override
-	protected TabHeader header() {
-		return new TabHeaderWithProgress("Histogram", "Please, enter a description for this tab ...",
-				Configuration.IMAGE_HISTO);
+	protected TabHeaderWithProgress header() {
+		return new TabHeaderWithProgress(settings().getString("title"), settings().getString("description"),
+				new File(Configuration.IMAGES_FOLDER, settings().getString("img")));
 	}
 
 	@Override
@@ -330,6 +329,11 @@ public class HistogramTab extends LogTab implements ItemListener, HistogramProgr
 				enableBtns(true);
 			}
 		}
+	}
+
+	@Override
+	public String configurationSection() {
+		return "histogram";
 	}
 
 }

@@ -14,7 +14,7 @@ public abstract class LogTab extends MyCustomTab {
 
 	private final LogFile mLogFile;
 
-	public LogTab(FileSelector pFileSelector) {
+	public LogTab(final FileSelector pFileSelector) {
 		this.mLogFile = pFileSelector.getLogFile();
 		init();
 		add(content(), BorderLayout.CENTER);
@@ -26,4 +26,5 @@ public abstract class LogTab extends MyCustomTab {
 
 	protected void init() {
 	}
+
 }

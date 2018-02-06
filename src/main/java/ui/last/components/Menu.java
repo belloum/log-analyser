@@ -1,40 +1,48 @@
 package ui.last.components;
 
 import java.awt.GridLayout;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.LinkedHashMap;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import org.json.JSONObject;
+
 import ui.components.MyButton;
 import ui.last.FileSelector;
+import ui.last.tabs.ConfigurableTab;
 
-public class Menu extends JPanel {
+public class Menu extends JPanel implements ConfigurableTab {
 
 	private static final long serialVersionUID = 1L;
 
-	private LinkedList<JButton> mMenuItems = new LinkedList<>();
+	private LinkedHashMap<MenuItem, JButton> items = new LinkedHashMap<>();
 
 	int mCurrentPosition;
 	private MenuSelector mListener;
 	private LogFrame mFilePanel;
 
-	public Menu(List<String> pLabels) {
-		setLayout(new GridLayout(pLabels.size(), 1));
-		pLabels.forEach(label -> {
-			this.mMenuItems.add(new MyButton(label, event -> this.mListener.goTo(label)));
-		});
+	public Menu() {
+		JSONObject sections;
+		try {
+			sections = configuration();
+		} catch (Exception e) {
+			System.err.println(String.format("Unfound menu in configuration file %s",
+					ConfigurableTab.configurationFile().getName()));
+			sections = new JSONObject();
+		}
+
+		setLayout(new GridLayout(sections.length(), 1));
+		for (int i = 1; i <= sections.length(); i++) {
+			MenuItem item = new MenuItem(i, sections.getJSONObject(String.valueOf(i)));
+			items.put(item, new MyButton(item.label, event -> this.mListener.goTo(item.className)));
+		}
 
 		build();
 	}
 
 	private void build() {
-		removeAll();
-
-		this.mMenuItems.forEach(button -> add(button));
-
-		validate();
+		items.forEach((item, btn) -> add(btn));
 	};
 
 	public void addNavigationListener(MenuSelector pNavigationListener) {
@@ -48,20 +56,33 @@ public class Menu extends JPanel {
 	@Override
 	public void setEnabled(boolean pEnabled) {
 		super.setEnabled(pEnabled);
-		mMenuItems.forEach(button -> button.setEnabled(pEnabled));
-	}
-
-	public void enablePosition(boolean pEnabled, int pPosition) {
-		super.setEnabled(pEnabled);
-		mMenuItems.get(pPosition).setEnabled(pEnabled);
+		items.forEach((item, btn) -> btn.setEnabled(pEnabled));
 	}
 
 	public void disableMenu() {
-		setEnabled(false);
+		items.forEach((item, btn) -> btn.setEnabled(!item.isFileDependant));
 	}
 
 	public interface MenuSelector {
 		void goTo(String pSection);
+	}
+
+	@Override
+	public String configurationSection() {
+		return "menu";
+	}
+
+	public class MenuItem {
+		String label;
+		Boolean isFileDependant;
+		String className;
+
+		public MenuItem(int pPosition, JSONObject pJSONObject) {
+			this.label = pJSONObject.getString("label");
+			this.className = pJSONObject.getString("class_name");
+			this.isFileDependant = pJSONObject.getBoolean("need_file");
+		}
+
 	}
 
 }
