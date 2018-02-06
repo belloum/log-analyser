@@ -33,7 +33,6 @@ import loganalyser.utils.Utils;
 
 public class RoutineTab extends LogTab {
 
-	// FIXME Invalid hour > error message
 	// TODO helper for decision, show the biggest sender
 	// TODO Progress
 
