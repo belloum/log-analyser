@@ -8,6 +8,7 @@ public class Configuration {
 	public static final File RESOURCES_FOLDER = new File("src/main/resources/");
 	public static final File SCRIPTS_FOLDER = new File(RESOURCES_FOLDER, "scripts/");
 	public static final File IMAGES_FOLDER = new File(RESOURCES_FOLDER, "img/");
+	public static final File CONFIG_FOLDER = new File("config/");
 
 	public static final File PARTICIPANT_FILE = new File(RESOURCES_FOLDER, "userboxes.json");
 	public static final File RAW_LOG_FILE = new File(RESOURCES_FOLDER, "raw-logs.json");
@@ -42,4 +43,5 @@ public class Configuration {
 	public static final Integer LABEL_WIDTH_MEDIUM = 150;
 	public static final Integer PADDING = 5;
 	public static final Integer ITEM_HEIGHT = 20;
+
 }

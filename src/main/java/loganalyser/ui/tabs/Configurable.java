@@ -5,6 +5,7 @@ import java.io.File;
 import org.json.JSONObject;
 
 import loganalyser.operators.FileExtractor;
+import loganalyser.utils.Configuration;
 
 public interface Configurable {
 
@@ -13,7 +14,7 @@ public interface Configurable {
 	};
 
 	static File configurationFile() {
-		return new File("config/settings.json");
+		return new File(Configuration.CONFIG_FOLDER, "settings.json");
 	}
 
 	String configurationSection();

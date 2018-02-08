@@ -61,6 +61,7 @@ public class LogHandler2 extends JFrame implements MenuSelector, FileSelector {
 	public LogHandler2() throws Exception {
 		super("Log Handler");
 		Utils.log("Start application", this.getClass());
+
 		setLayout(new BorderLayout());
 		setResizable(false);
 		setVisible(true);
@@ -146,5 +147,4 @@ public class LogHandler2 extends JFrame implements MenuSelector, FileSelector {
 		mRightContent.add(jPanel, BorderLayout.CENTER);
 		mRightContent.validate();
 	}
-
 }

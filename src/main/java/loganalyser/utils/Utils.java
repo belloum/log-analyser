@@ -52,8 +52,13 @@ public class Utils implements Configurable {
 		File pFile = new File(new JSONObject(FileExtractor.readFile(Configurable.configurationFile()))
 				.getJSONObject("settings").getString("temp_file"));
 
+		if (!pFile.getParentFile().exists()) {
+			pFile.getParentFile().mkdirs();
+		}
+
 		if (!pFile.exists()) {
 			pFile.createNewFile();
+			pFile.deleteOnExit();
 		}
 
 		return pFile;
@@ -90,6 +95,10 @@ public class Utils implements Configurable {
 	@SuppressWarnings("rawtypes")
 	private static void updateLogFile(File pFile, String pMsg, Class pClass) {
 		try {
+			if (!pFile.getParentFile().exists()) {
+				pFile.getParentFile().mkdirs();
+			}
+
 			if (!pFile.exists()) {
 				pFile.createNewFile();
 			}
