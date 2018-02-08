@@ -15,10 +15,10 @@ public class TabHeaderWithProgress extends TabHeader {
 	private static final long serialVersionUID = 1L;
 
 	// FIXME Replace by a circular indeterminate progress
-	private JLabel mJLabel;
-	private JProgressBar mJProgress;
+	private final JLabel mJLabel;
+	private final JProgressBar mJProgress;
 
-	public TabHeaderWithProgress(String pTitle, String pDescription, File pImage) {
+	public TabHeaderWithProgress(final String pTitle, final String pDescription, final File pImage) {
 		super(pTitle, pDescription, pImage);
 		mJLabel = new JLabel("Progress");
 		mJProgress = new JProgressBar(0, 100);
@@ -40,13 +40,13 @@ public class TabHeaderWithProgress extends TabHeader {
 		validate();
 	}
 
-	public void setProgressText(String pProgressTxt) {
+	public void setProgressText(final String pProgressTxt) {
 		mJLabel.setVisible(true);
 		mJLabel.setText(pProgressTxt);
 		validate();
 	}
 
-	public void updateProgress(float pPropgress) {
+	public void updateProgress(final float pPropgress) {
 		if (!mJProgress.isVisible()) {
 			mJProgress.setVisible(true);
 		}

@@ -200,3 +200,10 @@
 [2018.02.06 20:51:46][RoutineTab] Invalid primary markers
 [2018.02.06 20:51:53][RoutineTab] Start time and end time are equals
 [2018.02.06 20:52:29][RoutineTab] Start time is after end time
+[2018.02.08 16:27:41][RoutineTab] Cannot run program "./wakeup.pl": error=2, No such file or directory
+[2018.02.08 16:36:24][RoutineTab] Cannot run program "./wakeup.pl" (in directory "file:/Users/ariche/Documents/workspace/log-analyser/target/classes/scripts"): error=2, No such file or directory
+[2018.02.08 16:40:07][RoutineTab] Cannot run program "./wakeup.pl" (in directory "/Users/ariche/Documents/workspace/log-analyser/target/classes/scripts"): error=13, Permission denied
+[2018.02.08 16:47:40][RoutineTab] Cannot run program "./wakeup.pl" (in directory "/Users/ariche/Documents/workspace/log-analyser/target/classes/scripts"): error=13, Permission denied
+[2018.02.08 16:50:01][RoutineTab] Cannot run program "./wakeup.pl" (in directory "/Users/ariche/Documents/workspace/log-analyser/target/classes/scripts"): error=13, Permission denied
+[2018.02.08 17:22:56][OverviewTab] INVALID FILE: 2017.11_cleaned.json, JSONObject["user"] not found.
+[2018.02.08 21:01:19][LogFrame] Image not found

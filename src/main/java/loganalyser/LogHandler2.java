@@ -25,7 +25,6 @@ import loganalyser.ui.tabs.OverviewTab;
 import loganalyser.ui.tabs.RequestTab;
 import loganalyser.ui.tabs.RoutineTab;
 import loganalyser.utils.Configuration;
-import loganalyser.utils.Utils;
 
 //FIXME: use log file
 public class LogHandler2 extends JFrame implements MenuSelector, FileSelector {
@@ -60,7 +59,7 @@ public class LogHandler2 extends JFrame implements MenuSelector, FileSelector {
 	 */
 	public LogHandler2() throws Exception {
 		super("Log Handler");
-		Utils.log("Start application", this.getClass());
+		// Utils.log("Start application", this.getClass());
 
 		setLayout(new BorderLayout());
 		setResizable(false);
@@ -71,7 +70,7 @@ public class LogHandler2 extends JFrame implements MenuSelector, FileSelector {
 	}
 
 	private void init() {
-		Utils.log("init parameters", this.getClass());
+		// Utils.log("init parameters", this.getClass());
 		JPanel leftFrame = new JPanel(new BorderLayout());
 		leftFrame.setBounds(0, 0, Configuration.LEFT_MENU_WIDTH, Configuration.MAX_HEIGHT);
 		leftFrame.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
@@ -127,6 +126,7 @@ public class LogHandler2 extends JFrame implements MenuSelector, FileSelector {
 	@Override
 	public void goTo(String pSection) {
 		JPanel jPanel = new JPanel(new BorderLayout());
+
 		if (pSection.equalsIgnoreCase(OverviewTab.class.getSimpleName())) {
 			jPanel = StringUtils.isEmpty(mErrorMsg) ? new OverviewTab() : new OverviewTab(mErrorMsg);
 		} else if (pSection.equalsIgnoreCase(FileDetailsTab.class.getSimpleName())) {

@@ -31,14 +31,13 @@ import beans.devices.Device;
 import loganalyser.beans.SoftLog;
 import loganalyser.old.ui.CustomComponent;
 import loganalyser.old.ui.FileChooser;
-import loganalyser.old.ui.HistogramViewer;
 import loganalyser.old.ui.InputValue;
 import loganalyser.old.ui.MyButton;
 import loganalyser.operators.FileSelector;
 import loganalyser.operators.SoftLogExtractor;
 import loganalyser.ui.components.ErrorLabel;
 import loganalyser.ui.components.TabHeaderWithProgress;
-import loganalyser.utils.Configuration;
+import loganalyser.utils.Utils;
 
 //TODO: see the best way to handle progress, top bar or top histogram
 public class HistogramTab extends LogTab implements ItemListener, HistogramProgressListener {
@@ -63,7 +62,7 @@ public class HistogramTab extends LogTab implements ItemListener, HistogramProgr
 	private List<String> mSelectedDevice;
 	private Map<String, Checkbox> mCheckBoxes;
 
-	public HistogramTab(FileSelector pFileSelector) {
+	public HistogramTab(final FileSelector pFileSelector) {
 		super(pFileSelector);
 		draws();
 	}
@@ -81,8 +80,8 @@ public class HistogramTab extends LogTab implements ItemListener, HistogramProgr
 	}
 
 	private void save() {
-
-		FileChooser fc = new FileChooser(Configuration.RESOURCES_FOLDER, "Save histogram");
+		// FIXME
+		final FileChooser fc = new FileChooser(new File(""), "Save histogram");
 
 		if (fc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
 			File output = fc.getSelectedFile();
@@ -97,7 +96,7 @@ public class HistogramTab extends LogTab implements ItemListener, HistogramProgr
 					error("Nothing to save");
 					System.err.println("Nothing to save");
 				}
-			} catch (Exception exception) {
+			} catch (final Exception exception) {
 				System.err.println(String.format("Unable to save file, %s", exception));
 				error(String.format("Unable to save file, %s", exception));
 			}
@@ -105,7 +104,7 @@ public class HistogramTab extends LogTab implements ItemListener, HistogramProgr
 	}
 
 	@Override
-	public void itemStateChanged(ItemEvent e) {
+	public void itemStateChanged(final ItemEvent e) {
 		if (e.getStateChange() == ItemEvent.SELECTED) {
 			mSelectedDevice.add(e.getItem().toString());
 		} else if (e.getStateChange() == ItemEvent.DESELECTED) {
@@ -160,13 +159,13 @@ public class HistogramTab extends LogTab implements ItemListener, HistogramProgr
 
 		// Ignore Consumption
 		try {
-			int threshold = Integer.parseInt(mInputThreshold.getText());
+			final int threshold = Integer.parseInt(mInputThreshold.getText());
 			if (threshold <= 0) {
 				throw new Exception("Electrical threshold must be a positive integer");
 			} else {
 				logs = SoftLogExtractor.ignoreLowConsumptionLogs(logs, threshold);
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new Exception("Electrical threshold must be a positive integer");
 		}
 
@@ -178,21 +177,21 @@ public class HistogramTab extends LogTab implements ItemListener, HistogramProgr
 		return logs;
 	}
 
-	private void enableBtns(boolean pEnabled) {
+	private void enableBtns(final boolean pEnabled) {
 		mBtnDraw.setEnabled(pEnabled);
 		mBtnExportCSV.setEnabled(pEnabled);
 		mBtnSave.setEnabled(pEnabled);
 	}
 
 	@Override
-	protected void error(String pError) {
+	protected void error(final String pError) {
 		mJPanelChart.add(new ErrorLabel(pError), BorderLayout.PAGE_START);
 		mJPanelChart.validate();
 	}
 
 	@Override
 	protected Component content() {
-		JPanel content = new JPanel(new BorderLayout());
+		final JPanel content = new JPanel(new BorderLayout());
 
 		/*
 		 * Histogram Panel
@@ -204,7 +203,7 @@ public class HistogramTab extends LogTab implements ItemListener, HistogramProgr
 		/*
 		 * Bottom
 		 */
-		JPanel btm = new JPanel(new BorderLayout());
+		final JPanel btm = new JPanel(new BorderLayout());
 		btm.add(mBtnSave, BorderLayout.WEST);
 		btm.add(mBtnDraw, BorderLayout.CENTER);
 		btm.add(mBtnExportCSV, BorderLayout.EAST);
@@ -214,10 +213,10 @@ public class HistogramTab extends LogTab implements ItemListener, HistogramProgr
 		 * Right Settings
 		 */
 
-		JPanel settings = new JPanel(new GridLayout(2, 1));
+		final JPanel settings = new JPanel(new GridLayout(2, 1));
 
 		// Top Settings
-		JPanel topSettings = new JPanel(new GridLayout(5, 1));
+		final JPanel topSettings = new JPanel(new GridLayout(5, 1));
 
 		mJLTotalLogs = CustomComponent.boldLabel(new JLabel(String.format("%d", getLogFile().getSoftLogs().size())));
 		mJLTotalLogs.setBorder(BorderFactory.createTitledBorder("Logs"));
@@ -242,12 +241,12 @@ public class HistogramTab extends LogTab implements ItemListener, HistogramProgr
 		settings.add(topSettings);
 
 		// Bottom Settings
-		JPanel btmSettings = new JPanel(new BorderLayout());
+		final JPanel btmSettings = new JPanel(new BorderLayout());
 
-		JScrollPane scroll = new JScrollPane();
-		JPanel jpanel = new JPanel(new GridLayout(getLogFile().getDeviceCount(), 1));
+		final JScrollPane scroll = new JScrollPane();
+		final JPanel jpanel = new JPanel(new GridLayout(getLogFile().getDeviceCount(), 1));
 		getLogFile().getDevices().stream().map(Device::getId).forEach(deviceId -> {
-			Checkbox chBx = new Checkbox(deviceId, true);
+			final Checkbox chBx = new Checkbox(deviceId, true);
 			this.mSelectedDevice.add(deviceId);
 			chBx.addItemListener(this);
 			mCheckBoxes.put(deviceId, chBx);
@@ -272,7 +271,7 @@ public class HistogramTab extends LogTab implements ItemListener, HistogramProgr
 	@Override
 	protected TabHeaderWithProgress header() {
 		return new TabHeaderWithProgress(settings().getString("title"), settings().getString("description"),
-				new File(Configuration.IMAGES_FOLDER, settings().getString("img")));
+				Utils.getImg(settings().getString("img")));
 	}
 
 	@Override
@@ -291,16 +290,16 @@ public class HistogramTab extends LogTab implements ItemListener, HistogramProgr
 	}
 
 	@Override
-	public void progressBulding(float pProgress) {
+	public void progressBulding(final float pProgress) {
 		getHeader().updateProgress(pProgress);
 		mJPB.setValue((int) pProgress);
 	}
 
 	private class HistogramDrawer implements Runnable {
 
-		private HistogramProgressListener mListener;
+		private final HistogramProgressListener mListener;
 
-		public HistogramDrawer(HistogramProgressListener pListener) {
+		public HistogramDrawer(final HistogramProgressListener pListener) {
 			this.mListener = pListener;
 		}
 
@@ -311,14 +310,14 @@ public class HistogramTab extends LogTab implements ItemListener, HistogramProgr
 
 			try {
 
-				int hourSlot = Integer.parseInt(mInputSlotHour.getText());
+				final int hourSlot = Integer.parseInt(mInputSlotHour.getText());
 
-				List<SoftLog> logs = filterLogsBeforeDrawing();
-				boolean splitted = mSplitPicker.getSelectedIndex() > 0;
+				final List<SoftLog> logs = filterLogsBeforeDrawing();
+				final boolean splitted = mSplitPicker.getSelectedIndex() > 0;
 
 				mChart = Histogram.draw(new Histogram(hourSlot, logs, mListener), splitted);
 				mJLTotalLogs.setText(String.format("%d", logs.size()));
-			} catch (Exception exception) {
+			} catch (final Exception exception) {
 				mChart = null;
 				System.out.println("it is in the thread");
 				mJPanelChart.removeAll();

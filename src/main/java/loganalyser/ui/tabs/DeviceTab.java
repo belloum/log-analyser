@@ -46,14 +46,14 @@ public class DeviceTab extends LogTab {
 	private String mDevice;
 	private SplitMod mCurrentSplittingMod = SplitMod.DAY;
 
-	public DeviceTab(FileSelector pFileSelector) {
+	public DeviceTab(final FileSelector pFileSelector) {
 		super(pFileSelector);
 		mDevice = "All";
 		updateSplittedView();
 	}
 
-	private JPanel createRepartitionTops(String[] pHoursTop, String[] pDaysTop) {
-		JPanel repartitionTops = new JPanel(new GridLayout(4, 2));
+	private JPanel createRepartitionTops(final String[] pHoursTop, final String[] pDaysTop) {
+		final JPanel repartitionTops = new JPanel(new GridLayout(4, 2));
 		repartitionTops.add(CustomComponent.boldLabel("Hourly top"));
 		repartitionTops.add(CustomComponent.boldLabel("Daily top"));
 		for (int i = 0; i < pHoursTop.length; i++) {
@@ -70,7 +70,7 @@ public class DeviceTab extends LogTab {
 		String[] headers;
 		String[][] data;
 
-		List<SoftLog> toSplit = (!StringUtils.isEmpty(mDevice) && !mDevice.equals("All"))
+		final List<SoftLog> toSplit = (!StringUtils.isEmpty(mDevice) && !mDevice.equals("All"))
 				? getLogFile().getLogByDevice(mDevice)
 				: getLogFile().getSoftLogs();
 
@@ -84,9 +84,9 @@ public class DeviceTab extends LogTab {
 
 		data = new String[splitted.size()][2];
 
-		List<String> keyList = new ArrayList<String>(splitted.keySet());
+		final List<String> keyList = new ArrayList<String>(splitted.keySet());
 		for (int i = 0; i < keyList.size(); i++) {
-			String key = keyList.get(i);
+			final String key = keyList.get(i);
 			data[i] = new String[] { key, String.format("%d", splitted.get(key).size()) };
 		}
 
@@ -100,20 +100,20 @@ public class DeviceTab extends LogTab {
 	@Override
 	protected Component content() {
 
-		JPanel content = new JPanel(new GridLayout(1, 2));
+		final JPanel content = new JPanel(new GridLayout(1, 2));
 
-		JScrollPane leftScroll = new JScrollPane();
-		List<Device> devices = getLogFile().getDevices();
-		String[] headers = new String[] { "Device", "Type", "Location", "Logs" };
-		String[][] data = new String[devices.size() + 1][headers.length];
+		final JScrollPane leftScroll = new JScrollPane();
+		final List<Device> devices = getLogFile().getDevices();
+		final String[] headers = new String[] { "Device", "Type", "Location", "Logs" };
+		final String[][] data = new String[devices.size() + 1][headers.length];
 		data[0] = new String[] { "All", "", "", String.format("%d", getLogFile().getSoftLogs().size()) };
 		for (int i = 1; i < devices.size() + 1; i++) {
-			Device device = devices.get(i - 1);
+			final Device device = devices.get(i - 1);
 			data[i] = new String[] { device.getId(), device.getType().name(), device.getLocation(),
 					String.format("%d", getLogFile().getLogByDevice(device.getId()).size()) };
 		}
 
-		MyTable tab = new MyTable(data, headers);
+		final MyTable tab = new MyTable(data, headers);
 		tab.setEnabled(true);
 		tab.getSelectionModel().addListSelectionListener(event -> {
 			mDevice = tab.getValueAt(tab.getSelectedRow(), 0).toString();
@@ -124,8 +124,9 @@ public class DeviceTab extends LogTab {
 		content.add(leftScroll);
 
 		// RIGHT TOP
-		JPanel right = new JPanel(new BorderLayout());
-		JComboBox<String> jCBRepartition = new JComboBox<>(new String[] { "Daily repartition", "Hourly repartition" });
+		final JPanel right = new JPanel(new BorderLayout());
+		final JComboBox<String> jCBRepartition = new JComboBox<>(
+				new String[] { "Daily repartition", "Hourly repartition" });
 		jCBRepartition.addItemListener(event -> {
 			if (event.getStateChange() == ItemEvent.SELECTED) {
 				mCurrentSplittingMod = event.getItem().toString().toLowerCase().contains("hour") ? SplitMod.HOUR
@@ -140,7 +141,8 @@ public class DeviceTab extends LogTab {
 		right.add(mRepartitionDetails, BorderLayout.CENTER);
 
 		// RIGHT BOTTOM
-		JPanel rightBottom = createRepartitionTops(new String[] { "-", "-", "-" }, new String[] { "-", "-", "-" });
+		final JPanel rightBottom = createRepartitionTops(new String[] { "-", "-", "-" },
+				new String[] { "-", "-", "-" });
 		mRepartitionTop = new ComponentWithImage(Configuration.IMAGE_PODIUM, rightBottom);
 		mRepartitionTop.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
 		right.add(mRepartitionTop, BorderLayout.PAGE_END);
@@ -155,9 +157,9 @@ public class DeviceTab extends LogTab {
 		return "device";
 	}
 
-	private String[] fillTop(List<SoftLog> pLogs, SplitMod pMode) {
-		String empty = " - ";
-		String[] tops = new String[3];
+	private String[] fillTop(final List<SoftLog> pLogs, final SplitMod pMode) {
+		final String empty = " - ";
+		final String[] tops = new String[3];
 		tops[0] = empty;
 		tops[1] = empty;
 		tops[2] = empty;

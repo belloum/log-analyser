@@ -22,8 +22,8 @@ public class ComponentWithImage extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private Component mComponent;
-	private File mImage;
-	private Integer mAlignement;
+	private final File mImage;
+	private final Integer mAlignement;
 
 	public ComponentWithImage(final File pImage, final Component pContent) {
 		this(pImage, pContent, ALIGN_LEFT);

@@ -2,17 +2,14 @@ package loganalyser.ui.tabs;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.io.File;
 
 import javax.swing.JPanel;
 
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 
-import loganalyser.operators.FileExtractor;
 import loganalyser.ui.components.ErrorLabel;
 import loganalyser.ui.components.TabHeader;
-import loganalyser.utils.Configuration;
 import loganalyser.utils.Utils;
 
 /**
@@ -25,7 +22,7 @@ public abstract class MyCustomTab extends JPanel implements Configurable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private TabHeader mHeader;
+	private final TabHeader mHeader;
 	private final ErrorLabel mError;
 	private JSONObject mSettings;
 
@@ -37,7 +34,7 @@ public abstract class MyCustomTab extends JPanel implements Configurable {
 		} catch (final Exception e) {
 			final String error = String.format("Unable to find configuration file (%s): %s", this.getClass().getName(),
 					e.getMessage());
-			Utils.errorLog(error, this.getClass());
+			// Utils.errorLog(error, this.getClass());
 			System.err.println(error);
 		}
 
@@ -52,12 +49,12 @@ public abstract class MyCustomTab extends JPanel implements Configurable {
 
 	protected TabHeader header() {
 		return new TabHeader(settings().getString("title"), settings().getString("description"),
-				new File(Configuration.IMAGES_FOLDER, settings().getString("img")));
+				Utils.getImg(settings().getString("img")));
 	}
 
 	protected void error(final String pErrorMsg) {
 		if (!StringUtils.isEmpty(pErrorMsg)) {
-			Utils.errorLog(pErrorMsg, this.getClass());
+			// Utils.errorLog(pErrorMsg, this.getClass());
 			System.err.println("Error: " + pErrorMsg);
 			getError().setVisible(true);
 			getError().setText(pErrorMsg);
@@ -78,14 +75,13 @@ public abstract class MyCustomTab extends JPanel implements Configurable {
 		return this.mSettings;
 	}
 
-	@Override
-	public JSONObject configuration() throws Exception {
-		return new JSONObject(FileExtractor.readFile(Configurable.configurationFile())).getJSONObject("tabs")
-				.getJSONObject(configurationSection());
-	}
-
 	public ErrorLabel getError() {
 		return this.mError;
+	}
+
+	@Override
+	public String configurationFilename() {
+		return "tabs.json";
 	}
 
 }

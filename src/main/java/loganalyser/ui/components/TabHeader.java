@@ -24,7 +24,7 @@ public class TabHeader extends JPanel {
 	private JLabel mTitle;
 	private JXLabel mDescription;
 
-	public TabHeader(String pTitle, String pDescription, File pImage) {
+	public TabHeader(final String pTitle, final String pDescription, final File pImage) {
 		this.mImage = pImage;
 		this.mTitle = CustomComponent.boldLabel(pTitle);
 		this.mDescription = new JXLabel(pDescription) {
@@ -45,11 +45,11 @@ public class TabHeader extends JPanel {
 		setLayout(new BorderLayout(5, 5));
 		setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
 
-		JPanel title = new JPanel(new BorderLayout());
+		final JPanel title = new JPanel(new BorderLayout());
 		title.add(mTitle, BorderLayout.NORTH);
 		title.add(mDescription, BorderLayout.CENTER);
 
-		JPanel panelWithImg = new ComponentWithImage(mImage, title);
+		final JPanel panelWithImg = new ComponentWithImage(mImage, title);
 		panelWithImg.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		add(panelWithImg, BorderLayout.CENTER);

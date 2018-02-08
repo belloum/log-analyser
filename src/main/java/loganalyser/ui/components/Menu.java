@@ -23,16 +23,9 @@ public class Menu extends JPanel implements Configurable {
 	private LogFrame mFilePanel;
 
 	public Menu() {
-		JSONObject sections;
-		try {
-			sections = configuration();
-		} catch (Exception e) {
-			System.err.println(String.format("Unfound menu in configuration file %s",
-					Configurable.configurationFile().getName()));
-			sections = new JSONObject();
-		}
-
+		JSONObject sections = configuration();
 		setLayout(new GridLayout(sections.length(), 1));
+
 		for (int i = 1; i <= sections.length(); i++) {
 			MenuItem item = new MenuItem(i, sections.getJSONObject(String.valueOf(i)));
 			items.put(item, new MyButton(item.label, event -> this.mListener.goTo(item.className)));
@@ -67,10 +60,6 @@ public class Menu extends JPanel implements Configurable {
 		void goTo(String pSection);
 	}
 
-	@Override
-	public String configurationSection() {
-		return "menu";
-	}
 
 	public class MenuItem {
 		String label;
@@ -83,6 +72,16 @@ public class Menu extends JPanel implements Configurable {
 			this.isFileDependant = pJSONObject.getBoolean("need_file");
 		}
 
+	}
+
+	@Override
+	public String configurationFilename() {
+		return "menu.json";
+	}
+
+	@Override
+	public String configurationSection() {
+		return "sections";
 	}
 
 }

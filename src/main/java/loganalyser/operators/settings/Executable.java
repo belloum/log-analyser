@@ -4,7 +4,11 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.attribute.PosixFilePermission;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import loganalyser.beans.Routine;
 import loganalyser.beans.activityresults.ActivityResult;
@@ -22,7 +26,19 @@ public interface Executable {
 
 	default String[] executeScript(ProcessBuilder pProcessBuilder) throws IOException, InterruptedException {
 
-		pProcessBuilder.directory(Configuration.SCRIPTS_FOLDER);
+		File scriptDirectory = Configuration.SCRIPTS_FOLDER;
+		Set<PosixFilePermission> perms = new HashSet<>();
+		perms.add(PosixFilePermission.OWNER_EXECUTE);
+		perms.add(PosixFilePermission.OWNER_READ);
+
+		for (File file : scriptDirectory.listFiles()) {
+			if (!file.canExecute() || !file.canRead()) {
+				Files.setPosixFilePermissions(file.toPath(), perms);
+				System.out.println(String.format("%s is now readable and executable", file.getName()));
+			}
+		}
+
+		pProcessBuilder.directory(scriptDirectory);
 		System.out.println(pProcessBuilder.command());
 		Process process = pProcessBuilder.start();
 		process.waitFor();

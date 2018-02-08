@@ -58,7 +58,7 @@ public class LogFrame extends JPanel implements LogExtractorListener {
 			add(new JLabel(new ImageIcon(Utils.scaleImg(Configuration.IMAGE_LOG_FILE, IMG_DIMENSION, IMG_DIMENSION))),
 					BorderLayout.PAGE_START);
 		} catch (final IOException ignored) {
-			Utils.errorLog("Image not found", this.getClass());
+			// Utils.errorLog("Image not found", this.getClass());
 			System.err.println("Hay una problema");
 		}
 
@@ -66,8 +66,9 @@ public class LogFrame extends JPanel implements LogExtractorListener {
 		info.add(mFileName);
 		info.add(mLogCount);
 
-		final FileChooser fileChooser = new FileChooser(Configuration.RESOURCES_FOLDER, "Select a log file",
-				Arrays.asList(new FileNameExtensionFilter("Log file", "json")));
+		// FIXME
+		final FileChooser fileChooser = new FileChooser(new File("")/* Configuration.RESOURCES_FOLDER */,
+				"Select a log file", Arrays.asList(new FileNameExtensionFilter("Log file", "json")));
 
 		// button
 		info.add(new MyButton(SELECT_A_FILE, event -> {
