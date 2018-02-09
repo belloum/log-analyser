@@ -1,8 +1,4 @@
-ReadMe
-
-# Getting start
-
-## Test
+## Getting start
 
 To launch the jar file, please ensure that Java is installed on your computer.
 
