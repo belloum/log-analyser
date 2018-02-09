@@ -1,0 +1,39 @@
+{
+	"sections": {
+		"1": {
+			"label":"Overview",
+			"need_file":false,
+			"class_name":"OverviewTab"
+		},
+		"2":{
+			"label":"Request Assistant",
+			"need_file":false,
+			"class_name":"RequestTab"
+		},
+		"3":{
+			"label":"File details",
+			"need_file":true,
+			"class_name":"FileDetailsTab"
+		},
+		"4":{
+			"label":"Devices",
+			"need_file":true,
+			"class_name":"DeviceTab"
+		},
+		"5":{
+			"label":"Histograms",
+			"need_file":true,
+			"class_name":"HistogramTab"
+		},
+		"6":{
+			"label":"Routines",
+			"need_file":true,
+			"class_name":"RoutineTab"
+		},
+		"7":{
+			"label":"Settings",
+			"need_file":false,
+			"class_name":"SettingsTab"
+		}
+	}
+}
