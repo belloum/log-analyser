@@ -1,5 +1,0 @@
-{
-	"log_file":"logs/storyboard.log",
-	"error_log_file":"logs/errors.log",
-	"temp_file":"temp/cleaned.json"
-}
