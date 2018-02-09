@@ -44,3 +44,12 @@ Contains the source code of the Java application.
 ## Contact
 
 [Antoine Riché](mailto:riche.ant@gmail.com) - riche.ant@gmail.com
+
+Title:       LogTool
+Subtitle:    MyLogTool is good
+Project:     Phoenix
+Author:      Antoine Riché
+Affiliation: Phoenix
+Mail:   	 riche.ant@gmail.com
+Web:         http://www.noverse.com  
+Date:        February 9, 2018
