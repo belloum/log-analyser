@@ -2,6 +2,8 @@ ReadMe
 
 # Getting start
 
+## Test
+
 To launch the jar file, please ensure that Java is installed on your computer.
 
 1. Download *logtool.zip*
