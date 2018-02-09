@@ -1,5 +1,6 @@
-
 # Launch program
+
+To launch the jar file, please ensure that Java is installed on your computer.
 
 1. Download *logtool.zip*
 2. Extract *logtool.zip*
