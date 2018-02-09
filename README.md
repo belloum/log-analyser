@@ -16,7 +16,8 @@ Contains JSONs that defines the menu sections, and some generic settings.
 ### Logs
 
 Contains log files of executions.
-*For now, it's not relevant, but it would be as soon as possible.*
+
+> For now, it's not relevant, but it would be as soon as possible.
 
 ### Res
 
@@ -37,7 +38,8 @@ Contains temporary files during the executions. These files are deleted while st
 ### Src
 
 Contains the source code of the Java application.
-*For now, lot's of classes have to be refactored.*
+
+> For now, lot's of classes have to be refactored.
 
 ## Contact
 
