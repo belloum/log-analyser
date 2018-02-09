@@ -1,7 +1,6 @@
 package loganalyser.operators;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +22,7 @@ public class RawLogFormater extends FileExtractor {
 			content = readFile(pRawLogFile).replaceAll("}\n", "},");
 			content = String.format("[%s]", content);
 			return new JSONArray(content);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			throw new RawLogException(e.getMessage());
 		}
 	}
@@ -52,7 +51,7 @@ public class RawLogFormater extends FileExtractor {
 
 	public static List<SoftLog> extractLogs(File pRawLogFile, LogExtractorListener pListener) throws RawLogException {
 		List<SoftLog> myLogs = new ArrayList<>();
-
+		// FIXME validate file before any iteration
 		// 1. Format logs
 		if (pListener != null) {
 			pListener.formatLogs();
@@ -67,12 +66,12 @@ public class RawLogFormater extends FileExtractor {
 			JSONObject jLog = logs.getJSONObject(i);
 			try {
 				myLogs.add(new SoftLog(jLog));
+			} catch (RawLogException ignored) {
+			} finally {
 				if (pListener != null) {
 					float progress = ((float) i * 100) / logs.length();
 					pListener.logExtractionProgress((int) progress);
 				}
-			} catch (RawLogException exception) {
-				System.out.println("No me gusta, porque hay un malformed log: " + exception);
 			}
 		}
 

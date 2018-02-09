@@ -113,6 +113,7 @@ public class LogHandler2 extends JFrame implements MenuSelector, FileSelector {
 		mLogFile = null;
 		mErrorMsg = String.format("INVALID FILE: %s, %s", pInvalidFile.getName(), pCause);
 		mMenu.disableMenu();
+		log.error("Invalid file: {}, {}", pInvalidFile.getName(), pCause);
 		goTo(OverviewTab.class.getSimpleName());
 	}
 
