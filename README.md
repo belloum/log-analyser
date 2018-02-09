@@ -7,34 +7,38 @@ To launch the jar file, please ensure that Java is installed on your computer.
 3. Go to the extracted folder
 4. Run the command *java -jar logtool.jar from a command prompt*
 
-# Folder content
+## Folder content
 
-## Config
+### Config
 
 Contains JSONs that defines the menu sections, and some generic settings.
 
-## Logs
+### Logs
 
 Contains log files of executions.
 *For now, it's not relevant, but it would be as soon as possible.*
 
-## Res
+### Res
 
 Contains the resources used by the Java application.
 
-### Img
+#### Img
 
 Contains the image resources.
 
-### Scripts
+#### Scripts
 
 Contains the Perl scripts that enables to compute the daily activities scores.
 
-## Temp
+### Temp
 
 Contains temporary files during the executions. These files are deleted while stopping the execution.
 
-## Src
+### Src
 
 Contains the source code of the Java application.
 *For now, lot's of classes have to be refactored.*
+
+## Contact
+
+[Antoine RIché](riche.ant@gmail.com)
