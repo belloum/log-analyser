@@ -41,4 +41,4 @@ Contains the source code of the Java application.
 
 ## Contact
 
-[Antoine RIché](riche.ant@gmail.com)
+[Antoine RIché](mailto:riche.ant@gmail.com)
