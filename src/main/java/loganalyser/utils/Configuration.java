@@ -11,6 +11,7 @@ public class Configuration {
 	public static final File SCRIPTS_FOLDER = new File(RESOURCES, "scripts");
 	public static final File CONFIG_FOLDER = new File(ROOT_FOLDER, "config");
 	public static final File TEMP_FOLDER = new File(ROOT_FOLDER, "temp");
+	public static final File LOG_FOLDER = new File(ROOT_FOLDER, "logs");
 
 	public static final File IMG_FOLDER = new File(RESOURCES, "img/");
 	public static final File IMAGE_AVATAR = Utils.getImg("avatar.png");
@@ -27,6 +28,9 @@ public class Configuration {
 	public static final File IMAGE_WARM = Utils.getImg("warm.png");
 
 	public static final File TEMP_LOG_FILE = Utils.getTmpFile("temp.json");
+
+	public static final File LOG_FILE = new File(LOG_FOLDER, "storyboard.log");
+	public static final File LOG_ERROR_FILE = new File(LOG_FOLDER, "error.log");
 
 	public static final Color RED_COLOR = Color.decode("#F44336");
 

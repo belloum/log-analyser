@@ -120,12 +120,12 @@ public class Utils implements Configurable {
 		return new File(Configuration.TEMP_FOLDER, pTempName);
 	}
 
-	public static File getConfigFile(final String pConfigName) {
-		return new File(Configuration.CONFIG_FOLDER, pConfigName);
+	public static File getLogFile(final String pLogFile) {
+		return new File(Configuration.LOG_FOLDER, pLogFile);
 	}
 
-	public static File getFile(final String pPathToFile) {
-		return new File(pPathToFile);
+	public static File getConfigFile(final String pConfigName) {
+		return new File(Configuration.CONFIG_FOLDER, pConfigName);
 	}
 
 	@Override
