@@ -5,7 +5,7 @@ To launch the jar file, please ensure that Java is installed on your computer.
 1. Download *logtool.zip*
 2. Extract *logtool.zip*
 3. Go to the extracted folder
-4. Run the command *java -jar logtool.jar from a command prompt*
+4. Run the command *java -jar logtool.jar* from a command prompt
 
 ## Folder content
 
