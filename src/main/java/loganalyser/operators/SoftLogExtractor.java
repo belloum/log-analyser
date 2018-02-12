@@ -14,9 +14,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import beans.Period;
-import beans.devices.Device;
-import beans.devices.Device.DeviceType;
 import loganalyser.beans.SoftLog;
+import loganalyser.beans.devices.Device;
+import loganalyser.beans.devices.Device.DeviceType;
 import loganalyser.utils.Utils;
 
 public class SoftLogExtractor extends FileExtractor {

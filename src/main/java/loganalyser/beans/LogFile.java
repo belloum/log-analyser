@@ -5,8 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
 
-import beans.devices.Device;
-import beans.devices.Device.DeviceType;
+import loganalyser.beans.devices.Device;
+import loganalyser.beans.devices.Device.DeviceType;
 import loganalyser.exceptions.RawLogException;
 import loganalyser.operators.LogExtractorListener;
 import loganalyser.operators.RawLogFormater;
@@ -19,18 +19,18 @@ public class LogFile extends File {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private String mUser;
-	private String mVeraId;
-	private List<SoftLog> mSoftLogs;
-	private List<Device> mDevices;
-	private List<DeviceType> mDeviceTypes;
-	private Integer mDayCount;
+	private final String mUser;
+	private final String mVeraId;
+	private final List<SoftLog> mSoftLogs;
+	private final List<Device> mDevices;
+	private final List<DeviceType> mDeviceTypes;
+	private final Integer mDayCount;
 
-	public LogFile(File pFile) throws RawLogException {
+	public LogFile(final File pFile) throws RawLogException {
 		this(pFile, null);
 	}
 
-	public LogFile(File pFile, LogExtractorListener pListener) throws RawLogException {
+	public LogFile(final File pFile, final LogExtractorListener pListener) throws RawLogException {
 		super(pFile.getPath());
 
 		if (pListener != null) {
@@ -107,23 +107,23 @@ public class LogFile extends File {
 						this.mSoftLogs.get(this.mSoftLogs.size() - 1).getDayLabel());
 	}
 
-	public List<SoftLog> getLogByDevice(String pDeviceId) {
+	public List<SoftLog> getLogByDevice(final String pDeviceId) {
 		return SoftLogExtractor.filterByIds(this.mSoftLogs, Collections.singletonList(pDeviceId));
 	}
 
-	public List<SoftLog> getLogByDay(String pDay) {
+	public List<SoftLog> getLogByDay(final String pDay) {
 		return SoftLogExtractor.filterByDay(this.mSoftLogs, pDay);
 	}
 
-	public List<SoftLog> getLogByHour(String pHour) {
+	public List<SoftLog> getLogByHour(final String pHour) {
 		return SoftLogExtractor.filterByHour(this.mSoftLogs, pHour);
 	}
 
-	public List<SoftLog> getLogsByDevice(String pDeviceId) {
+	public List<SoftLog> getLogsByDevice(final String pDeviceId) {
 		return SoftLogExtractor.filterByIds(this.mSoftLogs, Collections.singletonList(pDeviceId));
 	}
 
-	public List<SoftLog> getLogsByDevice(List<String> pDeviceIds) {
+	public List<SoftLog> getLogsByDevice(final List<String> pDeviceIds) {
 		return SoftLogExtractor.filterByIds(this.mSoftLogs, pDeviceIds);
 	}
 

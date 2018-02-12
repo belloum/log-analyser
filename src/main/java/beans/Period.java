@@ -13,7 +13,7 @@ public class Period {
 	private static final SimpleDateFormat mSDFormat = new SimpleDateFormat("HH:mm");
 	private Date mStartDate, mEndDate;
 
-	public Period(Date pStartDate, Date pEndDate) throws PeriodException {
+	public Period(final Date pStartDate, final Date pEndDate) throws PeriodException {
 		if (pStartDate.before(pEndDate) || pStartDate.equals(pEndDate)) {
 			this.mStartDate = pStartDate;
 			this.mEndDate = pEndDate;
@@ -22,23 +22,24 @@ public class Period {
 		}
 	}
 
-	public Period(long pTSStart, long pTSEnd) throws PeriodException {
+	public Period(final long pTSStart, final long pTSEnd) throws PeriodException {
 		this(new Date(pTSStart), new Date(pTSEnd));
 	}
 
-	public Period(String pHourStart, String pHourEnd) throws PeriodException {
+	// FIXME ugly Period constructor
+	public Period(final String pHourStart, final String pHourEnd) throws PeriodException {
 
 		int sH, sM, eH, eM;
 		try {
 			sH = Integer.parseInt(pHourStart.split(":")[0]);
 			sM = Integer.parseInt(pHourStart.split(":")[1]);
-		} catch (ArrayIndexOutOfBoundsException exception) {
+		} catch (final ArrayIndexOutOfBoundsException exception) {
 			throw exception;
 		}
 		try {
 			eH = Integer.parseInt(pHourEnd.split(":")[0]);
 			eM = Integer.parseInt(pHourEnd.split(":")[1]);
-		} catch (ArrayIndexOutOfBoundsException exception) {
+		} catch (final ArrayIndexOutOfBoundsException exception) {
 			throw new PeriodException(PeriodException.UNPARSABLE, exception);
 		}
 		if (sH > 23 || sH < 0) {
@@ -50,7 +51,7 @@ public class Period {
 		} else if (eM > 59 || eM < 0) {
 			throw new PeriodException(String.format("%s: %d", PeriodException.INVALID_MINUTE, eM));
 		} else {
-			Calendar calendar = Calendar.getInstance();
+			final Calendar calendar = Calendar.getInstance();
 			try {
 				calendar.setTime(mSDFormat.parse(pHourStart));
 				this.mStartDate = calendar.getTime();
@@ -63,7 +64,7 @@ public class Period {
 					calendar.set(Calendar.MILLISECOND, 99);
 				}
 				this.mEndDate = calendar.getTime();
-			} catch (ParseException exception) {
+			} catch (final ParseException exception) {
 				throw new PeriodException(PeriodException.UNPARSABLE, exception);
 			}
 		}
@@ -73,7 +74,7 @@ public class Period {
 		return this.mStartDate;
 	}
 
-	public void setStartDate(Date pStartDate) {
+	public void setStartDate(final Date pStartDate) {
 		this.mStartDate = pStartDate;
 	}
 
@@ -81,11 +82,11 @@ public class Period {
 		return this.mEndDate;
 	}
 
-	public void setEndDate(Date pEndDate) {
+	public void setEndDate(final Date pEndDate) {
 		this.mEndDate = pEndDate;
 	}
 
-	public boolean contains(Date pDate) {
+	public boolean contains(final Date pDate) {
 		return mStartDate.before(pDate) && mEndDate.after(pDate);
 	}
 
@@ -94,8 +95,8 @@ public class Period {
 		return "TSLimits [mStartDate=" + mStartDate + ", mEndDate=" + mEndDate + "]";
 	}
 
-	public static String getFriendlyLabel(Period pTsLimits) {
-		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+	public static String getFriendlyLabel(final Period pTsLimits) {
+		final SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 		return String.format(Locale.FRANCE, "%s - %s", sdf.format(pTsLimits.getStartDate()),
 				sdf.format(pTsLimits.getEndDate()));
 	}

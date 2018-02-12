@@ -36,7 +36,7 @@ public class Participant {
 	private Date install;
 	private Map<String, Routine> routines;
 
-	public Participant(String name) {
+	public Participant(final String name) {
 		this.name = name;
 		this.routines = new HashMap<String, Routine>();
 	}
@@ -45,7 +45,7 @@ public class Participant {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
@@ -53,7 +53,7 @@ public class Participant {
 		return tcapsa;
 	}
 
-	public void setTcapsa(String tcapsa) {
+	public void setTcapsa(final String tcapsa) {
 		this.tcapsa = tcapsa;
 	}
 
@@ -61,7 +61,7 @@ public class Participant {
 		return install;
 	}
 
-	public void setInstall(Date install) {
+	public void setInstall(final Date install) {
 		this.install = install;
 	}
 
@@ -69,17 +69,17 @@ public class Participant {
 		return routines;
 	}
 
-	public void setRoutines(Map<String, Routine> routines) {
+	public void setRoutines(final Map<String, Routine> routines) {
 		this.routines = routines;
 	}
 
 	public void fillWithJSON(JSONObject infos) throws JSONException {
 		this.tcapsa = infos.has(JSON_TCAPSA) ? infos.getString(JSON_TCAPSA) : null;
 		this.vera = infos.has(JSON_VERA) ? infos.getString(JSON_VERA) : null;
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
+		final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
 		try {
 			this.install = infos.has(JSON_INSTALL) ? sdf.parse(infos.getString(JSON_INSTALL)) : null;
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new IllegalArgumentException("Malformed date: " + e.getMessage());
 		}
 
@@ -112,11 +112,11 @@ public class Participant {
 		return vera;
 	}
 
-	public void setVera(String vera) {
+	public void setVera(final String vera) {
 		this.vera = vera;
 	}
 
-	public Routine getRoutine(String activity) {
+	public Routine getRoutine(final String activity) {
 		return this.routines.containsKey(activity) ? this.routines.get(activity) : null;
 	}
 
@@ -126,9 +126,9 @@ public class Participant {
 				+ ", \nroutines=" + routines + "]";
 	}
 
-	public List<String> extractRoutineRequests(String scriptPath, File logFile, File scoreFile) {
+	public List<String> extractRoutineRequests(final String scriptPath, final File logFile, final File scoreFile) {
 
-		List<String> requests = new ArrayList<>();
+		final List<String> requests = new ArrayList<>();
 
 		String request;
 		if (this.routines.containsKey(ROUTINE_WAKEUP)) {

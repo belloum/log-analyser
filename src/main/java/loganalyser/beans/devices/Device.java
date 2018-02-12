@@ -1,4 +1,4 @@
-package beans.devices;
+package loganalyser.beans.devices;
 
 import org.json.JSONException;
 import org.json.JSONObject;

@@ -51,7 +51,5 @@ public class SleepPeriod {
 	public String toString() {
 		return "SleepPeriod [startTs=" + startTs + ", endTs=" + endTs + "]";
 	}
-	
-	
 
 }

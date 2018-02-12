@@ -31,8 +31,8 @@ public class Exit {
 		this.exitTs = exitTs;
 		this.entranceTs = entranceTs;
 	}
-	
-	public Exit(JSONObject jExit) throws Exception{
+
+	public Exit(JSONObject jExit) throws Exception {
 		JSONObject date = jExit.getJSONObject("beginning");
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(Calendar.DAY_OF_MONTH, date.getInt("day"));
@@ -42,8 +42,8 @@ public class Exit {
 		calendar.set(Calendar.MINUTE, date.getInt("minute"));
 		calendar.set(Calendar.SECOND, date.getInt("second"));
 		calendar.set(Calendar.MILLISECOND, 0);
-		this.exitTs = ""+calendar.getTimeInMillis();
-		
+		this.exitTs = "" + calendar.getTimeInMillis();
+
 		date = jExit.getJSONObject("end");
 		calendar.set(Calendar.DAY_OF_MONTH, date.getInt("day"));
 		calendar.set(Calendar.MONTH, date.getInt("month") - 1);
@@ -52,7 +52,7 @@ public class Exit {
 		calendar.set(Calendar.MINUTE, date.getInt("minute"));
 		calendar.set(Calendar.SECOND, date.getInt("second"));
 		calendar.set(Calendar.MILLISECOND, 0);
-		this.entranceTs = ""+calendar.getTimeInMillis();
+		this.entranceTs = "" + calendar.getTimeInMillis();
 	}
 
 	/**
@@ -77,5 +77,5 @@ public class Exit {
 	public String toString() {
 		return "Exit [exitTs=" + exitTs + ", entranceTs=" + entranceTs + "]";
 	}
-	
+
 }

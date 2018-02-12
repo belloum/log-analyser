@@ -83,5 +83,5 @@ public class DailyActivity {
 	public float getScore() {
 		return score;
 	}
-	
+
 }

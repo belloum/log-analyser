@@ -27,15 +27,15 @@ import org.jfree.chart.JFreeChart;
 
 import beans.Histogram;
 import beans.Histogram.HistogramProgressListener;
-import beans.devices.Device;
 import loganalyser.beans.SoftLog;
+import loganalyser.beans.devices.Device;
 import loganalyser.old.ui.CustomComponent;
-import loganalyser.old.ui.FileChooser;
 import loganalyser.old.ui.InputValue;
 import loganalyser.old.ui.MyButton;
 import loganalyser.operators.FileSelector;
 import loganalyser.operators.SoftLogExtractor;
 import loganalyser.ui.components.ErrorLabel;
+import loganalyser.ui.components.FileChooser;
 import loganalyser.ui.components.TabHeaderWithProgress;
 import loganalyser.utils.Utils;
 
@@ -75,12 +75,17 @@ public class HistogramTab extends LogTab implements ItemListener, HistogramProgr
 		mJPB = new JProgressBar(0, 100);
 		mBtnSave = new MyButton("Save histogram".toUpperCase(), event -> save());
 		mBtnDraw = new MyButton("Draw".toUpperCase(), event -> draws());
-		mBtnExportCSV = new MyButton("Export as CSV".toUpperCase(),
-				event -> System.out.println("CSV export is not yet implemented"));
+		mBtnExportCSV = new MyButton("Export as CSV".toUpperCase(), event -> exportCsv());
+	}
+
+	// TODO implement CSV exportation
+	private void exportCsv() {
+		System.out.println("CSV export is not yet implemented");
+		return;
 	}
 
 	private void save() {
-		// FIXME
+		// FIXME choose a default folder
 		final FileChooser fc = new FileChooser(new File(""), "Save histogram");
 
 		if (fc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
@@ -319,7 +324,6 @@ public class HistogramTab extends LogTab implements ItemListener, HistogramProgr
 				mJLTotalLogs.setText(String.format("%d", logs.size()));
 			} catch (final Exception exception) {
 				mChart = null;
-				System.out.println("it is in the thread");
 				mJPanelChart.removeAll();
 				error(exception.getMessage());
 			} finally {

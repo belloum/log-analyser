@@ -29,6 +29,7 @@ import loganalyser.ui.tabs.RoutineTab;
 import loganalyser.utils.Configuration;
 
 //FIXME: use log file
+//TODO: add ParticipantTab implementation
 public class LogHandler2 extends JFrame implements MenuSelector, FileSelector {
 
 	private static final Logger log = LoggerFactory.getLogger(LogHandler2.class);

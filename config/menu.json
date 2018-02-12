@@ -31,6 +31,11 @@
 			"class_name":"RoutineTab"
 		},
 		"7":{
+			"label":"Participants",
+			"need_file":false,
+			"class_name":"ParticipantTab"
+		},
+		"8":{
 			"label":"Settings",
 			"need_file":false,
 			"class_name":"SettingsTab"

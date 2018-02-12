@@ -16,12 +16,11 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.json.JSONException;
 
-import beans.devices.Device;
-import beans.devices.Device.DeviceType;
 import loganalyser.beans.LogFile;
 import loganalyser.beans.SoftLog;
+import loganalyser.beans.devices.Device;
+import loganalyser.beans.devices.Device.DeviceType;
 import loganalyser.exceptions.RawLogException;
-import loganalyser.old.ui.FileChooser;
 import loganalyser.old.ui.MyButton;
 import loganalyser.operators.FileSelector;
 import loganalyser.operators.LogExtractorListener;

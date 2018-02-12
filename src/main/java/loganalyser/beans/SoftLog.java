@@ -12,14 +12,13 @@ import java.util.TimeZone;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import beans.devices.ContactSensor.ContactSensorState;
 import beans.Period;
-import beans.devices.Device;
-import beans.devices.ElectricMeter.ElectricMeterState;
-import beans.devices.MotionDetector.MotionDetectorState;
+import loganalyser.beans.devices.ContactSensor.ContactSensorState;
+import loganalyser.beans.devices.Device;
+import loganalyser.beans.devices.ElectricMeter.ElectricMeterState;
+import loganalyser.beans.devices.MotionDetector.MotionDetectorState;
 import loganalyser.exceptions.PeriodException;
 import loganalyser.exceptions.RawLogException;
-import loganalyser.utils.DateFormater;
 
 public class SoftLog {
 
@@ -100,7 +99,6 @@ public class SoftLog {
 		calendar.setTime(this.mDate);
 		return String.format("%02d:00 - %02d:00", calendar.get(Calendar.HOUR_OF_DAY),
 				calendar.get(Calendar.HOUR_OF_DAY) + 1);
-		// return String.format("%s:00", new SimpleDateFormat("HH").format(this.mDate));
 	}
 
 	public String getDayLabel() {
@@ -108,7 +106,7 @@ public class SoftLog {
 	}
 
 	public String getMonth() {
-		return DateFormater.formatDate(this.mDate, DateFormater.SHORT_MONTH_FORMAT);
+		return new SimpleDateFormat("yyyy.MM", Locale.ENGLISH).format(this.mDate);
 	}
 
 	public boolean isBetweenDates(Period pTsLimits) {

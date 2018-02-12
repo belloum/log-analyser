@@ -3,7 +3,8 @@ package beans.activities.dailyactivities;
 import beans.activities.dailyactivities.DailyActivity.DailyActivities;
 
 /**
- * A Go to bed representation extending {@link DailyActivity} with a name as {@link DailyActivities} and a score 
+ * A Go to bed representation extending {@link DailyActivity} with a name as
+ * {@link DailyActivities} and a score
  * 
  * @param timestamp
  *            The timestamp of the activity (non-)detection as String

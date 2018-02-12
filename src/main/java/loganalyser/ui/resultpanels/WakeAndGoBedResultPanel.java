@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
 import loganalyser.beans.activityresults.ActivityResult;
 import loganalyser.old.ui.CustomComponent;
@@ -45,7 +45,7 @@ public class WakeAndGoBedResultPanel extends ActivityResultPanel {
 	}
 
 	@Override
-	protected JScrollPane detilledResults(List<ActivityResult> pActivityResults) {
+	protected JTable formatResults(List<ActivityResult> pActivityResults) {
 		String[] headers = new String[] { "Date", "Score", "Success", "Publish hour" };
 		String[][] data = new String[pActivityResults.size()][headers.length];
 		for (int i = 0; i < pActivityResults.size(); i++) {
@@ -56,11 +56,7 @@ public class WakeAndGoBedResultPanel extends ActivityResultPanel {
 					new SimpleDateFormat("HH:mm:ss").format(ar.getPublishHour()) };
 		}
 
-		MyTable table = new MyTable(data, headers);
-
-		JScrollPane scroll = new JScrollPane();
-		scroll.getViewport().add(table);
-		return scroll;
+		return new MyTable(data, headers);
 	}
 
 }

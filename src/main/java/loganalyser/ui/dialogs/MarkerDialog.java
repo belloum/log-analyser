@@ -23,7 +23,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JRootPane;
 import javax.swing.KeyStroke;
 
-import beans.devices.Device;
+import loganalyser.beans.devices.Device;
 import loganalyser.old.ui.CustomComponent;
 import loganalyser.old.ui.MyButton;
 

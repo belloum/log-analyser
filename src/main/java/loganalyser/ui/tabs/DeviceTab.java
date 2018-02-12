@@ -19,8 +19,8 @@ import javax.swing.border.BevelBorder;
 
 import org.apache.commons.lang3.StringUtils;
 
-import beans.devices.Device;
 import loganalyser.beans.SoftLog;
+import loganalyser.beans.devices.Device;
 import loganalyser.old.ui.CustomComponent;
 import loganalyser.operators.FileSelector;
 import loganalyser.operators.SoftLogExtractor;

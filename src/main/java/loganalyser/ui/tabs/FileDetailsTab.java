@@ -12,7 +12,7 @@ import javax.swing.JProgressBar;
 
 import org.apache.commons.io.FileUtils;
 
-import beans.devices.Device;
+import loganalyser.beans.devices.Device;
 import loganalyser.old.ui.CustomComponent;
 import loganalyser.operators.FileSelector;
 import loganalyser.operators.SoftLogExtractor;

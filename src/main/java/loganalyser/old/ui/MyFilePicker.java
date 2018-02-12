@@ -10,6 +10,8 @@ import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JTextArea;
 
+import loganalyser.ui.components.FileChooser;
+
 public class MyFilePicker extends JComponent {
 
 	private static final long serialVersionUID = 1L;

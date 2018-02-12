@@ -2,8 +2,8 @@ package loganalyser.operators;
 
 import java.util.List;
 
-import beans.devices.Device;
-import beans.devices.Device.DeviceType;
+import loganalyser.beans.devices.Device;
+import loganalyser.beans.devices.Device.DeviceType;
 
 public interface LogExtractorListener {
 	void startExtraction();

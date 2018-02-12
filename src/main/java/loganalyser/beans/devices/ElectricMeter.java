@@ -1,4 +1,4 @@
-package beans.devices;
+package loganalyser.beans.devices;
 
 /**
  * Simple representation of electric meter

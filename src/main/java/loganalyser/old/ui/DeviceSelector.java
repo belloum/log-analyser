@@ -13,7 +13,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 
-import beans.devices.Device;
+import loganalyser.beans.devices.Device;
 import loganalyser.utils.Configuration;
 
 public class DeviceSelector extends CustomComponent implements ItemListener {

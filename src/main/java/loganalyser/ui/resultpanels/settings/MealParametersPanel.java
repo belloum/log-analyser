@@ -12,11 +12,11 @@ import javax.swing.JPanel;
 
 import org.apache.commons.lang3.StringUtils;
 
-import beans.devices.Device;
-import beans.devices.Device.DeviceType;
 import loganalyser.beans.Routine;
 import loganalyser.beans.activityresults.ActivityResult;
 import loganalyser.beans.activityresults.MealResult;
+import loganalyser.beans.devices.Device;
+import loganalyser.beans.devices.Device.DeviceType;
 import loganalyser.old.ui.CustomComponent;
 import loganalyser.old.ui.MyButton;
 import loganalyser.operators.settings.MealSettings;

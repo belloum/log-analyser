@@ -13,10 +13,10 @@ import javax.swing.JPanel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import beans.devices.Device;
-import beans.devices.Device.DeviceType;
 import loganalyser.beans.Routine;
 import loganalyser.beans.activityresults.ActivityResult;
+import loganalyser.beans.devices.Device;
+import loganalyser.beans.devices.Device.DeviceType;
 import loganalyser.old.ui.CustomComponent;
 import loganalyser.old.ui.InputValue;
 import loganalyser.operators.settings.RoutineSettings;

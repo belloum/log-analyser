@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
-import beans.devices.Device;
+import loganalyser.beans.devices.Device;
 
 public class MealSettings extends RoutineSettings {
 

@@ -15,8 +15,8 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 
-import beans.devices.Device;
 import loganalyser.beans.SoftLog;
+import loganalyser.beans.devices.Device;
 import loganalyser.exceptions.HistogramException;
 import loganalyser.exceptions.PeriodException;
 import loganalyser.operators.FileExtractor;
@@ -29,23 +29,23 @@ public class Histogram extends LinkedHashMap<Period, Integer> {
 
 	private static final long serialVersionUID = 1L;
 	private Integer mMinuteSlot;
-	private List<?> mDataSet;
+	private final List<?> mDataSet;
 
 	private HistogramProgressListener mProgressListener;
 
-	public void setBuildingListener(HistogramProgressListener pListener) {
+	public void setBuildingListener(final HistogramProgressListener pListener) {
 		this.mProgressListener = pListener;
 	}
 
-	public Histogram(Integer pMinuteSlot) throws HistogramException, PeriodException {
+	public Histogram(final Integer pMinuteSlot) throws HistogramException, PeriodException {
 		this(pMinuteSlot, new ArrayList<>(), null);
 	}
 
-	public Histogram(Integer pMinuteSlot, List<?> pDatas) throws HistogramException, PeriodException {
+	public Histogram(final Integer pMinuteSlot, final List<?> pDatas) throws HistogramException, PeriodException {
 		this(pMinuteSlot, pDatas, null);
 	}
 
-	public Histogram(Integer pMinuteSlot, List<?> pDatas, HistogramProgressListener pListener)
+	public Histogram(final Integer pMinuteSlot, final List<?> pDatas, final HistogramProgressListener pListener)
 			throws HistogramException, PeriodException {
 
 		if (pMinuteSlot >= MIN_DELAY && pMinuteSlot <= MAX_DELAY) {
@@ -63,14 +63,15 @@ public class Histogram extends LinkedHashMap<Period, Integer> {
 	}
 
 	private void buildSlots() throws PeriodException {
-		Calendar calendar = Calendar.getInstance();
+		final Calendar calendar = Calendar.getInstance();
 		calendar.set(Calendar.HOUR_OF_DAY, 0);
 		calendar.set(Calendar.MINUTE, 0);
 		calendar.set(Calendar.SECOND, 0);
 		calendar.set(Calendar.MILLISECOND, 0);
-		int cDay = calendar.get(Calendar.DAY_OF_YEAR);
+		final int cDay = calendar.get(Calendar.DAY_OF_YEAR);
 		long start;
-		LinkedList<Period> histogramItems = new LinkedList<>();
+
+		final LinkedList<Period> histogramItems = new LinkedList<>();
 		while (calendar.get(Calendar.DAY_OF_YEAR) == cDay) {
 			start = calendar.getTimeInMillis();
 			calendar.add(Calendar.MINUTE, this.mMinuteSlot);
@@ -79,23 +80,22 @@ public class Histogram extends LinkedHashMap<Period, Integer> {
 			calendar.add(Calendar.SECOND, 1);
 		}
 
-		String lastLabel = Period.getFriendlyLabel(histogramItems.getLast());
+		final String lastLabel = Period.getFriendlyLabel(histogramItems.getLast());
 		if (!lastLabel.contains("23:59")) {
 			histogramItems.removeLast();
 			histogramItems.add(new Period(lastLabel.split(" - ")[0], "23:59"));
 		}
 
 		histogramItems.forEach(tsLimits -> put(tsLimits, 0));
-
 	}
 
-	private void fillHistogram(List<?> pDatas) {
+	private void fillHistogram(final List<?> pDatas) {
 		if (mProgressListener != null) {
 			mProgressListener.startFillingSlots();
 		}
 
 		int index = 0;
-		for (Period tsLimits : keySet()) {
+		for (final Period tsLimits : keySet()) {
 			put(tsLimits, (int) pDatas.stream().filter(log -> ((SoftLog) log).isBetweenHours(tsLimits)).count());
 			index++;
 			if (mProgressListener != null) {
@@ -106,24 +106,23 @@ public class Histogram extends LinkedHashMap<Period, Integer> {
 		if (mProgressListener != null) {
 			mProgressListener.finishFillingSlots();
 		}
-
 	}
 
-	public static JFreeChart draw(Histogram pHistogram, boolean pSplitByDevice) throws Exception {
+	public static JFreeChart draw(final Histogram pHistogram, final boolean pSplitByDevice) throws Exception {
 		return draw(pHistogram, pSplitByDevice, null, null, null);
 	}
 
-	public static JFreeChart draw(Histogram pHistogram, boolean pSplitByDevice, String pTitle, String xLabel,
-			String yLabel) throws Exception {
+	public static JFreeChart draw(final Histogram pHistogram, final boolean pSplitByDevice, String pTitle,
+			final String xLabel, final String yLabel) throws Exception {
 
-		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+		final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
 		if (!pSplitByDevice) {
 			pHistogram.forEach(
 					(tsLimit, value) -> dataset.setValue(value, "occurence", Period.getFriendlyLabel(tsLimit)));
 		} else {
 			@SuppressWarnings("unchecked")
-			List<Device> pDevices = SoftLogExtractor.getDevices((List<SoftLog>) pHistogram.mDataSet);
+			final List<Device> pDevices = SoftLogExtractor.getDevices((List<SoftLog>) pHistogram.mDataSet);
 			pHistogram.forEach((tsLimit, value) -> {
 				pDevices.forEach(device -> {
 					dataset.setValue(
@@ -144,15 +143,16 @@ public class Histogram extends LinkedHashMap<Period, Integer> {
 					.toString();
 		}
 
-		JFreeChart chart = ChartFactory.createBarChart(pTitle, yLabel, xLabel, dataset, PlotOrientation.VERTICAL,
+		final JFreeChart chart = ChartFactory.createBarChart(pTitle, yLabel, xLabel, dataset, PlotOrientation.VERTICAL,
 				pSplitByDevice, false, false);
 		chart.getPlot().setBackgroundPaint(Color.WHITE);
 		return chart;
 	}
 
+	// TODO: check method
 	@SuppressWarnings("unchecked")
-	private static String formatAsCSV(Histogram pHistogram) {
-		StringBuilder strB = new StringBuilder("Hours;");
+	private static String formatAsCSV(final Histogram pHistogram) {
+		final StringBuilder strB = new StringBuilder("Hours;");
 		pHistogram.forEach((ts, count) -> strB.append(Period.getFriendlyLabel(ts)).append(";"));
 		strB.append("\n").append("Logs;");
 		strB.append(StringUtils.join(pHistogram.values(), ";"));
@@ -173,7 +173,7 @@ public class Histogram extends LinkedHashMap<Period, Integer> {
 		return strB.toString();
 	}
 
-	public static boolean saveChart(Histogram pHistogram, File output) {
+	public static boolean saveChart(final Histogram pHistogram, final File output) {
 		System.out.println("Saving " + output.getName() + " in " + output.getParent());
 		try {
 			ChartUtils.saveChartAsJPEG(
@@ -181,13 +181,13 @@ public class Histogram extends LinkedHashMap<Period, Integer> {
 					draw(pHistogram, true, "Sensors", "occurences", "time"), 1500, 600);
 			ChartUtils.saveChartAsJPEG(output, draw(pHistogram, false, "Logs", "occurences", "time"), 1500, 600);
 			return true;
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			System.err.println("Problem occurred creating chart.");
 			return false;
 		}
 	}
 
-	public static boolean saveCSVFile(Histogram pHistogram, File pOutputFile) {
+	public static boolean saveCSVFile(final Histogram pHistogram, final File pOutputFile) {
 		return FileExtractor.saveFile(formatAsCSV(pHistogram), pOutputFile);
 	}
 

@@ -1,4 +1,4 @@
-package loganalyser.old.ui;
+package loganalyser.ui.components;
 
 import java.io.File;
 import java.util.List;
