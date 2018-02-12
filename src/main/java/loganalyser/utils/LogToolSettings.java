@@ -15,6 +15,7 @@ import loganalyser.operators.FileExtractor;
 
 public class LogToolSettings {
 
+	private static final String LOG_FOLDER = "log_folder";
 	private static final String LOG4J_APPENDER_ERR_FILE = "log4j.appender.err.File";
 	private static final String LOG4J_APPENDER_FILE_FILE = "log4j.appender.file.File";
 	private static final String JSON_ERROR_LOG_FILE = "error_log_file";
@@ -26,6 +27,27 @@ public class LogToolSettings {
 	private static final String NO_LOG_FILE = "No log file specified";
 	private static final String SETTINGS_JSON = "settings.json";
 
+	public static void setLogFolder(final File pLogFolder) {
+		try {
+			updateJSONSettingsLog(LOG_FOLDER, pLogFolder.getAbsolutePath());
+			// Deal with error log file
+			File child = new File(getErrorLogFilepath());
+			String oldParentPath = child.getParent().concat(File.separator);
+			String childPath = child.getAbsolutePath().replace(oldParentPath, pLogFolder.getAbsolutePath());
+			setErrorLogFile(childPath);
+
+			// Deal with error log file
+			child = new File(getGenericLogFilepath());
+			oldParentPath = child.getParent();
+			childPath = child.getAbsolutePath().replace(oldParentPath, pLogFolder.getAbsolutePath());
+			setGenericLogFile(childPath);
+
+			log.info("Log folder has been successfully updated by: {}", pLogFolder.getPath());
+		} catch (JSONException | IOException e) {
+			log.error("Oops ! {}", e.getMessage(), e);
+		}
+	}
+
 	public static void setGenericLogFile(final String pLogFilename) {
 		setLogFile(LOG4J_APPENDER_FILE_FILE, JSON_GENERIC_LOG_FILE, pLogFilename);
 		return;
@@ -34,6 +56,16 @@ public class LogToolSettings {
 	public static void setErrorLogFile(final String pLogFilename) {
 		setLogFile(LOG4J_APPENDER_ERR_FILE, JSON_ERROR_LOG_FILE, pLogFilename);
 		return;
+	}
+
+	public static String getLogFolder() {
+		String result;
+		try {
+			result = getLogJSONProperty(LOG_FOLDER);
+		} catch (JSONException e) {
+			result = NO_LOG_FILE;
+		}
+		return result;
 	}
 
 	public static String getGenericLogFilepath() {
@@ -47,6 +79,17 @@ public class LogToolSettings {
 	private static String getLogFilePath(final String pKey) {
 		String result;
 		try {
+			result = getLogFolder().concat(File.separator).concat(getLogJSONProperty(pKey));
+		} catch (JSONException e) {
+			log.error("Oops ! {}", e.getMessage(), e);
+			result = NO_LOG_FILE;
+		}
+		return result;
+	}
+
+	private static String getLogJSONProperty(final String pKey) {
+		String result;
+		try {
 			result = getJSONSettings().getJSONObject(LOGS).getString(pKey);
 		} catch (JSONException | IOException e) {
 			log.error("Oops ! {}", e.getMessage(), e);
@@ -57,11 +100,11 @@ public class LogToolSettings {
 
 	private static void setLogFile(final String pSL4JPropertyKey, final String pJSONKey, final String pLogFilename) {
 		try {
-			String logFile = Configuration.LOG_FOLDER.getPath().concat(File.separator).concat(pLogFilename);
+			String logFile = getLogFolder().concat(File.separator).concat(pLogFilename);
 			logFile = logFile.endsWith(".log") ? logFile : logFile.concat(".log");
 
 			updateLOG4JProperty(pSL4JPropertyKey, logFile);
-			updateJSONSettingsLog(pJSONKey, logFile);
+			updateJSONSettingsLog(pJSONKey, new File(logFile).getName());
 			log.info("Log file has been successfully updated by: {}", logFile);
 		} catch (JSONException | IOException e) {
 			log.error("Oops ! {}", e.getMessage(), e);

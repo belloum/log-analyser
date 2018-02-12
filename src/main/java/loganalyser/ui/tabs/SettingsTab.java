@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.awt.GridLayout;
 import java.io.File;
 
+import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -27,7 +28,7 @@ public class SettingsTab extends MyCustomTab {
 
 	private static final Logger log = LoggerFactory.getLogger(SettingsTab.class);
 	private static final long serialVersionUID = 1L;
-	private SettingEntry mConfigFileSetting, mDefaultLogFolder, mLogFile, mLogErrorFile, mParticipantFile;
+	private SettingEntry mLogFolder, mLogFile, mLogErrorFile, mParticipantFile, mParticipantLogFolder;
 
 	public SettingsTab() {
 		super();
@@ -37,35 +38,48 @@ public class SettingsTab extends MyCustomTab {
 	@Override
 	protected Component content() {
 
-		final JPanel content = new JPanel(new BorderLayout());
+		final JPanel content = new JPanel(new GridLayout(1, 2));
 
-		content.add(settingsPanel(), BorderLayout.PAGE_START);
+		JPanel left = new JPanel(new BorderLayout());
+
+		left.add(logSetttings(), BorderLayout.PAGE_START);
+		content.add(left);
+		content.add(genericSettings());
 
 		return content;
 	}
 
-	private JPanel settingsPanel() {
-		final JPanel genericSettings = new JPanel(new GridLayout(5, 1));
+	private JPanel logSetttings() {
+		final JPanel logSetttings = new JPanel(new GridLayout(3, 1));
+		logSetttings.setBorder(BorderFactory.createTitledBorder("Log settings"));
 
-		mConfigFileSetting = new SettingEntry("Configuration file", "The file of configuration",
-				Configuration.CONFIG_FOLDER.getPath(), e -> updateFile(CONFIG));
-		genericSettings.add(mConfigFileSetting);
+		mLogFolder = new SettingEntry("Log folder", "The folder with log files.", LogToolSettings.getLogFolder(),
+				e -> updateLogFolder());
+		logSetttings.add(mLogFolder);
+
+		mLogFile = new SettingEntry("Log file", "The file where logs are gathered.",
+				LogToolSettings.getGenericLogFilepath(), e -> updateFile(LOG));
+		logSetttings.add(mLogFile);
+
+		mLogErrorFile = new SettingEntry("Log error file", "The file where error logs are gathered.",
+				LogToolSettings.getErrorLogFilepath(), e -> updateFile(ERROR_LOG));
+		logSetttings.add(mLogErrorFile);
+
+		return logSetttings;
+	}
+
+	private JPanel genericSettings() {
+		final JPanel genericSettings = new JPanel(new GridLayout(2, 1));
+		genericSettings.setBorder(BorderFactory.createTitledBorder("Generic settings"));
+
+		mParticipantLogFolder = new SettingEntry("Participant logs folder",
+				"The folder that contains participant logs.", Configuration.CONFIG_FOLDER.getPath(),
+				e -> updateFile(CONFIG));
+		genericSettings.add(mParticipantLogFolder);
 
 		mParticipantFile = new SettingEntry("Participant file", "The file where participant data are gathered.",
 				Configuration.CONFIG_FOLDER.getPath(), e -> updateFile(PARTICIPANT));
 		genericSettings.add(mParticipantFile);
-
-		mDefaultLogFolder = new SettingEntry("Default log folder", "The folder with log files",
-				Configuration.RESOURCES.getPath(), e -> updateFolder());
-		genericSettings.add(mDefaultLogFolder);
-
-		mLogFile = new SettingEntry("Log file", "The file where logs are gathered.",
-				LogToolSettings.getGenericLogFilepath(), e -> updateFile(LOG));
-		genericSettings.add(mLogFile);
-
-		mLogErrorFile = new SettingEntry("Log error file", "The file where error logs are gathered.",
-				LogToolSettings.getErrorLogFilepath(), e -> updateFile(ERROR_LOG));
-		genericSettings.add(mLogErrorFile);
 
 		return genericSettings;
 	}
@@ -75,11 +89,14 @@ public class SettingsTab extends MyCustomTab {
 		return "settings";
 	}
 
-	private void updateFolder() {
-		File errorFile = chooseDirectory("Select a folder");
-		if (errorFile != null) {
-			log.debug("Try to update errorFile with {}", errorFile.getName());
-			// TODO: update log error file
+	private void updateLogFolder() {
+		FileChooser folderPicker = new FileChooser(new File(LogToolSettings.getLogFolder()), "Select a folder");
+		folderPicker.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		if (folderPicker.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+			File selectedFile = folderPicker.getSelectedFile();
+			log.debug("Try to update logFolder with {}", selectedFile.getName());
+			LogToolSettings.setLogFolder(selectedFile);
+			mLogFolder.updateProperty(selectedFile.getPath());
 		}
 	}
 
@@ -104,11 +121,11 @@ public class SettingsTab extends MyCustomTab {
 			switch (pFileToUpdate) {
 			case LOG:
 				LogToolSettings.setGenericLogFile(selectedFile.getName());
-				mLogFile.updateProperty(selectedFile.getPath());
+				mLogFile.updateProperty(selectedFile.getName());
 				break;
 			case ERROR_LOG:
 				LogToolSettings.setErrorLogFile(selectedFile.getName());
-				mLogErrorFile.updateProperty(selectedFile.getPath());
+				mLogErrorFile.updateProperty(selectedFile.getName());
 				break;
 			default:
 				log.debug("try to update {} with {}", pFileToUpdate, selectedFile);
@@ -132,13 +149,13 @@ public class SettingsTab extends MyCustomTab {
 		}
 	}
 
-	private File chooseDirectory(String pDialogTitle) {
-		FileChooser picker = updatePicker(pDialogTitle);
-		picker.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		if (picker.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-			return picker.getSelectedFile();
-		} else {
-			return null;
-		}
-	}
+	// private File chooseDirectory(String pDialogTitle) {
+	// FileChooser picker = updatePicker(pDialogTitle);
+	// picker.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+	// if (picker.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+	// return picker.getSelectedFile();
+	// } else {
+	// return null;
+	// }
+	// }
 }
