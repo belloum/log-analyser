@@ -5,8 +5,6 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -17,6 +15,8 @@ import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.PropertyConfigurator;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -29,9 +29,6 @@ import loganalyser.operators.SoftLogExtractor;
 public class Utils {
 
 	private static final Logger log = LoggerFactory.getLogger(Utils.class);
-
-	private static File logFile;
-	private static File configFile;
 
 	public static LinkedHashMap<String, ?> sortMap(final Map<String, ?> pMap) {
 		return pMap.entrySet().stream().sorted(Map.Entry.comparingByKey()).collect(Collectors.toMap(Map.Entry::getKey,
@@ -81,6 +78,12 @@ public class Utils {
 			log.error("Exception while getting log filename {}", e.getMessage(), e);
 			return null;
 		}
+	}
+
+	public static void resetLOG4JProperties(Properties pProps) {
+		LogManager.resetConfiguration();
+		PropertyConfigurator.configure(pProps);
+		log.debug("Reset SL4J configuration");
 	}
 
 	// private static File logFile() throws JSONException, IOException {

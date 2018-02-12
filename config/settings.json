@@ -1,1 +1,1 @@
-{"error_log_file":"logs/errors.log","log_file":"logs/logtool.log.log","temp_file":"temp/cleaned.json"}
+{"logs":{"error_log_file":"logs/errors.log","log_file":"logs/generic.log"},"temp_file":"temp/cleaned.json"}
