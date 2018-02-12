@@ -86,8 +86,6 @@ public class SettingsTab extends MyCustomTab {
 		if (errorFile != null) {
 			log.debug("Try to update errorFile with {}", errorFile.getName());
 			// TODO: update log error file
-		} else {
-			error("No log error file selected");
 		}
 	}
 
