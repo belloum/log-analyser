@@ -218,7 +218,7 @@ public class RequestTab extends MyCustomTab {
 		final JPanel instructions = new JPanel(new BorderLayout());
 		instructions.setBorder(BorderFactory.createTitledBorder("Instructions"));
 
-		JSONObject steps = settings().getJSONObject("steps");
+		final JSONObject steps = settings().getJSONObject("steps");
 
 		final JPanel indexes = new JPanel(new GridLayout(steps.length(), 1));
 		final JPanel values = new JPanel(new GridLayout(steps.length(), 1));

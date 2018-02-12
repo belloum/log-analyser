@@ -54,5 +54,10 @@
 		"title":"Routines",
 		"description":"The routine tab enables to compute scores of daily monitored activities so as to find out the best configuration of markers that leads to the most relevant activity monitoring.",
 		"img":"routine.png"
+	},
+	"settings": {
+		"title":"Settings",
+		"description":"The routine tab enables to compute scores of daily monitored activities so as to find out the best configuration of markers that leads to the most relevant activity monitoring.",
+		"img":"routine.png"
 	}
 }

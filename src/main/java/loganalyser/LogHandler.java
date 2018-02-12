@@ -26,13 +26,15 @@ import loganalyser.ui.tabs.HistogramTab;
 import loganalyser.ui.tabs.OverviewTab;
 import loganalyser.ui.tabs.RequestTab;
 import loganalyser.ui.tabs.RoutineTab;
+import loganalyser.ui.tabs.SettingsTab;
 import loganalyser.utils.Configuration;
 
 //FIXME: use log file
 //TODO: add ParticipantTab implementation
-public class LogHandler2 extends JFrame implements MenuSelector, FileSelector {
+//TODO: add a loading for configuration
+public class LogHandler extends JFrame implements MenuSelector, FileSelector {
 
-	private static final Logger log = LoggerFactory.getLogger(LogHandler2.class);
+	private static final Logger log = LoggerFactory.getLogger(LogHandler.class);
 	private static final long serialVersionUID = 1L;
 
 	private JPanel mRightContent;
@@ -44,12 +46,12 @@ public class LogHandler2 extends JFrame implements MenuSelector, FileSelector {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					new LogHandler2();
-				} catch (Exception e) {
+					new LogHandler();
+				} catch (final Exception e) {
 					e.printStackTrace();
 				}
 			}
@@ -61,7 +63,7 @@ public class LogHandler2 extends JFrame implements MenuSelector, FileSelector {
 	 * 
 	 * @throws Exception
 	 */
-	public LogHandler2() throws Exception {
+	public LogHandler() throws Exception {
 		super("Log Handler");
 		log.info("Start application-info");
 
@@ -75,12 +77,12 @@ public class LogHandler2 extends JFrame implements MenuSelector, FileSelector {
 
 	private void init() {
 		log.info("init parameters");
-		JPanel leftFrame = new JPanel(new BorderLayout());
+		final JPanel leftFrame = new JPanel(new BorderLayout());
 		leftFrame.setBounds(0, 0, Configuration.LEFT_MENU_WIDTH, Configuration.MAX_HEIGHT);
 		leftFrame.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
 		leftFrame.setPreferredSize(new Dimension(Configuration.LEFT_MENU_WIDTH, Configuration.MAX_HEIGHT));
 
-		LogFrame mFilePanel = new LogFrame();
+		final LogFrame mFilePanel = new LogFrame();
 		mFilePanel.addFileSelectorListener(this);
 		leftFrame.add(mFilePanel, BorderLayout.PAGE_START);
 
@@ -102,7 +104,7 @@ public class LogHandler2 extends JFrame implements MenuSelector, FileSelector {
 	}
 
 	@Override
-	public void validFile(LogFile pLogFile) {
+	public void validFile(final LogFile pLogFile) {
 		this.mLogFile = pLogFile;
 		mMenu.setEnabled(true);
 		mErrorMsg = null;
@@ -110,7 +112,7 @@ public class LogHandler2 extends JFrame implements MenuSelector, FileSelector {
 	}
 
 	@Override
-	public void invalidFile(File pInvalidFile, String pCause) {
+	public void invalidFile(final File pInvalidFile, final String pCause) {
 		mLogFile = null;
 		mErrorMsg = String.format("INVALID FILE: %s, %s", pInvalidFile.getName(), pCause);
 		mMenu.disableMenu();
@@ -130,7 +132,7 @@ public class LogHandler2 extends JFrame implements MenuSelector, FileSelector {
 	}
 
 	@Override
-	public void goTo(String pSection) {
+	public void goTo(final String pSection) {
 		JPanel jPanel = new JPanel(new BorderLayout());
 
 		if (pSection.equalsIgnoreCase(OverviewTab.class.getSimpleName())) {
@@ -145,6 +147,8 @@ public class LogHandler2 extends JFrame implements MenuSelector, FileSelector {
 			jPanel = new RoutineTab(this);
 		} else if (pSection.equalsIgnoreCase(RequestTab.class.getSimpleName())) {
 			jPanel = new RequestTab();
+		} else if (pSection.equalsIgnoreCase(SettingsTab.class.getSimpleName())) {
+			jPanel = new SettingsTab();
 		} else {
 			jPanel.add(new JLabel("Not implemented but who cares ?"));
 		}
