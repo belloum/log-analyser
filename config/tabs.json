@@ -57,7 +57,7 @@
 	},
 	"settings": {
 		"title":"Settings",
-		"description":"The routine tab enables to compute scores of daily monitored activities so as to find out the best configuration of markers that leads to the most relevant activity monitoring.",
+		"description":"The settings tab enables to configure LogTool.",
 		"img":"routine.png"
 	}
 }

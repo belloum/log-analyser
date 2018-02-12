@@ -7,6 +7,8 @@ import javax.swing.JPanel;
 
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import loganalyser.ui.components.ErrorLabel;
 import loganalyser.ui.components.TabHeader;
@@ -17,6 +19,7 @@ import loganalyser.utils.Utils;
  */
 public abstract class MyCustomTab extends JPanel implements Configurable {
 
+	private static final Logger log = LoggerFactory.getLogger(MyCustomTab.class);
 	/**
 	 * 
 	 */
@@ -54,7 +57,7 @@ public abstract class MyCustomTab extends JPanel implements Configurable {
 
 	protected void error(final String pErrorMsg) {
 		if (!StringUtils.isEmpty(pErrorMsg)) {
-			// Utils.errorLog(pErrorMsg, this.getClass());
+			log.error(pErrorMsg);
 			System.err.println("Error: " + pErrorMsg);
 			getError().setVisible(true);
 			getError().setText(pErrorMsg);
