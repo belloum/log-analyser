@@ -21,13 +21,17 @@ public class SettingEntry extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	public SettingEntry(final String pName, final String pDescription, final Object pValue) {
+		this(pName, pDescription, pValue, null);
+	}
+
+	public SettingEntry(final String pName, final String pDescription, final Object pValue, ActionListener pAction) {
 		setLayout(new BorderLayout());
 		mButton = new JButton();
 		mTextField = new JTextField();
-		build(pName, pDescription, pValue);
+		build(pName, pDescription, pValue, pAction);
 	}
 
-	private void build(final String pName, final String pDescription, final Object pValue) {
+	private void build(final String pName, final String pDescription, final Object pValue, ActionListener pAction) {
 		final JPanel pan = new JPanel(new BorderLayout());
 		setBorder(BorderFactory.createTitledBorder(pName));
 
@@ -36,7 +40,7 @@ public class SettingEntry extends JPanel {
 		pan.add(mTextField, BorderLayout.CENTER);
 
 		mButton.setText("Update");
-		mButton.addActionListener(DEFAULT_ACTION);
+		mButton.addActionListener(pAction != null ? pAction : DEFAULT_ACTION);
 		pan.add(mButton, BorderLayout.EAST);
 		add(pan, BorderLayout.PAGE_START);
 

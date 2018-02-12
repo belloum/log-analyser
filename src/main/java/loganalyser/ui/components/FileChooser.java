@@ -22,8 +22,16 @@ public class FileChooser extends JFileChooser {
 
 	public FileChooser(File pCurrentDirectory, String pTitle, List<FileNameExtensionFilter> filters) {
 		this(pCurrentDirectory, pTitle);
-		filters.forEach(filter -> setFileFilter(filter));
+		addFilters(filters);
 		setAcceptAllFileFilterUsed(false);
+	}
+
+	public void addFilters(List<FileNameExtensionFilter> filters) {
+		filters.forEach(filter -> addFilter(filter));
+	}
+
+	public void addFilter(FileNameExtensionFilter filter) {
+		setFileFilter(filter);
 	}
 
 	@Override
