@@ -52,4 +52,8 @@ public class SettingEntry extends JPanel {
 		mButton.addActionListener(pAction);
 	}
 
+	public void updateProperty(String pValue) {
+		mTextField.setText(pValue);
+	}
+
 }

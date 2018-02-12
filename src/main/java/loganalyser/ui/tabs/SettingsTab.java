@@ -15,10 +15,12 @@ import org.slf4j.LoggerFactory;
 import loganalyser.ui.components.FileChooser;
 import loganalyser.ui.components.SettingEntry;
 import loganalyser.utils.Configuration;
+import loganalyser.utils.LogToolSetting;
 
 public class SettingsTab extends MyCustomTab {
 
 	// Kind of file which can be updated
+	// TODO: enable to create new log files
 	private static final String PARTICIPANT = "participant";
 	private static final String ERROR_LOG = "error-log";
 	private static final String LOG = "log";
@@ -58,7 +60,7 @@ public class SettingsTab extends MyCustomTab {
 				Configuration.RESOURCES.getPath(), e -> updateFolder());
 		genericSettings.add(mDefaultLogFolder);
 
-		mLogFile = new SettingEntry("Log file", "The file where logs are gathered.", Configuration.LOG_FILE.getPath(),
+		mLogFile = new SettingEntry("Log file", "The file where logs are gathered.", LogToolSetting.getLogFile(),
 				e -> updateFile(LOG));
 		genericSettings.add(mLogFile);
 
@@ -100,7 +102,15 @@ public class SettingsTab extends MyCustomTab {
 		}
 		if (selectedFile != null) {
 			// TODO
-			log.debug("try to update {} with {}", pFileToUpdate, selectedFile);
+			switch (pFileToUpdate) {
+			case LOG:
+				LogToolSetting.setLogFile(selectedFile.getName());
+				mLogFile.updateProperty(selectedFile.getPath());
+				break;
+			default:
+				log.debug("try to update {} with {}", pFileToUpdate, selectedFile);
+				break;
+			}
 		}
 	}
 
@@ -110,7 +120,7 @@ public class SettingsTab extends MyCustomTab {
 
 	private File chooseFile(String pDialogTitle) {
 		FileChooser picker = updatePicker(pDialogTitle);
-		picker.addFilter(new FileNameExtensionFilter("Log file", "json"));
+		picker.addFilter(new FileNameExtensionFilter("Log file", "log"));
 		picker.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		if (picker.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
 			return picker.getSelectedFile();

@@ -12,6 +12,7 @@ public class Configuration {
 	public static final File CONFIG_FOLDER = new File(ROOT_FOLDER, "config");
 	public static final File TEMP_FOLDER = new File(ROOT_FOLDER, "temp");
 	public static final File LOG_FOLDER = new File(ROOT_FOLDER, "logs");
+	public static final File LOG_PROPERTIES = new File(ROOT_FOLDER, "src/main/resources/log4j.properties");
 
 	public static final File IMG_FOLDER = new File(RESOURCES, "img/");
 	public static final File IMAGE_AVATAR = Utils.getImg("avatar.png");
@@ -50,5 +51,4 @@ public class Configuration {
 	public static final Integer LABEL_WIDTH_MEDIUM = 150;
 	public static final Integer PADDING = 5;
 	public static final Integer ITEM_HEIGHT = 20;
-
 }
