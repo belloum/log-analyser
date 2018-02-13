@@ -38,8 +38,10 @@ public class LogFile extends File {
 			pListener.startExtraction();
 		}
 
-		JSONArray logs = SoftLogExtractor.extractJSON(pFile);
-		List<SoftLog> extractLogs = SoftLogExtractor.formatJSONArrayToSoftLogs(logs, pListener);
+		SoftLogExtractor.addLogExtractorListener(pListener);
+
+		JSONArray logs = SoftLogExtractor.extractJSONFromRawLogFile(pFile);
+		List<SoftLog> extractLogs = SoftLogExtractor.formatJSONArrayToSoftLogs(logs);
 		this.mSoftLogs = SoftLogExtractor.sortLogsByDate(extractLogs);
 
 		this.mDevices = SoftLogExtractor.getDevices(this.mSoftLogs);
@@ -66,6 +68,8 @@ public class LogFile extends File {
 		if (pListener != null) {
 			pListener.veraExtracted(this.mVeraId);
 		}
+
+		SoftLogExtractor.removeLogExtractorListener();
 	}
 
 	public List<SoftLog> getSoftLogs() {

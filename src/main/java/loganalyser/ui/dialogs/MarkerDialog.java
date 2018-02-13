@@ -29,9 +29,6 @@ import loganalyser.old.ui.MyButton;
 
 public class MarkerDialog extends JDialog {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	private static final String PRIMARY_MARKER = "primary";

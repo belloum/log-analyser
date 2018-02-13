@@ -62,14 +62,14 @@ public abstract class CustomComponent extends JPanel {
 		return pJlLabel;
 	}
 
-	public static JComponent addEmptyBorder(JComponent pComponent, int pTop, int pLeft, int pBottom, int pRight) {
+	public static JPanel addEmptyBorder(JComponent pComponent, int pTop, int pLeft, int pBottom, int pRight) {
 		JPanel container = new JPanel(new BorderLayout());
 		container.setBorder(BorderFactory.createEmptyBorder(pTop, pLeft, pBottom, pRight));
 		container.add(pComponent, BorderLayout.CENTER);
 		return container;
 	}
 
-	public static JComponent addEmptyBorder(JComponent pComponent, int pThickness) {
+	public static JPanel addEmptyBorder(JComponent pComponent, int pThickness) {
 		return addEmptyBorder(pComponent, pThickness, pThickness, pThickness, pThickness);
 	}
 

@@ -15,9 +15,6 @@ import loganalyser.old.ui.CustomComponent;
 
 public class TabHeader extends JPanel {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	private File mImage;

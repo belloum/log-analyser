@@ -1,3 +1,4 @@
+
 package loganalyser.ui.components;
 
 import java.awt.BorderLayout;
@@ -32,9 +33,6 @@ import loganalyser.utils.Utils;
 
 public class LogFrame extends JPanel implements LogExtractorListener, ParticipantSettingsListener {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	private FileSelector mFileListener;
@@ -145,7 +143,7 @@ public class LogFrame extends JPanel implements LogExtractorListener, Participan
 
 	@Override
 	public void startExtraction() {
-		this.mProgressBar.setProgressText("Start extraction");
+		this.mProgressBar.setProgressText("Getting logs");
 		if (mFileListener != null) {
 			mFileListener.checkingFile();
 		}
@@ -212,5 +210,10 @@ public class LogFrame extends JPanel implements LogExtractorListener, Participan
 
 	@Override
 	public void participantRoutineFileUpdated(File participantRoutineFile) {
+	}
+
+	@Override
+	public void validateRawLogFile() {
+		this.mProgressBar.setProgressText("Validating log file");
 	}
 }

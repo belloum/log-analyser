@@ -26,9 +26,6 @@ import loganalyser.ui.dialogs.MarkerDialog.MarkerSelectionListener;
 
 public class MealParametersPanel extends RoutineParameterPanel implements MarkerSelectionListener {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	private JLabel mMarkersI, mMarkersII;

@@ -18,26 +18,24 @@ public class SettingEntry extends JPanel {
 	private final JButton mButton;
 	private final JTextField mTextField;
 	private final ActionListener DEFAULT_ACTION = event -> System.out.println("Not implemented yet");
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	public SettingEntry(final String pName, final String pDescription, final Object pValue) {
-		this(pName, pDescription, pValue, null);
+		this(pName, pDescription, pValue, null, false);
 	}
 
-	public SettingEntry(final String pName, final String pDescription, final Object pValue, ActionListener pAction) {
+	public SettingEntry(final String pName, final String pDescription, final Object pValue, ActionListener pAction,
+			boolean pBordered) {
 		setLayout(new BorderLayout(5, 5));
 		mButton = new JButton();
 		mTextField = new JTextField();
-		build(pName, pDescription, pValue, pAction);
+		build(pName, pDescription, pValue, pAction, pBordered);
 	}
 
-	private void build(final String pName, final String pDescription, final Object pValue, ActionListener pAction) {
+	private void build(final String pName, final String pDescription, final Object pValue, ActionListener pAction,
+			boolean pBordered) {
 		setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
 
-		JPanel container = CustomComponent.addLineBorder(new JPanel(), Color.GRAY, 1);
 		JPanel content = new JPanel(new BorderLayout());
 
 		final JPanel pan = new JPanel(new BorderLayout());
@@ -53,8 +51,13 @@ public class SettingEntry extends JPanel {
 		content.add(pan, BorderLayout.PAGE_START);
 		content.add(new JLabel(pDescription), BorderLayout.CENTER);
 
-		container.add(CustomComponent.addEmptyBorder(content, 3));
-		add(container, BorderLayout.CENTER);
+		if (pBordered) {
+			JPanel container = CustomComponent.addLineBorder(new JPanel(), Color.GRAY, 1);
+			container.add(CustomComponent.addEmptyBorder(content, 3));
+			add(container, BorderLayout.CENTER);
+		} else {
+			add(content, BorderLayout.CENTER);
+		}
 	}
 
 	public void addActionListener(final ActionListener pAction) {

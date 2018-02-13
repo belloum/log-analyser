@@ -9,9 +9,6 @@ import loganalyser.utils.Configuration;
 
 public class ErrorLabel extends JLabel {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	public ErrorLabel() {

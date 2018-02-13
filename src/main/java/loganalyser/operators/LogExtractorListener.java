@@ -7,7 +7,9 @@ import loganalyser.beans.devices.Device.DeviceType;
 
 public interface LogExtractorListener {
 	void startExtraction();
-	
+
+	void validateRawLogFile();
+
 	void formatLogs();
 
 	void userExtracted(String pUser);
@@ -17,11 +19,11 @@ public interface LogExtractorListener {
 	void startLogExtraction();
 
 	void ignoreLowConsumptionLogs();
-	
+
 	void cleanLogsResult(int pOldCount, int pNewCount);
-	
+
 	void saveCleanFile();
-	
+
 	void logExtractionProgress(int pProgress);
 
 	void deviceExtracted(List<Device> pDevices);

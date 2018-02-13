@@ -13,9 +13,6 @@ public class LegendValueLabel extends JPanel {
 
 	private JLabel mLegend, mValue;
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	public LegendValueLabel(String pLabel, String pValue) {

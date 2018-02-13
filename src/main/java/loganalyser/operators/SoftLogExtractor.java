@@ -30,49 +30,66 @@ public class SoftLogExtractor extends FileExtractor {
 
 	private static final String INVALID_THRESHOLD = "Invalid threshold: ";
 
-	// FIXME Implement a method for log validating before extraction
+	private static LogExtractorListener mExtractionListeners;
 
-	public static JSONArray extractJSON(File pRawLogFile) throws RawLogException {
+	/*
+	 * Deals with Listeners
+	 */
+	public static void addLogExtractorListener(LogExtractorListener pListener) {
+		mExtractionListeners = pListener;
+	}
+
+	public static void removeLogExtractorListener() {
+		mExtractionListeners = null;
+	}
+
+	/*
+	 * Handling RawLogFiles
+	 */
+	public static JSONArray extractJSONFromRawLogFile(File pRawLogFile) throws RawLogException {
 		String content;
+		JSONArray jArr = new JSONArray();
+
+		if (mExtractionListeners != null) {
+			mExtractionListeners.formatLogs();
+		}
+
 		try {
 			content = readFile(pRawLogFile).replace("}\n", "},");
 			content = String.format("[%s]", content);
+			jArr = new JSONArray(content);
 		} catch (IOException e) {
 			log.error("Can not extract JSON from {}, because of: {}", pRawLogFile.getPath(), e.getMessage(), e);
 			throw new RawLogException(e.getMessage());
+		} finally {
+			validateRawLogFile(jArr);
 		}
-		return new JSONArray(content);
+		return jArr;
 	}
 
-	public static String extractVeraId(JSONObject pFirstLog) throws RawLogException {
-		log.trace("Extract vera id from {}", pFirstLog);
-		String veraId;
+	private static String extractPropertyFromRawLog(JSONObject pJRawLog, String pPropertyKey) throws RawLogException {
+		log.trace("Extract {} from {}", pPropertyKey, pJRawLog);
 		try {
-			veraId = pFirstLog.has("user") ? pFirstLog.getString("vera_serial") : "no_vera";
-		} catch (Exception e) {
-			log.error("Can not extract user Id from {} because of: {}", pFirstLog, e.getMessage(), e);
+			return pJRawLog.getString("vera_serial");
+		} catch (JSONException e) {
+			log.error("Can not extract {} from {} because of: {}", pPropertyKey, pJRawLog, e.getMessage(), e);
 			throw new RawLogException(e.getMessage());
 		}
-		return veraId;
 	}
 
-	public static String extractUserId(JSONObject pFirstLog) throws RawLogException {
-		log.trace("Extract user id from {}", pFirstLog);
-		String userId;
-		try {
-			userId = pFirstLog.has("user") ? pFirstLog.getString("user") : "no_user";
-		} catch (Exception e) {
-			log.error("Can not extract user Id from {} because of: {}", pFirstLog, e.getMessage(), e);
-			throw new RawLogException(e.getMessage());
-		}
-		return userId;
+	public static String extractVeraId(JSONObject pFirsRawtLog) throws RawLogException {
+		return extractPropertyFromRawLog(pFirsRawtLog, "vera_serial");
 	}
 
-	public static List<SoftLog> formatJSONArrayToSoftLogs(JSONArray jArray, LogExtractorListener pListener) {
+	public static String extractUserId(JSONObject pFirsRawtLog) throws RawLogException {
+		return extractPropertyFromRawLog(pFirsRawtLog, "user");
+	}
+
+	public static List<SoftLog> formatJSONArrayToSoftLogs(JSONArray jArray) {
 		List<SoftLog> myLogs = new ArrayList<>();
 
-		if (pListener != null) {
-			pListener.startLogExtraction();
+		if (mExtractionListeners != null) {
+			mExtractionListeners.startLogExtraction();
 		}
 
 		for (int i = 0; i < jArray.length(); i++) {
@@ -82,21 +99,51 @@ public class SoftLogExtractor extends FileExtractor {
 			} catch (RawLogException ignored) {
 				log.debug("Exception while extracting logs: {}", ignored.getMessage(), ignored);
 			} finally {
-				if (pListener != null) {
+				if (mExtractionListeners != null) {
 					float progress = ((float) i * 100) / jArray.length();
-					pListener.logExtractionProgress((int) progress);
+					mExtractionListeners.logExtractionProgress((int) progress);
 				}
 			}
 		}
 		return myLogs;
 	}
 
-	public static List<SoftLog> extractLogs(File pRawLogFile, LogExtractorListener pListener) throws RawLogException {
-		if (pListener != null) {
-			pListener.formatLogs();
+	private static void validateRawLogFile(JSONArray pRawLogs) throws RawLogException {
+		String error;
+		if (mExtractionListeners != null) {
+			mExtractionListeners.validateRawLogFile();
 		}
-		return formatJSONArrayToSoftLogs(extractJSON(pRawLogFile), pListener);
+
+		for (int i = 0; i < pRawLogs.length(); i++) {
+			JSONObject jLog = pRawLogs.getJSONObject(i);
+			if (!jLog.has("user")) {
+				error = "Invalid JSONFormat, ['user'] field not found";
+				log.error("{} in {}", error, jLog);
+				throw new RawLogException(error);
+			} else if (!jLog.has("vera_serial")) {
+				error = "Invalid JSONFormat, ['vera_serial'] field not found";
+				log.error("{} in {}", error, jLog);
+				throw new RawLogException(error);
+			} else if (!jLog.has("vera_serial")) {
+				error = "Invalid JSONFormat, ['event'] field not found";
+				log.error("{} in {}", error, jLog);
+				throw new RawLogException(error);
+			} else if (!jLog.has("vera_serial")) {
+				error = "Invalid JSONFormat, ['device'] field not found";
+				log.error("{} in {}", error, jLog);
+				throw new RawLogException(error);
+			} else {
+				if (mExtractionListeners != null) {
+					float progress = ((float) i * 100) / pRawLogs.length();
+					mExtractionListeners.logExtractionProgress((int) progress);
+				}
+			}
+		}
 	}
+
+	/*
+	 * Handling SoftLogList
+	 */
 
 	public static List<SoftLog> cleanUpLogs(List<SoftLog> pLogs, List<String> pDeviceIds, float pThreshold) {
 		if (pThreshold >= 0) {
@@ -155,13 +202,6 @@ public class SoftLogExtractor extends FileExtractor {
 		return sortLogsByDate(cleanedList);
 	}
 
-	/**
-	 * Extracts all the types of device from the given list of logs
-	 * 
-	 * @param pLogs
-	 *            list of log
-	 * @return the different types, sorted by name
-	 */
 	public static List<DeviceType> getDeviceTypes(List<SoftLog> pLogs) {
 		return sortList(getDevices(pLogs).stream().map(Device::getType).distinct().collect(Collectors.toList()));
 	}

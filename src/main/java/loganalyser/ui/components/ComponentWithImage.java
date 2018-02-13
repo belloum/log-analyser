@@ -16,9 +16,7 @@ public class ComponentWithImage extends JPanel {
 
 	public static final Integer ALIGN_LEFT = 0;
 	public static final Integer ALIGN_RIGHT = 1;
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 
 	private Component mComponent;

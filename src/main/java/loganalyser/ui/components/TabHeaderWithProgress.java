@@ -9,9 +9,6 @@ import javax.swing.JProgressBar;
 //TODO implement circular progress bar in the east of the layout
 public class TabHeaderWithProgress extends TabHeader {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	// FIXME Replace by a circular indeterminate progress

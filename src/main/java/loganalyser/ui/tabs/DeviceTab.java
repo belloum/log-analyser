@@ -31,9 +31,6 @@ import loganalyser.utils.Configuration;
 //TODO implements Runnable to fill view
 public class DeviceTab extends LogTab {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	private enum SplitMod {

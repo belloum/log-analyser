@@ -20,9 +20,6 @@ import loganalyser.utils.Utils;
 public abstract class MyCustomTab extends JPanel implements Configurable {
 
 	private static final Logger log = LoggerFactory.getLogger(MyCustomTab.class);
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	private final TabHeader mHeader;

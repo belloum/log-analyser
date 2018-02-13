@@ -60,6 +60,7 @@
 		"description":"The settings tab enables to configure LogTool.",
 		"img":"routine.png",
 		"settings_description":{
+			"generic":"The generic settings enable to locate the saving folders for CSV, histograms and cleaned files.",
 			"logtool":"The LogTool settings enable to locate logs file of the application.",
 			"participant":"The Participant settings enable to locate participant folders and files."
 		}

@@ -7,9 +7,6 @@ import javax.swing.table.TableModel;
 
 public class MyTable extends JTable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	public MyTable(TableModel pTableModel) {

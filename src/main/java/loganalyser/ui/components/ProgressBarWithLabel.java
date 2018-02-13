@@ -8,9 +8,6 @@ import javax.swing.JProgressBar;
 
 public class ProgressBarWithLabel extends JPanel {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	private final JLabel mProgressText;

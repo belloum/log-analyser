@@ -24,11 +24,17 @@ public class LogToolSettings {
 	private static final String JSON_GENERIC_LOG_FILE = "log_file";
 	private static final String LOGS = "logs";
 	private static final String PARTICIPANTS = "participants";
+	private static final String GENERIC = "generic";
+	private static final String JSON_HISTOGRAM_FOLDER = "histogram_folder";
 	private static final String JSON_PARTICIPANT_ROUTINE_FILE = "routine_file";
 	private static final String NO_LOG_FILE = "No log file specified";
 	private static final String SETTINGS_JSON = "settings.json";
 
 	private static ParticipantSettingsListener mLogSettingsListener;
+
+	public static String getSavedHistogramsFolder() {
+		return getGenericJSONProperty(JSON_HISTOGRAM_FOLDER);
+	}
 
 	public static void setLogToolLogFolder(final File pLogFolder) {
 		try {
@@ -53,6 +59,15 @@ public class LogToolSettings {
 			if (mLogSettingsListener != null) {
 				mLogSettingsListener.participantLogsFolderUpdated(pParticipantLogFolder);
 			}
+		} catch (JSONException | IOException e) {
+			log.error("Oops ! {}", e.getMessage(), e);
+		}
+	}
+
+	public static void setSavedHistogramsFolder(final File pSavedHistogramFolder) {
+		try {
+			updateJSONSettingsGeneric(JSON_HISTOGRAM_FOLDER, pSavedHistogramFolder.getAbsolutePath());
+			log.info("Saved histograms folder has been successfully updated by: {}", pSavedHistogramFolder.getPath());
 		} catch (JSONException | IOException e) {
 			log.error("Oops ! {}", e.getMessage(), e);
 		}
@@ -129,6 +144,17 @@ public class LogToolSettings {
 		return result;
 	}
 
+	private static String getGenericJSONProperty(final String pKey) {
+		String result;
+		try {
+			result = getJSONSettings().getJSONObject(GENERIC).getString(pKey);
+		} catch (JSONException | IOException e) {
+			log.error("Oops ! {}", e.getMessage(), e);
+			result = NO_LOG_FILE;
+		}
+		return result;
+	}
+
 	private static void setLogFile(final String pSL4JPropertyKey, final String pJSONKey, final String pLogFilename) {
 		try {
 			String logFile = getLogToolLogFolder().concat(File.separator).concat(pLogFilename);
@@ -176,6 +202,14 @@ public class LogToolSettings {
 			throws JSONException, IOException {
 		final JSONObject jSettings = getJSONSettings();
 		jSettings.getJSONObject(PARTICIPANTS).put(pKey, pValue);
+		saveJSONSettings(jSettings);
+		return;
+	}
+
+	private static void updateJSONSettingsGeneric(final String pKey, final Object pValue)
+			throws JSONException, IOException {
+		final JSONObject jSettings = getJSONSettings();
+		jSettings.getJSONObject(GENERIC).put(pKey, pValue);
 		saveJSONSettings(jSettings);
 		return;
 	}

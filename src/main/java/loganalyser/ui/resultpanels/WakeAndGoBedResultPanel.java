@@ -15,9 +15,6 @@ import loganalyser.ui.components.MyTable;
 
 public class WakeAndGoBedResultPanel extends ActivityResultPanel {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	public WakeAndGoBedResultPanel(List<ActivityResult> pActivityResults) {

@@ -16,9 +16,6 @@ import loganalyser.ui.components.MyTable;
 
 public class MealResultPanel extends ActivityResultPanel {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	public MealResultPanel(List<ActivityResult> pActivityResults) {

@@ -36,9 +36,6 @@ public class RoutineTab extends LogTab {
 	// TODO helper for decision, show the biggest sender
 	// TODO Progress
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	private JTextArea mRoutineDesc;

@@ -7,9 +7,6 @@ import loganalyser.operators.FileSelector;
 
 public abstract class LogTab extends MyCustomTab {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	private final LogFile mLogFile;

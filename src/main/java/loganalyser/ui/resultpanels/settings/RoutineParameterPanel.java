@@ -22,9 +22,6 @@ public abstract class RoutineParameterPanel extends JPanel implements Executable
 	private static final String DEFAULT_HOUR = "00:00";
 	private static final Pattern HOUR_PATTERN = Pattern.compile("\\d{2}[:]\\d{2}$");
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	protected RoutineSettings mSettings;

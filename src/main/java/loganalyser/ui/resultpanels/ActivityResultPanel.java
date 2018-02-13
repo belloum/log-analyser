@@ -16,9 +16,6 @@ public abstract class ActivityResultPanel extends JPanel {
 
 	List<ActivityResult> mActivityResults;
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	public ActivityResultPanel(List<ActivityResult> pActivityResults) {
