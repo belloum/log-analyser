@@ -8,7 +8,12 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class FileExtractor {
+
+	private static final Logger log = LoggerFactory.getLogger(FileExtractor.class);
 
 	/**
 	 * Reads the file
@@ -35,6 +40,7 @@ public class FileExtractor {
 			writer.write(pContent);
 			writer.flush();
 			writer.close();
+			log.info("{} has been saved in {}", pOutputFile.getName(), pOutputFile.getParentFile().getAbsolutePath());
 			return true;
 		} catch (IOException e) {
 			System.out.println("Exception while writing content: " + e);

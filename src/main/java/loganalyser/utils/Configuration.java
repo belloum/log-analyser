@@ -11,6 +11,9 @@ public class Configuration {
 	public static final File SCRIPTS_FOLDER = new File(RESOURCES, "scripts");
 	public static final File CONFIG_FOLDER = new File(ROOT_FOLDER, "config");
 	public static final File TEMP_FOLDER = new File(ROOT_FOLDER, "temp");
+
+	public static final File PARTICIPANT_FOLDER = new File(RESOURCES, "participants");
+
 	public static final File LOG_FOLDER = new File(ROOT_FOLDER, "logs");
 	public static final File LOG_PROPERTIES = new File(ROOT_FOLDER, "src/main/resources/log4j.properties");
 

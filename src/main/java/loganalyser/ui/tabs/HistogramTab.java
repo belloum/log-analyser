@@ -39,7 +39,7 @@ import loganalyser.ui.components.FileChooser;
 import loganalyser.ui.components.TabHeaderWithProgress;
 import loganalyser.utils.Utils;
 
-//TODO: see the best way to handle progress, top bar or top histogram
+//TODO see the best way to handle progress, top bar or top histogram
 public class HistogramTab extends LogTab implements ItemListener, HistogramProgressListener {
 
 	private static final long serialVersionUID = 1L;

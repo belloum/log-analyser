@@ -37,8 +37,8 @@ public class SettingEntry extends JPanel {
 	private void build(final String pName, final String pDescription, final Object pValue, ActionListener pAction) {
 		setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
 
-		JPanel container = new JPanel(new BorderLayout());
-		container.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1, true));
+		JPanel container = CustomComponent.addLineBorder(new JPanel(), Color.GRAY, 1);
+		JPanel content = new JPanel(new BorderLayout());
 
 		final JPanel pan = new JPanel(new BorderLayout());
 		pan.add(CustomComponent.boldLabel(pName), BorderLayout.PAGE_START);
@@ -50,9 +50,10 @@ public class SettingEntry extends JPanel {
 		mButton.setText("Update");
 		mButton.addActionListener(pAction != null ? pAction : DEFAULT_ACTION);
 		pan.add(mButton, BorderLayout.EAST);
-		container.add(pan, BorderLayout.PAGE_START);
-		container.add(new JLabel(pDescription), BorderLayout.CENTER);
+		content.add(pan, BorderLayout.PAGE_START);
+		content.add(new JLabel(pDescription), BorderLayout.CENTER);
 
+		container.add(CustomComponent.addEmptyBorder(content, 3));
 		add(container, BorderLayout.CENTER);
 	}
 

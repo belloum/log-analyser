@@ -58,6 +58,10 @@
 	"settings": {
 		"title":"Settings",
 		"description":"The settings tab enables to configure LogTool.",
-		"img":"routine.png"
+		"img":"routine.png",
+		"settings_description":{
+			"logtool":"The LogTool settings enable to locate logs file of the application.",
+			"participant":"The Participant settings enable to locate participant folders and files."
+		}
 	}
 }

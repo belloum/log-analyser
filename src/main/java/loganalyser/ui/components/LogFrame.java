@@ -26,9 +26,11 @@ import loganalyser.operators.FileSelector;
 import loganalyser.operators.LogExtractorListener;
 import loganalyser.operators.SoftLogExtractor;
 import loganalyser.utils.Configuration;
+import loganalyser.utils.LogToolSettings;
+import loganalyser.utils.LogToolSettings.ParticipantSettingsListener;
 import loganalyser.utils.Utils;
 
-public class LogFrame extends JPanel implements LogExtractorListener {
+public class LogFrame extends JPanel implements LogExtractorListener, ParticipantSettingsListener {
 
 	/**
 	 * 
@@ -41,9 +43,10 @@ public class LogFrame extends JPanel implements LogExtractorListener {
 	private static final String SELECT_A_FILE = "Select a file";
 	private static final int IMG_DIMENSION = 40;
 
-	private LegendValueLabel mFileName = new LegendValueLabel("Name", NO_FILE_SELECTED);
-	private LegendValueLabel mLogCount = new LegendValueLabel("Logs", "0");
-	private ProgressBarWithLabel mProgressBar = new ProgressBarWithLabel();
+	private final LegendValueLabel mFileName = new LegendValueLabel("Name", NO_FILE_SELECTED);
+	private final LegendValueLabel mLogCount = new LegendValueLabel("Logs", "0");
+	private final ProgressBarWithLabel mProgressBar = new ProgressBarWithLabel();
+	private FileChooser mFileChooser;
 
 	public LogFrame() {
 		setLayout(new BorderLayout());
@@ -51,28 +54,27 @@ public class LogFrame extends JPanel implements LogExtractorListener {
 	}
 
 	private void init() {
+		LogToolSettings.addParticipantSettingsListener(this);
 		setBorder(BorderFactory.createTitledBorder("Current file"));
 
 		try {
 			add(new JLabel(new ImageIcon(Utils.scaleImg(Configuration.IMAGE_LOG_FILE, IMG_DIMENSION, IMG_DIMENSION))),
 					BorderLayout.PAGE_START);
 		} catch (final IOException ignored) {
-			// Utils.errorLog("Image not found", this.getClass());
 			System.err.println("Hay una problema");
 		}
 
-		JPanel info = new JPanel(new GridLayout(3, 1));
+		final JPanel info = new JPanel(new GridLayout(3, 1));
 		info.add(mFileName);
 		info.add(mLogCount);
 
-		// FIXME
-		final FileChooser fileChooser = new FileChooser(new File("")/* Configuration.RESOURCES_FOLDER */,
-				"Select a log file", Arrays.asList(new FileNameExtensionFilter("Log file", "json")));
+		mFileChooser = new FileChooser(new File(LogToolSettings.getParticipantLogFolder()), "Select a log file",
+				Arrays.asList(new FileNameExtensionFilter("Log file", "json")));
 
 		// button
 		info.add(new MyButton(SELECT_A_FILE, event -> {
-			if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-				checkLogFile(fileChooser.getSelectedFile());
+			if (mFileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+				checkLogFile(mFileChooser.getSelectedFile());
 			}
 		}));
 
@@ -129,11 +131,11 @@ public class LogFrame extends JPanel implements LogExtractorListener {
 		}
 	}
 
-	private boolean saveLogFile(LogFile pLogFile) throws JSONException, IOException {
+	private boolean saveLogFile(final LogFile pLogFile) throws JSONException, IOException {
 
-		float pThreshold = 20f;
+		final float pThreshold = 20f;
 		ignoreLowConsumptionLogs();
-		List<SoftLog> cleanList = SoftLogExtractor.ignoreLowConsumptionLogs(pLogFile.getSoftLogs(), pThreshold);
+		final List<SoftLog> cleanList = SoftLogExtractor.ignoreLowConsumptionLogs(pLogFile.getSoftLogs(), pThreshold);
 
 		cleanLogsResult(pLogFile.getSoftLogs().size(), cleanList.size());
 
@@ -150,12 +152,12 @@ public class LogFrame extends JPanel implements LogExtractorListener {
 	}
 
 	@Override
-	public void userExtracted(String pUser) {
+	public void userExtracted(final String pUser) {
 		this.mProgressBar.setProgressText("Extract user");
 	}
 
 	@Override
-	public void veraExtracted(String pVera) {
+	public void veraExtracted(final String pVera) {
 	}
 
 	@Override
@@ -164,22 +166,22 @@ public class LogFrame extends JPanel implements LogExtractorListener {
 	}
 
 	@Override
-	public void logExtractionProgress(int pProgress) {
+	public void logExtractionProgress(final int pProgress) {
 		this.mProgressBar.setProgressValue(pProgress);
 	}
 
 	@Override
-	public void deviceExtracted(List<Device> pDevices) {
+	public void deviceExtracted(final List<Device> pDevices) {
 		this.mProgressBar.setProgressText("Extract devices");
 	}
 
 	@Override
-	public void devieTypeExtracted(List<DeviceType> pDeviceType) {
+	public void devieTypeExtracted(final List<DeviceType> pDeviceType) {
 		this.mProgressBar.setProgressText("Extract device types");
 	}
 
 	@Override
-	public void dayExtracted(int dayCount) {
+	public void dayExtracted(final int dayCount) {
 		this.mProgressBar.setProgressText("Extract days");
 	}
 
@@ -194,12 +196,21 @@ public class LogFrame extends JPanel implements LogExtractorListener {
 	}
 
 	@Override
-	public void cleanLogsResult(int pOldCount, int pNewCount) {
+	public void cleanLogsResult(final int pOldCount, final int pNewCount) {
 		this.mProgressBar.setProgressText(String.format("%d logs removed", (pOldCount - pNewCount)));
 	}
 
 	@Override
 	public void saveCleanFile() {
 		this.mProgressBar.setProgressText("Save file");
+	}
+
+	@Override
+	public void participantLogsFolderUpdated(final File participantFolder) {
+		mFileChooser.setCurrentDirectory(participantFolder);
+	}
+
+	@Override
+	public void participantRoutineFileUpdated(File participantRoutineFile) {
 	}
 }

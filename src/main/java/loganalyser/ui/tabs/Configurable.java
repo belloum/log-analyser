@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 import loganalyser.utils.Configuration;
 
+//FIXME Find a better way for configuration
 public interface Configurable {
 
 	default JSONObject configuration() {

@@ -149,7 +149,7 @@ public class Histogram extends LinkedHashMap<Period, Integer> {
 		return chart;
 	}
 
-	// TODO: check method
+	// TODO check format CSV method
 	@SuppressWarnings("unchecked")
 	private static String formatAsCSV(final Histogram pHistogram) {
 		final StringBuilder strB = new StringBuilder("Hours;");
