@@ -5,11 +5,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
 
+import org.json.JSONArray;
+
 import loganalyser.beans.devices.Device;
 import loganalyser.beans.devices.Device.DeviceType;
 import loganalyser.exceptions.RawLogException;
 import loganalyser.operators.LogExtractorListener;
-import loganalyser.operators.RawLogFormater;
 import loganalyser.operators.SoftLogExtractor;
 
 public class LogFile extends File {
@@ -37,7 +38,9 @@ public class LogFile extends File {
 			pListener.startExtraction();
 		}
 
-		this.mSoftLogs = SoftLogExtractor.sortLogsByDate(RawLogFormater.extractLogs(pFile, pListener));
+		JSONArray logs = SoftLogExtractor.extractJSON(pFile);
+		List<SoftLog> extractLogs = SoftLogExtractor.formatJSONArrayToSoftLogs(logs, pListener);
+		this.mSoftLogs = SoftLogExtractor.sortLogsByDate(extractLogs);
 
 		this.mDevices = SoftLogExtractor.getDevices(this.mSoftLogs);
 		if (pListener != null) {
@@ -54,12 +57,12 @@ public class LogFile extends File {
 			pListener.dayExtracted(this.mDayCount);
 		}
 
-		this.mUser = RawLogFormater.extractUserId(pFile);
+		this.mUser = SoftLogExtractor.extractUserId(logs.getJSONObject(0));
 		if (pListener != null) {
 			pListener.userExtracted(this.mUser);
 		}
 
-		this.mVeraId = RawLogFormater.extractVeraId(pFile);
+		this.mVeraId = SoftLogExtractor.extractVeraId(logs.getJSONObject(0));
 		if (pListener != null) {
 			pListener.veraExtracted(this.mVeraId);
 		}

@@ -94,7 +94,7 @@ public class SettingsTab extends MyCustomTab {
 				e -> updateParticipantLogsFolder());
 		participantSettings.add(mParticipantLogFolder);
 
-		mParticipantFile = new SettingEntry("Participant file", "The file that contains participant's routine data.",
+		mParticipantFile = new SettingEntry("Participant routine file", "The file that contains participant's routine data.",
 				LogToolSettings.getParticipantRoutineFile(), e -> updateFile(ROUTINE_FILE));
 		participantSettings.add(mParticipantFile);
 

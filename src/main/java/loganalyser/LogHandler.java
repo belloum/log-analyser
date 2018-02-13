@@ -52,7 +52,7 @@ public class LogHandler extends JFrame implements MenuSelector, FileSelector {
 				try {
 					new LogHandler();
 				} catch (final Exception e) {
-					e.printStackTrace();
+					log.error("Unable to start application: {}", e.getMessage(), e);
 				}
 			}
 		});
@@ -66,17 +66,17 @@ public class LogHandler extends JFrame implements MenuSelector, FileSelector {
 	public LogHandler() throws Exception {
 		super("Log Handler");
 		log.info("Start application-info");
-
-		setLayout(new BorderLayout());
-		setResizable(false);
-		setVisible(true);
-		setBounds(0, 50, Configuration.MAX_WIDTH, Configuration.MAX_HEIGHT);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		init();
 	}
 
 	private void init() {
 		log.info("init parameters");
+		setLayout(new BorderLayout());
+		setResizable(false);
+		setVisible(true);
+		setBounds(0, 50, Configuration.MAX_WIDTH, Configuration.MAX_HEIGHT);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
 		final JPanel leftFrame = new JPanel(new BorderLayout());
 		leftFrame.setBounds(0, 0, Configuration.LEFT_MENU_WIDTH, Configuration.MAX_HEIGHT);
 		leftFrame.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
@@ -133,6 +133,7 @@ public class LogHandler extends JFrame implements MenuSelector, FileSelector {
 
 	@Override
 	public void goTo(final String pSection) {
+		log.debug("Go to {}", pSection);
 		JPanel jPanel = new JPanel(new BorderLayout());
 
 		if (pSection.equalsIgnoreCase(OverviewTab.class.getSimpleName())) {
