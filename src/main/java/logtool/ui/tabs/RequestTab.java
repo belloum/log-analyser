@@ -184,6 +184,8 @@ public class RequestTab extends MyCustomTab {
 			}
 		});
 
+		// TODO Select a report type (daily, weekly)
+
 		final JPanel settingsValue = new JPanel(new GridLayout(4, 1));
 		settingsValue.add(mStartDate);
 		settingsValue.add(mEndDate);

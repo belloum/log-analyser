@@ -16,6 +16,14 @@ public class RequestExtractor {
 	}
 
 	private static final String REQUEST_LOG_FORMAT = "elasticdump --input=http://localhost:9200/logstash-%s/event --sourceOnly --output=%s --searchBody \"{\\\"query\\\":{\\\"term\\\":{\\\"vera_serial\\\":\\\"%s\\\"}}}\"";
+
+	/*
+	 * return String.format(Locale.FRANCE,
+	 * "elasticdump --input=http://localhost:9200/logstash-%s --sourceOnly --output=%s --searchBody '{\"query\":{\"term\":{\"report_type\":\"%s\"}}}'%s"
+	 * , formattedPeriod, outputFile, report, silentMod);
+	 */
+	private static final String REQUEST_REPORT_FORMAT = "elasticdump --input=http://localhost:9200/logstash-%s --sourceOnly --output=%s --searchBody \"{\\\"query\\\":{\\\"term\\\":{\\\"report_type\\\":\\\"%s\\\"}}}\"";
+
 	private static final String TEMP_FILE = "temp";
 	private static final SimpleDateFormat DAY_FORMAT = new SimpleDateFormat("yyyy.MM.dd");
 
@@ -27,7 +35,8 @@ public class RequestExtractor {
 		return request(RequestType.ReportRequest, pOutputFile, pVeraId, pDay);
 	}
 
-	private static String request(final RequestType pRequestType, String pOutputFile, final String pVeraId, final String pDay) {
+	private static String request(final RequestType pRequestType, String pOutputFile, final String pVeraId,
+			final String pDay) {
 		String request = null;
 		pOutputFile = pOutputFile.endsWith(".json") ? pOutputFile : String.format("%s.json", pOutputFile);
 		switch (pRequestType) {
@@ -35,14 +44,15 @@ public class RequestExtractor {
 			request = String.format(REQUEST_LOG_FORMAT, pDay, pOutputFile, pVeraId);
 			break;
 		case ReportRequest:
-			request = "Not implemented yet";
+			// TODO Update report type (daily/weekly) here
+			request = String.format(REQUEST_REPORT_FORMAT, pDay, pOutputFile, "daily");
 			break;
 		}
 		return request;
 	}
 
-	private static String iterateOverPeriod(final RequestType pRequestType, final String pOutputFile, final String pVeraId,
-			final String pStartDay, final String pEndDay) throws ParseException {
+	private static String iterateOverPeriod(final RequestType pRequestType, final String pOutputFile,
+			final String pVeraId, final String pStartDay, final String pEndDay) throws ParseException {
 
 		final Date date = DAY_FORMAT.parse(pStartDay);
 		final Date endDate = DAY_FORMAT.parse(pEndDay);
@@ -69,8 +79,6 @@ public class RequestExtractor {
 				requests.add(pRequestType == RequestType.LogRequest
 						? logRequest(pOutputFile, pVeraId, DAY_FORMAT.format(calendar.getTime()))
 						: reportRequest(pOutputFile, pVeraId, DAY_FORMAT.format(calendar.getTime())));
-				// requests.add(logRequest(pOutputFile, pVeraId,
-				// DAY_FORMAT.format(calendar.getTime())));
 				requests.add(copyFileContentToDestFile(pOutputFile, TEMP_FILE));
 				calendar.add(Calendar.DATE, 1);
 			}
@@ -82,13 +90,13 @@ public class RequestExtractor {
 
 	}
 
-	public static String logRequests(final String pOutputFile, final String pVeraId, final String pStartDay, final String pEndDay)
-			throws ParseException {
+	public static String logRequests(final String pOutputFile, final String pVeraId, final String pStartDay,
+			final String pEndDay) throws ParseException {
 		return iterateOverPeriod(RequestType.LogRequest, pOutputFile, pVeraId, pStartDay, pEndDay);
 	}
 
-	public static String reportRequests(final String pOutputFile, final String pVeraId, final String pStartDay, final String pEndDay)
-			throws ParseException {
+	public static String reportRequests(final String pOutputFile, final String pVeraId, final String pStartDay,
+			final String pEndDay) throws ParseException {
 		return iterateOverPeriod(RequestType.ReportRequest, pOutputFile, pVeraId, pStartDay, pEndDay);
 	}
 
