@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.GridLayout;
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -11,10 +12,12 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import loganalyser.old.ui.CustomComponent;
+import loganalyser.operators.FileExtractor;
 import loganalyser.ui.components.FileChooser;
 import loganalyser.ui.components.SettingEntry;
 import loganalyser.utils.Configuration;
@@ -22,6 +25,11 @@ import loganalyser.utils.LogToolSettings;
 
 public class SettingsTab extends MyCustomTab {
 
+	private static final String SAVED_HISTOGRAMS_FOLDER = "saved histograms folder";
+	private static final String SAVED_CSV_FOLDER = "saved CSV folder";
+	private static final String SAVED_CLEANED_LOGS_FOLDER = "saved cleaned logs folder";
+	private static final String PARTICIPANT_LOGS_FOLDER = "Participant-logs folder";
+	private static final String LOG_TOOL_LOG_FOLDER = "LogTool-log folder";
 	// Kind of file which can be updated
 	private static final String ROUTINE_FILE = "routine_file";
 	private static final String PARTICIPANT = "participant";
@@ -47,7 +55,7 @@ public class SettingsTab extends MyCustomTab {
 		tabbedPane.addTab("Generic", null, genericSettings(), "Generic settings");
 		tabbedPane.addTab("Participant", null, participantSettings(), "Handle participant settings");
 		tabbedPane.addTab("Scripts", null, new JLabel("Not implemented yet"), "Not implemented yet");
-		tabbedPane.addTab("LogTool logs", null, logSettings(), "Handle LogTool log settings");
+		tabbedPane.addTab("LogTool logs", null, logToolLogsSettings(), "Handle LogTool log settings");
 
 		return tabbedPane;
 	}
@@ -57,28 +65,28 @@ public class SettingsTab extends MyCustomTab {
 		genericSettings.add(new JLabel(configuration().getJSONObject("settings_description").getString("generic")));
 
 		mHistogramFolder = new SettingEntry("Saved histograms folder", "The default folder for saved histograms.",
-				LogToolSettings.getSavedHistogramsFolder(), e -> updateSavedHistogramsFolder(), true);
+				LogToolSettings.getSavedHistogramsFolder(), e -> updateFolder(SAVED_HISTOGRAMS_FOLDER), true);
 		genericSettings.add(mHistogramFolder);
 
 		mCSVFolder = new SettingEntry("Saved CSV folder", "The default folder for saved CSV.",
-				LogToolSettings.getSavedHistogramsFolder(), e -> System.out.println("Not implemented"), true);
+				LogToolSettings.getSavedCSVFolder(), e -> updateFolder(SAVED_CSV_FOLDER), true);
 		genericSettings.add(mCSVFolder);
 
 		mCleanLogFileFolder = new SettingEntry("Saved cleaned log file folder",
-				"The default folder for saved cleaned log file.", LogToolSettings.getSavedHistogramsFolder(),
-				e -> System.out.println("Not implemented"), true);
+				"The default folder for saved cleaned log file.", LogToolSettings.getCleanedLogsFolder(),
+				e -> updateFolder(SAVED_CLEANED_LOGS_FOLDER), true);
 		genericSettings.add(mCleanLogFileFolder);
 
 		return CustomComponent.addEmptyBorder(genericSettings, 5);
 	}
 
-	private JPanel logSettings() {
+	private JPanel logToolLogsSettings() {
 		final JPanel logSettings = new JPanel(new GridLayout(5, 1));
 
 		logSettings.add(new JLabel(configuration().getJSONObject("settings_description").getString("logtool")));
 
 		mLogFolder = new SettingEntry("Log folder", "The folder with log files.", LogToolSettings.getLogToolLogFolder(),
-				e -> updateLogFolder(), true);
+				e -> updateFolder(LOG_TOOL_LOG_FOLDER), true);
 		logSettings.add(mLogFolder);
 
 		mLogFile = new SettingEntry("Generic logs file", "The file where logs are gathered.",
@@ -100,8 +108,8 @@ public class SettingsTab extends MyCustomTab {
 				.add(new JLabel(configuration().getJSONObject("settings_description").getString("participant")));
 
 		mParticipantLogFolder = new SettingEntry("Participant logs folder",
-				"The folder that contains participant logs.", LogToolSettings.getParticipantLogFolder(),
-				e -> updateParticipantLogsFolder(), true);
+				"The folder that contains participant logs.", LogToolSettings.getParticipantLogsFolder(),
+				e -> updateFolder(PARTICIPANT_LOGS_FOLDER), true);
 		participantSettings.add(mParticipantLogFolder);
 
 		mParticipantFile = new SettingEntry("Participant routine file",
@@ -110,44 +118,6 @@ public class SettingsTab extends MyCustomTab {
 		participantSettings.add(mParticipantFile);
 
 		return CustomComponent.addEmptyBorder(participantSettings, 5);
-	}
-
-	private void updateParticipantLogsFolder() {
-		final FileChooser folderPicker = updatePicker(LogToolSettings.getParticipantLogFolder(),
-				"Select the participant logs folder");
-		folderPicker.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		if (folderPicker.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-			final File selectedFile = folderPicker.getSelectedFile();
-			log.debug("Try to update participant logs folder with {}", selectedFile.getName());
-			LogToolSettings.setParticipantLogsFolder(selectedFile);
-			mParticipantLogFolder.updateProperty(selectedFile.getPath());
-		}
-		return;
-	}
-
-	private void updateLogFolder() {
-		final FileChooser folderPicker = updatePicker(LogToolSettings.getLogToolLogFolder(), "Select a log folder");
-		folderPicker.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		if (folderPicker.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-			final File selectedFile = folderPicker.getSelectedFile();
-			log.debug("Try to update logFolder with {}", selectedFile.getName());
-			LogToolSettings.setLogToolLogFolder(selectedFile);
-			mLogFolder.updateProperty(selectedFile.getPath());
-		}
-		return;
-	}
-
-	private void updateSavedHistogramsFolder() {
-		final FileChooser folderPicker = updatePicker(LogToolSettings.getSavedHistogramsFolder(),
-				"Select a folder for saved histograms");
-		folderPicker.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		if (folderPicker.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-			final File selectedFile = folderPicker.getSelectedFile();
-			log.debug("Try to update saved histograms folder with {}", selectedFile.getName());
-			LogToolSettings.setSavedHistogramsFolder(selectedFile);
-			mHistogramFolder.updateProperty(selectedFile.getPath());
-		}
-		return;
 	}
 
 	private void updateFile(final String pFileToUpdate) {
@@ -170,6 +140,18 @@ public class SettingsTab extends MyCustomTab {
 			break;
 		}
 		if (selectedFile != null) {
+
+			// TODO Check the file extension
+			if (!selectedFile.getParentFile().exists()) {
+				selectedFile.mkdirs();
+				log.info("Making directories {}", selectedFile.getParentFile().getAbsolutePath());
+			}
+
+			if (!selectedFile.exists()) {
+				FileExtractor.saveFile(new JSONObject().toString(), selectedFile);
+				log.info("Create a new Participant routine file {}", selectedFile);
+			}
+
 			switch (pFileToUpdate) {
 			case LOG:
 				LogToolSettings.setGenericLogFile(selectedFile.getName());
@@ -204,6 +186,78 @@ public class SettingsTab extends MyCustomTab {
 			return picker.getSelectedFile();
 		} else {
 			return null;
+		}
+	}
+
+	private void updateFolder(String pFolder) {
+		String currentDirectoryPath, dialogTitle;
+		switch (pFolder) {
+		case LOG_TOOL_LOG_FOLDER:
+			currentDirectoryPath = LogToolSettings.getLogToolLogFolder();
+			dialogTitle = "Select the LogTool log folder";
+			break;
+		case PARTICIPANT_LOGS_FOLDER:
+			currentDirectoryPath = LogToolSettings.getParticipantLogsFolder();
+			dialogTitle = "Select the participant logs folder";
+			break;
+		case SAVED_HISTOGRAMS_FOLDER:
+			currentDirectoryPath = LogToolSettings.getSavedHistogramsFolder();
+			dialogTitle = "Select the saved histograms folder";
+			break;
+		case SAVED_CSV_FOLDER:
+			currentDirectoryPath = LogToolSettings.getSavedCSVFolder();
+			dialogTitle = "Select the saved CSV folder";
+			break;
+		case SAVED_CLEANED_LOGS_FOLDER:
+			currentDirectoryPath = LogToolSettings.getCleanedLogsFolder();
+			dialogTitle = "Select the saved cleand logs folder";
+			break;
+		default:
+			log.warn("{} can not be configure", pFolder);
+			return;
+		}
+
+		FileChooser folderPicker = new FileChooser(new File(currentDirectoryPath), dialogTitle);
+		folderPicker.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+		if (folderPicker.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+			final File selectedFile = folderPicker.getSelectedFile();
+
+			if (!selectedFile.exists()) {
+				selectedFile.mkdirs();
+				try {
+					selectedFile.createNewFile();
+				} catch (IOException e) {
+					log.error("{} could not have been created because of: {}", selectedFile.getPath(), e.getMessage(),
+							e);
+					return;
+				}
+			}
+
+			switch (pFolder) {
+			case LOG_TOOL_LOG_FOLDER:
+				LogToolSettings.setLogToolLogFolder(selectedFile);
+				mLogFolder.updateProperty(selectedFile.getPath());
+				break;
+			case PARTICIPANT_LOGS_FOLDER:
+				LogToolSettings.setParticipantLogsFolder(selectedFile);
+				mParticipantLogFolder.updateProperty(selectedFile.getPath());
+				break;
+			case SAVED_HISTOGRAMS_FOLDER:
+				LogToolSettings.setSavedHistogramsFolder(selectedFile);
+				mHistogramFolder.updateProperty(selectedFile.getPath());
+				break;
+			case SAVED_CSV_FOLDER:
+				LogToolSettings.setSavedCSVFolder(selectedFile);
+				mCSVFolder.updateProperty(selectedFile.getPath());
+				break;
+			case SAVED_CLEANED_LOGS_FOLDER:
+				LogToolSettings.setSavedCleanedLogsFolder(selectedFile);
+				mCleanLogFileFolder.updateProperty(selectedFile.getPath());
+				break;
+			default:
+				break;
+			}
 		}
 	}
 

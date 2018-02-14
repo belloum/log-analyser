@@ -66,7 +66,7 @@ public class LogFrame extends JPanel implements LogExtractorListener, Participan
 		info.add(mFileName);
 		info.add(mLogCount);
 
-		mFileChooser = new FileChooser(new File(LogToolSettings.getParticipantLogFolder()), "Select a log file",
+		mFileChooser = new FileChooser(new File(LogToolSettings.getParticipantLogsFolder()), "Select a log file",
 				Arrays.asList(new FileNameExtensionFilter("Log file", "json")));
 
 		// button
