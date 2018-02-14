@@ -39,7 +39,7 @@
 						<manifest>
 							<addClasspath>true</addClasspath>
 							<classpathPrefix>lib/</classpathPrefix>
-							<mainClass>loganalyser.LogTool</mainClass>
+							<mainClass>logtool.LogTool</mainClass>
 						</manifest>
 					</archive>
 				</configuration>

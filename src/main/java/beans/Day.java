@@ -15,7 +15,7 @@ import beans.activities.dailyactivities.WakeUp;
 import beans.activities.dailyactivities.meals.Breakfast;
 import beans.activities.dailyactivities.meals.Dinner;
 import beans.activities.dailyactivities.meals.Lunch;
-import loganalyser.beans.SoftLog;
+import logtool.beans.SoftLog;
 import operators.csv.CSVCleaner;
 import operators.csv.CSVDailyActivity;
 import operators.csv.CSVExit;

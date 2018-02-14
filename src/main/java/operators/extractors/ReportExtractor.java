@@ -12,7 +12,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import beans.DailyReport;
-import loganalyser.operators.FileExtractor;
+import logtool.operators.FileExtractor;
 
 public class ReportExtractor extends FileExtractor {
 

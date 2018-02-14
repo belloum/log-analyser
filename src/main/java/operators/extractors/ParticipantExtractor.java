@@ -9,7 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import beans.participants.Participant;
-import loganalyser.operators.FileExtractor;
+import logtool.operators.FileExtractor;
 
 public class ParticipantExtractor extends FileExtractor {
 
