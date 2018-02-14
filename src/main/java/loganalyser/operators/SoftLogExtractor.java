@@ -17,11 +17,10 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import beans.Period;
 import loganalyser.beans.SoftLog;
 import loganalyser.beans.devices.Device;
 import loganalyser.beans.devices.Device.DeviceType;
-import loganalyser.exceptions.RawLogException;
+import loganalyser.exceptions.LogExtractorException;
 import loganalyser.utils.Utils;
 
 public class SoftLogExtractor extends FileExtractor {
@@ -46,7 +45,7 @@ public class SoftLogExtractor extends FileExtractor {
 	/*
 	 * Handling RawLogFiles
 	 */
-	public static JSONArray extractJSONFromRawLogFile(File pRawLogFile) throws RawLogException {
+	public static JSONArray extractJSONFromRawLogFile(File pRawLogFile) throws LogExtractorException {
 		String content;
 		JSONArray jArr = new JSONArray();
 
@@ -60,28 +59,29 @@ public class SoftLogExtractor extends FileExtractor {
 			jArr = new JSONArray(content);
 		} catch (IOException e) {
 			log.error("Can not extract JSON from {}, because of: {}", pRawLogFile.getPath(), e.getMessage(), e);
-			throw new RawLogException(e.getMessage());
+			throw new LogExtractorException(e.getMessage());
 		} finally {
 			validateRawLogFile(jArr);
 		}
 		return jArr;
 	}
 
-	private static String extractPropertyFromRawLog(JSONObject pJRawLog, String pPropertyKey) throws RawLogException {
+	private static String extractPropertyFromRawLog(JSONObject pJRawLog, String pPropertyKey)
+			throws LogExtractorException {
 		log.trace("Extract {} from {}", pPropertyKey, pJRawLog);
 		try {
 			return pJRawLog.getString("vera_serial");
 		} catch (JSONException e) {
 			log.error("Can not extract {} from {} because of: {}", pPropertyKey, pJRawLog, e.getMessage(), e);
-			throw new RawLogException(e.getMessage());
+			throw new LogExtractorException(e.getMessage());
 		}
 	}
 
-	public static String extractVeraId(JSONObject pFirsRawtLog) throws RawLogException {
+	public static String extractVeraId(JSONObject pFirsRawtLog) throws LogExtractorException {
 		return extractPropertyFromRawLog(pFirsRawtLog, "vera_serial");
 	}
 
-	public static String extractUserId(JSONObject pFirsRawtLog) throws RawLogException {
+	public static String extractUserId(JSONObject pFirsRawtLog) throws LogExtractorException {
 		return extractPropertyFromRawLog(pFirsRawtLog, "user");
 	}
 
@@ -96,7 +96,7 @@ public class SoftLogExtractor extends FileExtractor {
 			JSONObject jLog = jArray.getJSONObject(i);
 			try {
 				myLogs.add(new SoftLog(jLog));
-			} catch (RawLogException ignored) {
+			} catch (LogExtractorException ignored) {
 				log.debug("Exception while extracting logs: {}", ignored.getMessage(), ignored);
 			} finally {
 				if (mExtractionListeners != null) {
@@ -108,7 +108,7 @@ public class SoftLogExtractor extends FileExtractor {
 		return myLogs;
 	}
 
-	private static void validateRawLogFile(JSONArray pRawLogs) throws RawLogException {
+	private static void validateRawLogFile(JSONArray pRawLogs) throws LogExtractorException {
 		String error;
 		if (mExtractionListeners != null) {
 			mExtractionListeners.validateRawLogFile();
@@ -119,19 +119,19 @@ public class SoftLogExtractor extends FileExtractor {
 			if (!jLog.has("user")) {
 				error = "Invalid JSONFormat, ['user'] field not found";
 				log.error("{} in {}", error, jLog);
-				throw new RawLogException(error);
+				throw new LogExtractorException(error);
 			} else if (!jLog.has("vera_serial")) {
 				error = "Invalid JSONFormat, ['vera_serial'] field not found";
 				log.error("{} in {}", error, jLog);
-				throw new RawLogException(error);
+				throw new LogExtractorException(error);
 			} else if (!jLog.has("vera_serial")) {
 				error = "Invalid JSONFormat, ['event'] field not found";
 				log.error("{} in {}", error, jLog);
-				throw new RawLogException(error);
+				throw new LogExtractorException(error);
 			} else if (!jLog.has("vera_serial")) {
 				error = "Invalid JSONFormat, ['device'] field not found";
 				log.error("{} in {}", error, jLog);
-				throw new RawLogException(error);
+				throw new LogExtractorException(error);
 			} else {
 				if (mExtractionListeners != null) {
 					float progress = ((float) i * 100) / pRawLogs.length();
@@ -164,10 +164,6 @@ public class SoftLogExtractor extends FileExtractor {
 	public static List<SoftLog> filterByHour(List<SoftLog> pLogs, String pHourLabel) {
 		return sortLogsByDate(
 				pLogs.stream().filter(log -> log.getHourLabel().equals(pHourLabel)).collect(Collectors.toList()));
-	}
-
-	public static List<SoftLog> filterByHour(List<SoftLog> pLogs, Period pTSLimits) {
-		return sortLogsByDate(pLogs.stream().filter(log -> log.isBetweenHours(pTSLimits)).collect(Collectors.toList()));
 	}
 
 	public static List<SoftLog> filterByIds(List<SoftLog> pLogs, List<String> pDeviceIds) {

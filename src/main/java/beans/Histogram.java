@@ -80,7 +80,7 @@ public class Histogram extends LinkedHashMap<Period, Integer> {
 			calendar.add(Calendar.SECOND, 1);
 		}
 
-		final String lastLabel = Period.getFriendlyLabel(histogramItems.getLast());
+		final String lastLabel = histogramItems.getLast().getFriendlyLabel();
 		if (!lastLabel.contains("23:59")) {
 			histogramItems.removeLast();
 			histogramItems.add(new Period(lastLabel.split(" - ")[0], "23:59"));
@@ -118,8 +118,7 @@ public class Histogram extends LinkedHashMap<Period, Integer> {
 		final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
 		if (!pSplitByDevice) {
-			pHistogram.forEach(
-					(tsLimit, value) -> dataset.setValue(value, "occurence", Period.getFriendlyLabel(tsLimit)));
+			pHistogram.forEach((tsLimit, value) -> dataset.setValue(value, "occurence", tsLimit.getFriendlyLabel()));
 		} else {
 			@SuppressWarnings("unchecked")
 			final List<Device> pDevices = SoftLogExtractor.getDevices((List<SoftLog>) pHistogram.mDataSet);
@@ -130,7 +129,7 @@ public class Histogram extends LinkedHashMap<Period, Integer> {
 									.filter(log -> ((SoftLog) log).getDevice().getId().equals(device.getId())
 											&& ((SoftLog) log).isBetweenHours(tsLimit))
 									.count(),
-							device.getId(), Period.getFriendlyLabel(tsLimit));
+							device.getId(), tsLimit.getFriendlyLabel());
 				});
 			});
 		}
@@ -153,7 +152,7 @@ public class Histogram extends LinkedHashMap<Period, Integer> {
 	@SuppressWarnings("unchecked")
 	private static String formatAsCSV(final Histogram pHistogram) {
 		final StringBuilder strB = new StringBuilder("Hours;");
-		pHistogram.forEach((ts, count) -> strB.append(Period.getFriendlyLabel(ts)).append(";"));
+		pHistogram.forEach((ts, count) -> strB.append(ts.getFriendlyLabel()).append(";"));
 		strB.append("\n").append("Logs;");
 		strB.append(StringUtils.join(pHistogram.values(), ";"));
 

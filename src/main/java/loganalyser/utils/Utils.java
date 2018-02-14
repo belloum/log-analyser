@@ -6,6 +6,9 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import loganalyser.beans.SoftLog;
+import loganalyser.exceptions.PeriodException;
 import loganalyser.operators.SoftLogExtractor;
 
 public class Utils {
@@ -36,6 +40,26 @@ public class Utils {
 	public static Image scaleImg(final File pImg, final int pWidth, final int pHeight) throws IOException {
 		return new ImageIcon(ImageIO.read(pImg)).getImage().getScaledInstance(pWidth, pHeight,
 				java.awt.Image.SCALE_SMOOTH);
+	}
+
+	public static Date getHourFromString(final String pHour) throws PeriodException {
+		if (!Configuration.HOUR_PATTERN.matcher(pHour).matches()) {
+			throw new PeriodException(PeriodException.INVALID_PERIOD.concat(": "));
+		} else {
+			final int hour = Integer.parseInt(pHour.split(":")[0]);
+			final int minute = Integer.parseInt(pHour.split(":")[1]);
+			if (hour > 23) {
+				throw new PeriodException(String.format("%s: %d", PeriodException.INVALID_HOUR, hour));
+			} else if (minute > 59) {
+				throw new PeriodException(String.format("%s: %d", PeriodException.INVALID_MINUTE, minute));
+			} else {
+				try {
+					return new SimpleDateFormat(Configuration.HOUR_FORMAT).parse(pHour);
+				} catch (final ParseException e) {
+					throw new PeriodException(String.format("%s: %s", PeriodException.UNPARSABLE, pHour));
+				}
+			}
+		}
 	}
 
 	public static void copyToClipboard(final String pTextToCopy) {

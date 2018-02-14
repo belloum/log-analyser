@@ -18,7 +18,7 @@ import loganalyser.beans.devices.Device;
 import loganalyser.beans.devices.ElectricMeter.ElectricMeterState;
 import loganalyser.beans.devices.MotionDetector.MotionDetectorState;
 import loganalyser.exceptions.PeriodException;
-import loganalyser.exceptions.RawLogException;
+import loganalyser.exceptions.LogExtractorException;
 
 public class SoftLog {
 
@@ -33,7 +33,7 @@ public class SoftLog {
 		this.mDevice = pDevice;
 	}
 
-	public SoftLog(JSONObject pJSON) throws RawLogException {
+	public SoftLog(JSONObject pJSON) throws LogExtractorException {
 
 		DateFormat utcFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 		utcFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -57,11 +57,11 @@ public class SoftLog {
 				break;
 			}
 		} catch (JSONException exception) {
-			String error = new StringBuffer(RawLogException.MALFORMED_LOG)
+			String error = new StringBuffer(LogExtractorException.MALFORMED_LOG)
 					.append(String.format(": %s", exception.getMessage())).toString();
-			throw new RawLogException(error);
+			throw new LogExtractorException(error);
 		} catch (ParseException exception) {
-			throw new RawLogException(RawLogException.INVALID_TIMESTAMP);
+			throw new LogExtractorException(LogExtractorException.INVALID_TIMESTAMP);
 		}
 
 	}

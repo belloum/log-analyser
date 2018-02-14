@@ -21,7 +21,7 @@ import loganalyser.beans.LogFile;
 import loganalyser.beans.SoftLog;
 import loganalyser.beans.devices.Device;
 import loganalyser.beans.devices.Device.DeviceType;
-import loganalyser.exceptions.RawLogException;
+import loganalyser.exceptions.LogExtractorException;
 import loganalyser.operators.FileSelector;
 import loganalyser.operators.LogExtractorListener;
 import loganalyser.operators.SoftLogExtractor;
@@ -93,7 +93,7 @@ public class LogFrame extends JPanel implements LogExtractorListener, Participan
 				LogFrame.this.mProgressBar.showProgress();
 				try {
 					validFile(new LogFile(pSelectedFile, LogFrame.this));
-				} catch (final RawLogException e) {
+				} catch (final LogExtractorException e) {
 					System.err.println(e.getMessage());
 					invalidFile(pSelectedFile, e.getMessage());
 				} finally {
@@ -103,7 +103,7 @@ public class LogFrame extends JPanel implements LogExtractorListener, Participan
 		}).start();
 	}
 
-	public void validFile(final LogFile pLogFile) throws RawLogException {
+	public void validFile(final LogFile pLogFile) throws LogExtractorException {
 		mFileName.setValue(pLogFile.getName());
 		mLogCount.setValue(String.format("%d", pLogFile.getLogCount()));
 
@@ -113,9 +113,9 @@ public class LogFrame extends JPanel implements LogExtractorListener, Participan
 					mFileListener.validFile(pLogFile);
 				}
 			} else {
-				throw new RawLogException("Unable to save cleaned list to tempory file");
+				throw new LogExtractorException("Unable to save cleaned list to tempory file");
 			}
-		} catch (JSONException | IOException | RawLogException e) {
+		} catch (JSONException | IOException | LogExtractorException e) {
 			e.printStackTrace();
 		}
 	}

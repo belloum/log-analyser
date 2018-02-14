@@ -6,9 +6,9 @@ public class PeriodException extends Exception {
 
 	public static final String INVALID_PERIOD = "Invalid period";
 	public static final String START_AFTER_END = String.format("%s: The period ends before it starts.", INVALID_PERIOD);
-	public static final String UNPARSABLE = String.format("Period can not be parse");
-	public static final String INVALID_HOUR = String.format("Invalid hour");
-	public static final String INVALID_MINUTE = String.format("Invalid minute");
+	public static final String UNPARSABLE = "Period can not be parse";
+	public static final String INVALID_HOUR = "Invalid hour";
+	public static final String INVALID_MINUTE = "Invalid minute";
 
 	/**
 	 * Instantiates a new <code>PeriodException</code>.

@@ -8,9 +8,15 @@ import java.util.regex.Pattern;
 public class Configuration {
 
 	/*
+	 * FORMATS
+	 */
+	public static final String HOUR_FORMAT = "HH:mm";
+
+	/*
 	 * PATTERNS
 	 */
 	public static final Pattern VERA_PATTERN = Pattern.compile("^\\d{8}$");
+	public static final Pattern HOUR_PATTERN = Pattern.compile("^\\d{2}:\\d{2}$");
 
 	public static final File ROOT_FOLDER = Paths.get("").toFile().getParentFile();
 	public static final File RESOURCES_FOLDER = new File(ROOT_FOLDER, "res");

@@ -3,7 +3,7 @@ package loganalyser.beans.devices;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import loganalyser.exceptions.RawLogException;
+import loganalyser.exceptions.LogExtractorException;
 
 public class Device {
 
@@ -57,7 +57,7 @@ public class Device {
 		return true;
 	}
 
-	public Device(JSONObject pJSON) throws RawLogException {
+	public Device(JSONObject pJSON) throws LogExtractorException {
 		try {
 			this.mId = pJSON.getString("name");
 			this.mLocation = pJSON.getString("room");
@@ -71,9 +71,9 @@ public class Device {
 				this.mType = DeviceType.Other;
 			}
 		} catch (JSONException exception) {
-			String error = new StringBuffer(RawLogException.MALFORMED_LOG)
+			String error = new StringBuffer(LogExtractorException.MALFORMED_LOG)
 					.append(String.format(": %s", exception.getMessage())).toString();
-			throw new RawLogException(error);
+			throw new LogExtractorException(error);
 		}
 	}
 

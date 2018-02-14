@@ -9,15 +9,12 @@ import org.json.JSONArray;
 
 import loganalyser.beans.devices.Device;
 import loganalyser.beans.devices.Device.DeviceType;
-import loganalyser.exceptions.RawLogException;
+import loganalyser.exceptions.LogExtractorException;
 import loganalyser.operators.LogExtractorListener;
 import loganalyser.operators.SoftLogExtractor;
 
 public class LogFile extends File {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	private final String mUser;
@@ -27,11 +24,11 @@ public class LogFile extends File {
 	private final List<DeviceType> mDeviceTypes;
 	private final Integer mDayCount;
 
-	public LogFile(final File pFile) throws RawLogException {
+	public LogFile(final File pFile) throws LogExtractorException {
 		this(pFile, null);
 	}
 
-	public LogFile(final File pFile, final LogExtractorListener pListener) throws RawLogException {
+	public LogFile(final File pFile, final LogExtractorListener pListener) throws LogExtractorException {
 		super(pFile.getPath());
 
 		if (pListener != null) {
@@ -40,8 +37,8 @@ public class LogFile extends File {
 
 		SoftLogExtractor.addLogExtractorListener(pListener);
 
-		JSONArray logs = SoftLogExtractor.extractJSONFromRawLogFile(pFile);
-		List<SoftLog> extractLogs = SoftLogExtractor.formatJSONArrayToSoftLogs(logs);
+		final JSONArray logs = SoftLogExtractor.extractJSONFromRawLogFile(pFile);
+		final List<SoftLog> extractLogs = SoftLogExtractor.formatJSONArrayToSoftLogs(logs);
 		this.mSoftLogs = SoftLogExtractor.sortLogsByDate(extractLogs);
 
 		this.mDevices = SoftLogExtractor.getDevices(this.mSoftLogs);

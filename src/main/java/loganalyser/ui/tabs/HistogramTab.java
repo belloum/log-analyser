@@ -86,8 +86,8 @@ public class HistogramTab extends LogTab implements ItemListener, HistogramProgr
 	}
 
 	private void save() {
-		// FIXME choose a default folder
-		final FileChooser fc = new FileChooser(new File(LogToolSettingsHandler.getSavedHistogramsFolder()), "Save histogram");
+		final FileChooser fc = new FileChooser(new File(LogToolSettingsHandler.getSavedHistogramsFolder()),
+				"Save histogram");
 
 		if (fc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
 			File output = fc.getSelectedFile();

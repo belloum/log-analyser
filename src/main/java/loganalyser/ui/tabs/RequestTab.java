@@ -57,9 +57,7 @@ public class RequestTab extends MyCustomTab {
 		// Center
 		final JPanel center = new JPanel(new BorderLayout());
 		center.setLayout(new GridLayout(1, 2));
-		// center.add(settingsPanel(), BorderLayout.PAGE_START);
 		center.add(settingsPanel());
-		// center.add(requestPanel(), BorderLayout.CENTER);
 		center.add(requestPanel());
 
 		content.add(instructionsPanel(), BorderLayout.PAGE_START);
@@ -249,7 +247,7 @@ public class RequestTab extends MyCustomTab {
 	}
 
 	private boolean validVera(final String pVeraId) {
-		return Configuration.VERA_PATTERN.matcher(pVeraId).find();
+		return Configuration.VERA_PATTERN.matcher(pVeraId).matches();
 	}
 
 	private boolean validDate(final String pDate) {

@@ -6,3 +6,7 @@
 bin
 /target/
 /logs/*
+/temp/*
+/output/histograms/*
+/output/csv/*
+/output/cleaned-logs/*

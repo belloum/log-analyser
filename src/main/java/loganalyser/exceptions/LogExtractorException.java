@@ -1,6 +1,6 @@
 package loganalyser.exceptions;
 
-public class RawLogException extends Exception {
+public class LogExtractorException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 
@@ -11,24 +11,24 @@ public class RawLogException extends Exception {
 	public static final String INVALID_DEVICE = "Invalid device type";
 
 	/**
-	 * Instantiates a new <code>RawLogException</code>.
+	 * Instantiates a new <code>LogExtractorException</code>.
 	 *
 	 * @param pMessage
 	 *            the message
 	 */
-	public RawLogException(final String pMessage) {
+	public LogExtractorException(final String pMessage) {
 		super(pMessage);
 	}
 
 	/**
-	 * Instantiates a new <code>RawLogException</code>.
+	 * Instantiates a new <code>LogExtractorException</code>.
 	 *
 	 * @param pMessage
 	 *            the message
 	 * @param pException
 	 *            the exception
 	 */
-	public RawLogException(final String pMessage, final Throwable pException) {
+	public LogExtractorException(final String pMessage, final Throwable pException) {
 		super(pMessage, pException);
 	}
 
