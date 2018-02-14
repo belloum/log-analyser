@@ -21,7 +21,7 @@ import operators.extractors.ReportExtractor;
 
 public class DailyReport {
 
-	private Date date;
+	private final Date date;
 	private WakeUp wakeUp;
 	private GoToBed goToBed;
 	private Breakfast breakfast;
@@ -29,8 +29,8 @@ public class DailyReport {
 	private Dinner dinner;
 	private List<Exit> exits;
 
-	public DailyReport(Date pDate, WakeUp pWakeUp, GoToBed pGoToBed, Breakfast pBreakfast, Lunch pLunch, Dinner pDinner,
-			List<Exit> pExits) {
+	public DailyReport(final Date pDate, final WakeUp pWakeUp, final GoToBed pGoToBed, final Breakfast pBreakfast,
+			final Lunch pLunch, final Dinner pDinner, final List<Exit> pExits) {
 		this.date = pDate;
 		this.wakeUp = pWakeUp;
 		this.breakfast = pBreakfast;
@@ -44,7 +44,7 @@ public class DailyReport {
 		JSONObject activity;
 		JSONArray arrActivity;
 
-		DateFormat utcFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+		final DateFormat utcFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 		utcFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 		this.date = utcFormat.parse(jsonReport.getString("@timestamp"));
 		jsonReport = ReportExtractor.extractJSONReport(jsonReport);
@@ -93,7 +93,7 @@ public class DailyReport {
 			// }
 			// }
 
-		} catch (JSONException e) {
+		} catch (final JSONException e) {
 			e.printStackTrace();
 		}
 	}
@@ -132,7 +132,7 @@ public class DailyReport {
 		return exits;
 	}
 
-	public boolean compareTo(DailyReport diasuiteReport) {
+	public boolean compareTo(final DailyReport diasuiteReport) {
 		String msg;
 
 		if (diasuiteReport == null) {

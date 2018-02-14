@@ -97,7 +97,7 @@ public class Day {
 	 * @param label
 	 *            The label <i>(e.g: 2017-03-12 Sun)</i>
 	 */
-	public Day(String label) {
+	public Day(final String label) {
 		this.label = label;
 	}
 
@@ -111,7 +111,7 @@ public class Day {
 	 * @param sleeps
 	 *            The list of {@link SleepPeriod} extract with {@link CSVSleep}
 	 */
-	public Day(String label, Exit[] exits, SleepPeriod[] sleeps) {
+	public Day(final String label, final Exit[] exits, final SleepPeriod[] sleeps) {
 		this.label = label;
 		this.exits = exits;
 		this.sleeps = sleeps;
@@ -150,7 +150,7 @@ public class Day {
 	 * @param wakeUp
 	 *            The {@link WakeUp} score extract with {@link CSVDailyActivity}
 	 */
-	public void setWakeUp(WakeUp wakeUp) {
+	public void setWakeUp(final WakeUp wakeUp) {
 		this.wakeUp = wakeUp;
 	}
 
@@ -158,10 +158,9 @@ public class Day {
 	 * Sets the daily {@link Breakfast} score
 	 * 
 	 * @param breakfast
-	 *            The {@link Breakfast} score extract with
-	 *            {@link CSVDailyActivity}
+	 *            The {@link Breakfast} score extract with {@link CSVDailyActivity}
 	 */
-	public void setBreakfast(Breakfast breakfast) {
+	public void setBreakfast(final Breakfast breakfast) {
 		this.breakfast = breakfast;
 	}
 
@@ -171,7 +170,7 @@ public class Day {
 	 * @param lunch
 	 *            The {@link Lunch} score extract with {@link CSVDailyActivity}
 	 */
-	public void setLunch(Lunch lunch) {
+	public void setLunch(final Lunch lunch) {
 		this.lunch = lunch;
 	}
 
@@ -181,7 +180,7 @@ public class Day {
 	 * @param dinner
 	 *            The {@link Dinner} score extract with {@link CSVDailyActivity}
 	 */
-	public void setDinner(Dinner dinner) {
+	public void setDinner(final Dinner dinner) {
 		this.dinner = dinner;
 	}
 
@@ -189,10 +188,9 @@ public class Day {
 	 * Sets the daily {@link GoToBed} score
 	 * 
 	 * @param goToBed
-	 *            The {@link GoToBed} score extract with
-	 *            {@link CSVDailyActivity}
+	 *            The {@link GoToBed} score extract with {@link CSVDailyActivity}
 	 */
-	public void setGoToBed(GoToBed goToBed) {
+	public void setGoToBed(final GoToBed goToBed) {
 		this.goToBed = goToBed;
 	}
 
@@ -213,13 +211,13 @@ public class Day {
 	 *            The list of {@link SleepPeriod} in living extract with
 	 *            {@link CSVSleep}
 	 */
-	public void setSleepLiving(SleepPeriod[] sleepLiving) {
+	public void setSleepLiving(final SleepPeriod[] sleepLiving) {
 		this.sleepLiving = sleepLiving;
 	}
 
 	/**
-	 * Fill the day with {@link DailyActivity} scores, {@link SleepPeriod} list
-	 * and {@link Exit} list
+	 * Fill the day with {@link DailyActivity} scores, {@link SleepPeriod} list and
+	 * {@link Exit} list
 	 * 
 	 * @param wakeUpCSV
 	 *            CSV-file that contains {@link WakeUp} scores
@@ -245,19 +243,20 @@ public class Day {
 	 *             </ul>
 	 *             Exceptions are thrown if one of the CSV-file does not exist
 	 */
-	public void fillDay(File wakeUpCSV, File breakfastCSV, File lunchCSV, File dinnerCSV, File goToBedCSV, File exitCSV,
-			File sleepCSV, File sleepLivingCSV) throws Exception {
+	public void fillDay(final File wakeUpCSV, final File breakfastCSV, final File lunchCSV, final File dinnerCSV,
+			final File goToBedCSV, final File exitCSV, final File sleepCSV, final File sleepLivingCSV)
+			throws Exception {
 
 		CSVDailyActivity cDailyActivity = new CSVDailyActivity(wakeUpCSV, DailyActivities.WakeUp);
-		List<Day> wakeUps = cDailyActivity.gatherDays();
+		final List<Day> wakeUps = cDailyActivity.gatherDays();
 		cDailyActivity = new CSVDailyActivity(breakfastCSV, DailyActivities.Breakfast);
-		List<Day> breakfasts = cDailyActivity.gatherDays();
+		final List<Day> breakfasts = cDailyActivity.gatherDays();
 		cDailyActivity = new CSVDailyActivity(lunchCSV, DailyActivities.Lunch);
-		List<Day> lunches = cDailyActivity.gatherDays();
+		final List<Day> lunches = cDailyActivity.gatherDays();
 		cDailyActivity = new CSVDailyActivity(dinnerCSV, DailyActivities.Dinner);
-		List<Day> dinners = cDailyActivity.gatherDays();
+		final List<Day> dinners = cDailyActivity.gatherDays();
 		cDailyActivity = new CSVDailyActivity(goToBedCSV, DailyActivities.GoToBed);
-		List<Day> goToBeds = cDailyActivity.gatherDays();
+		final List<Day> goToBeds = cDailyActivity.gatherDays();
 
 		this.wakeUp = new WakeUp("-1", 0);
 		this.breakfast = new Breakfast("-1", 0);
@@ -265,63 +264,63 @@ public class Day {
 		this.dinner = new Dinner("-1", 0);
 		this.goToBed = new GoToBed("-1", 0);
 
-		for (Day d : wakeUps) {
+		for (final Day d : wakeUps) {
 			if (this.label.equals(d.label)) {
 				this.wakeUp = d.wakeUp;
 			}
 		}
-		for (Day d : breakfasts) {
+		for (final Day d : breakfasts) {
 			if (this.label.equals(d.label)) {
 				this.breakfast = d.breakfast;
 				break;
 			}
 		}
-		for (Day d : lunches) {
+		for (final Day d : lunches) {
 			if (this.label.equals(d.label)) {
 				this.lunch = d.lunch;
 				break;
 			}
 		}
-		for (Day d : dinners) {
+		for (final Day d : dinners) {
 			if (this.label.equals(d.label)) {
 				this.dinner = d.dinner;
 				break;
 			}
 		}
-		for (Day d : goToBeds) {
+		for (final Day d : goToBeds) {
 			if (this.label.equals(d.label)) {
 				this.goToBed = d.goToBed;
 				break;
 			}
 		}
 
-		CSVExit cExit = new CSVExit(exitCSV);
-		List<Day> exits = cExit.gatherExitsByDay();
+		final CSVExit cExit = new CSVExit(exitCSV);
+		final List<Day> exits = cExit.gatherExitsByDay();
 		this.exits = new Exit[cExit.getMaxColumns()];
 
-		for (Day d : exits) {
+		for (final Day d : exits) {
 			if (this.label.equals(d.label)) {
 				this.exits = d.exits;
 				break;
 			}
 		}
 
-		CSVSleep cSleep = new CSVSleep(sleepCSV);
-		List<Day> sleeps = cSleep.gatherSleepPeriodsByDay();
+		final CSVSleep cSleep = new CSVSleep(sleepCSV);
+		final List<Day> sleeps = cSleep.gatherSleepPeriodsByDay();
 		this.sleeps = new SleepPeriod[cSleep.getMaxColumns()];
 
-		for (Day d : sleeps) {
+		for (final Day d : sleeps) {
 			if (this.label.equals(d.label)) {
 				this.sleeps = d.sleeps;
 				break;
 			}
 		}
 
-		CSVSleep cSleepLiving = new CSVSleep(sleepLivingCSV);
-		List<Day> sleepsLiving = cSleepLiving.gatherSleepPeriodsByDay();
+		final CSVSleep cSleepLiving = new CSVSleep(sleepLivingCSV);
+		final List<Day> sleepsLiving = cSleepLiving.gatherSleepPeriodsByDay();
 		this.sleepLiving = new SleepPeriod[cSleepLiving.getMaxColumns()];
 
-		for (Day d : sleepsLiving) {
+		for (final Day d : sleepsLiving) {
 			if (this.label.equals(d.label)) {
 				this.sleepLiving = d.sleeps;
 				break;
@@ -334,13 +333,13 @@ public class Day {
 	 * Format the day to be write in a CSV-file
 	 * 
 	 * @param index
-	 *            The index of the day into the loop. This index is important
-	 *            for the graphic drawings
+	 *            The index of the day into the loop. This index is important for
+	 *            the graphic drawings
 	 * @return The formatted day for CSV-file
 	 */
-	public String formatForCSV(int index) {
+	public String formatForCSV(final int index) {
 
-		StringBuilder sBuilder = new StringBuilder();
+		final StringBuilder sBuilder = new StringBuilder();
 		sBuilder.append(index + ";");
 		sBuilder.append(this.label + ";");
 
@@ -362,11 +361,11 @@ public class Day {
 	 * @return The formatted label
 	 * @since 06/16/17
 	 */
-	public static String formatLabelDay(LabelFormat format) {
-		Calendar calendar = Calendar.getInstance();
-		int day = calendar.get(Calendar.DAY_OF_MONTH);
-		int month = calendar.get(Calendar.MONTH) + 1;
-		int year = calendar.get(Calendar.YEAR);
+	public static String formatLabelDay(final LabelFormat format) {
+		final Calendar calendar = Calendar.getInstance();
+		final int day = calendar.get(Calendar.DAY_OF_MONTH);
+		final int month = calendar.get(Calendar.MONTH) + 1;
+		final int year = calendar.get(Calendar.YEAR);
 
 		String formattedLabel;
 		switch (format) {
@@ -401,12 +400,12 @@ public class Day {
 	 * @return The formatted label
 	 * @since 06/16/17
 	 */
-	public static String formatLabelDay(LabelFormat format, long timestamp) {
-		Calendar calendar = Calendar.getInstance();
+	public static String formatLabelDay(final LabelFormat format, final long timestamp) {
+		final Calendar calendar = Calendar.getInstance();
 		calendar.setTimeInMillis(timestamp);
-		int day = calendar.get(Calendar.DAY_OF_MONTH);
-		int month = calendar.get(Calendar.MONTH) + 1;
-		int year = calendar.get(Calendar.YEAR);
+		final int day = calendar.get(Calendar.DAY_OF_MONTH);
+		final int month = calendar.get(Calendar.MONTH) + 1;
+		final int year = calendar.get(Calendar.YEAR);
 
 		String formattedLabel;
 		switch (format) {

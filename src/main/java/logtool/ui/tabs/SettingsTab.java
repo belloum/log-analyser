@@ -54,6 +54,7 @@ public class SettingsTab extends MyCustomTab {
 
 		tabbedPane.addTab("Generic", null, genericSettings(), "Generic settings");
 		tabbedPane.addTab("Participant", null, participantSettings(), "Handle participant settings");
+		// TODO Add Script Settings Tab
 		tabbedPane.addTab("Scripts", null, new JLabel("Not implemented yet"), "Not implemented yet");
 		tabbedPane.addTab("LogTool logs", null, logToolLogsSettings(), "Handle LogTool log settings");
 
@@ -85,8 +86,8 @@ public class SettingsTab extends MyCustomTab {
 
 		logSettings.add(new JLabel(configuration().getJSONObject("settings_description").getString("logtool")));
 
-		mLogFolder = new SettingEntry("Log folder", "The folder with log files.", LogToolSettingsHandler.getLogToolLogFolder(),
-				e -> updateFolder(LOG_TOOL_LOG_FOLDER), true);
+		mLogFolder = new SettingEntry("Log folder", "The folder with log files.",
+				LogToolSettingsHandler.getLogToolLogFolder(), e -> updateFolder(LOG_TOOL_LOG_FOLDER), true);
 		logSettings.add(mLogFolder);
 
 		mLogFile = new SettingEntry("Generic logs file", "The file where logs are gathered.",
@@ -113,8 +114,8 @@ public class SettingsTab extends MyCustomTab {
 		participantSettings.add(mParticipantLogFolder);
 
 		mParticipantFile = new SettingEntry("Participant routine file",
-				"The file that contains participant's routine data.", LogToolSettingsHandler.getParticipantRoutineFile(),
-				e -> updateFile(ROUTINE_FILE), true);
+				"The file that contains participant's routine data.",
+				LogToolSettingsHandler.getParticipantRoutineFile(), e -> updateFile(ROUTINE_FILE), true);
 		participantSettings.add(mParticipantFile);
 
 		return ComponentUtils.addEmptyBorder(participantSettings, 5);

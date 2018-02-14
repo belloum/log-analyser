@@ -82,7 +82,7 @@ public class Histogram extends LinkedHashMap<Period, Integer> {
 		}
 
 		final String lastLabel = histogramItems.getLast().getFriendlyLabel();
-		if (!lastLabel.contains("23:59")) {
+		if (!"23:59".equals(lastLabel)) {
 			histogramItems.removeLast();
 			histogramItems.add(new Period(lastLabel.split(" - ")[0], "23:59"));
 		}
@@ -96,8 +96,8 @@ public class Histogram extends LinkedHashMap<Period, Integer> {
 		}
 
 		int index = 0;
-		for (final Period tsLimits : keySet()) {
-			put(tsLimits, (int) pDatas.stream().filter(log -> ((SoftLog) log).isBetweenHours(tsLimits)).count());
+		for (final Period period : keySet()) {
+			put(period, (int) pDatas.stream().filter(log -> ((SoftLog) log).isBetweenHours(period)).count());
 			index++;
 			if (mProgressListener != null) {
 				mProgressListener.progressBulding(((float) index * 100) / size());
