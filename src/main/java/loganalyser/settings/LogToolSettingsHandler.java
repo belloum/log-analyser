@@ -1,4 +1,4 @@
-package loganalyser.utils;
+package loganalyser.settings;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,10 +12,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import loganalyser.operators.FileExtractor;
+import loganalyser.utils.Configuration;
+import loganalyser.utils.Utils;
 
-public class LogToolSettings {
+public class LogToolSettingsHandler {
 
-	private static final Logger log = LoggerFactory.getLogger(LogToolSettings.class);
+	private static final Logger log = LoggerFactory.getLogger(LogToolSettingsHandler.class);
 
 	private static final String LOG_FOLDER = "log_folder";
 	private static final String LOG4J_APPENDER_ERR_FILE = "log4j.appender.err.File";
@@ -463,7 +465,7 @@ public class LogToolSettings {
 	}
 
 	/*
-	 * INTERFACES
+	 * INTERFACE REGISTRATIONS
 	 */
 
 	/**
@@ -474,17 +476,5 @@ public class LogToolSettings {
 	 */
 	public static void addParticipantSettingsListener(final ParticipantSettingsListener pListener) {
 		mLogSettingsListener = pListener;
-	}
-
-	/**
-	 * Interface which notifies Participant-settings updates
-	 * 
-	 * @author ariche
-	 *
-	 */
-	public interface ParticipantSettingsListener {
-		void participantLogsFolderUpdated(File participantLogFolder);
-
-		void participantRoutineFileUpdated(File participantRoutineFile);
 	}
 }

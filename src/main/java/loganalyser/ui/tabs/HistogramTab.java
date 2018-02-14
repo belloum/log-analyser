@@ -34,11 +34,11 @@ import loganalyser.old.ui.InputValue;
 import loganalyser.old.ui.MyButton;
 import loganalyser.operators.FileSelector;
 import loganalyser.operators.SoftLogExtractor;
+import loganalyser.settings.LogToolSettingsHandler;
 import loganalyser.ui.components.ErrorLabel;
 import loganalyser.ui.components.FileChooser;
 import loganalyser.ui.components.TabHeaderWithProgress;
 import loganalyser.utils.Configuration;
-import loganalyser.utils.LogToolSettings;
 
 //TODO see the best way to handle progress, top bar or top histogram
 public class HistogramTab extends LogTab implements ItemListener, HistogramProgressListener {
@@ -87,7 +87,7 @@ public class HistogramTab extends LogTab implements ItemListener, HistogramProgr
 
 	private void save() {
 		// FIXME choose a default folder
-		final FileChooser fc = new FileChooser(new File(LogToolSettings.getSavedHistogramsFolder()), "Save histogram");
+		final FileChooser fc = new FileChooser(new File(LogToolSettingsHandler.getSavedHistogramsFolder()), "Save histogram");
 
 		if (fc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
 			File output = fc.getSelectedFile();

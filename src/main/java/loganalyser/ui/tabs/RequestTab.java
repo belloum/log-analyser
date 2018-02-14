@@ -5,7 +5,6 @@ import java.awt.Component;
 import java.awt.GridLayout;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.regex.Pattern;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -32,7 +31,6 @@ public class RequestTab extends MyCustomTab {
 
 	// "45109548"
 	// TODO Request report
-	private static final Pattern VERA_PATTERN = Pattern.compile("^\\d{8}$");
 	private static final SimpleDateFormat DAY_FORMAT = new SimpleDateFormat("yyyy.MM.dd");
 
 	private String mVeraId;
@@ -56,12 +54,13 @@ public class RequestTab extends MyCustomTab {
 
 		final JPanel content = new JPanel(new BorderLayout());
 
-		// Settings
-
 		// Center
 		final JPanel center = new JPanel(new BorderLayout());
-		center.add(settingsPanel(), BorderLayout.PAGE_START);
-		center.add(requestPanel(), BorderLayout.CENTER);
+		center.setLayout(new GridLayout(1, 2));
+		// center.add(settingsPanel(), BorderLayout.PAGE_START);
+		center.add(settingsPanel());
+		// center.add(requestPanel(), BorderLayout.CENTER);
+		center.add(requestPanel());
 
 		content.add(instructionsPanel(), BorderLayout.PAGE_START);
 		content.add(center, BorderLayout.CENTER);
@@ -102,7 +101,14 @@ public class RequestTab extends MyCustomTab {
 	}
 
 	private JPanel settingsPanel() {
-		final JPanel settings = new JPanel(new BorderLayout());
+
+		final JPanel neoSettings = new JPanel(new BorderLayout(5, 5));
+
+		final JPanel settingsLabel = new JPanel(new GridLayout(4, 1));
+		settingsLabel.add(CustomComponent.boldLabel("Start date"));
+		settingsLabel.add(CustomComponent.boldLabel("End date"));
+		settingsLabel.add(CustomComponent.boldLabel("Vera id"));
+		settingsLabel.add(CustomComponent.boldLabel("Output file"));
 
 		final InputValue mStartDate = new InputValue(mSDate);
 		mStartDate.getDocument().addDocumentListener(new DocumentListener() {
@@ -180,37 +186,23 @@ public class RequestTab extends MyCustomTab {
 			}
 		});
 
-		final JPanel start = new JPanel(new BorderLayout());
-		start.add(CustomComponent.boldLabel(String.format("%s\t\t", "Start date")), BorderLayout.WEST);
-		start.add(mStartDate, BorderLayout.CENTER);
+		final JPanel settingsValue = new JPanel(new GridLayout(4, 1));
+		settingsValue.add(mStartDate);
+		settingsValue.add(mEndDate);
+		settingsValue.add(mVera);
+		settingsValue.add(mOutput);
 
-		final JPanel end = new JPanel(new BorderLayout());
-		end.add(CustomComponent.boldLabel(String.format("%s\t\t", "End date")), BorderLayout.WEST);
-		end.add(mEndDate, BorderLayout.CENTER);
-
-		final JPanel vera = new JPanel(new BorderLayout());
-		vera.add(CustomComponent.boldLabel(String.format("%s\t\t", "Vera id")), BorderLayout.WEST);
-		vera.add(mVera, BorderLayout.CENTER);
-
-		final JPanel output = new JPanel(new BorderLayout());
-		output.add(CustomComponent.boldLabel(String.format("%s\t\t", "Output file")), BorderLayout.WEST);
-		output.add(mOutput, BorderLayout.CENTER);
-
-		final JPanel hour = new JPanel(new GridLayout(1, 4, 10, 0));
-		hour.add(start);
-		hour.add(end);
-		hour.add(vera);
-		hour.add(output);
-
-		settings.add(hour, BorderLayout.PAGE_START);
+		neoSettings.add(settingsLabel, BorderLayout.WEST);
+		neoSettings.add(settingsValue, BorderLayout.CENTER);
 
 		final JPanel btns = new JPanel(new GridLayout(1, 2, 5, 0));
 		btns.add(new MyButton("Log extraction request", event -> extractRequest(RequestType.LogRequest)));
 		btns.add(new MyButton("Report extraction request", event -> extractRequest(RequestType.ReportRequest)));
 
-		settings.add(btns, BorderLayout.PAGE_END);
-		settings.setBorder(BorderFactory.createTitledBorder("Settings"));
-		return settings;
+		neoSettings.add(btns, BorderLayout.PAGE_END);
+
+		neoSettings.setBorder(BorderFactory.createTitledBorder("Settings"));
+		return neoSettings;
 	}
 
 	private JPanel instructionsPanel() {
@@ -239,15 +231,15 @@ public class RequestTab extends MyCustomTab {
 	private JPanel requestPanel() {
 
 		final JPanel requestPanel = new JPanel(new BorderLayout());
+		requestPanel.setBorder(BorderFactory.createTitledBorder("Request"));
 
 		requestPanel.add(
 				new MyButton("Copy to clipboard",
 						event -> Utils.copyToClipboard(mRequestArea.getText().replaceAll("\n", ""))),
-				BorderLayout.PAGE_START);
+				BorderLayout.PAGE_END);
 
 		final JScrollPane scroll = new JScrollPane();
 		mRequestArea = new JTextArea();
-		mRequestArea.setBorder(BorderFactory.createTitledBorder("Request"));
 		mRequestArea.setEditable(false);
 		mRequestArea.setLineWrap(true);
 		scroll.getViewport().add(mRequestArea);
@@ -257,7 +249,7 @@ public class RequestTab extends MyCustomTab {
 	}
 
 	private boolean validVera(final String pVeraId) {
-		return VERA_PATTERN.matcher(pVeraId).find();
+		return Configuration.VERA_PATTERN.matcher(pVeraId).find();
 	}
 
 	private boolean validDate(final String pDate) {

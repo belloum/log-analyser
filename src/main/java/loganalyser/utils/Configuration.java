@@ -3,8 +3,14 @@ package loganalyser.utils;
 import java.awt.Color;
 import java.io.File;
 import java.nio.file.Paths;
+import java.util.regex.Pattern;
 
 public class Configuration {
+
+	/*
+	 * PATTERNS
+	 */
+	public static final Pattern VERA_PATTERN = Pattern.compile("^\\d{8}$");
 
 	public static final File ROOT_FOLDER = Paths.get("").toFile().getParentFile();
 	public static final File RESOURCES_FOLDER = new File(ROOT_FOLDER, "res");

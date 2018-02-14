@@ -18,10 +18,10 @@ import org.slf4j.LoggerFactory;
 
 import loganalyser.old.ui.CustomComponent;
 import loganalyser.operators.FileExtractor;
+import loganalyser.settings.LogToolSettingsHandler;
 import loganalyser.ui.components.FileChooser;
 import loganalyser.ui.components.SettingEntry;
 import loganalyser.utils.Configuration;
-import loganalyser.utils.LogToolSettings;
 
 public class SettingsTab extends MyCustomTab {
 
@@ -65,15 +65,15 @@ public class SettingsTab extends MyCustomTab {
 		genericSettings.add(new JLabel(configuration().getJSONObject("settings_description").getString("generic")));
 
 		mHistogramFolder = new SettingEntry("Saved histograms folder", "The default folder for saved histograms.",
-				LogToolSettings.getSavedHistogramsFolder(), e -> updateFolder(SAVED_HISTOGRAMS_FOLDER), true);
+				LogToolSettingsHandler.getSavedHistogramsFolder(), e -> updateFolder(SAVED_HISTOGRAMS_FOLDER), true);
 		genericSettings.add(mHistogramFolder);
 
 		mCSVFolder = new SettingEntry("Saved CSV folder", "The default folder for saved CSV.",
-				LogToolSettings.getSavedCSVFolder(), e -> updateFolder(SAVED_CSV_FOLDER), true);
+				LogToolSettingsHandler.getSavedCSVFolder(), e -> updateFolder(SAVED_CSV_FOLDER), true);
 		genericSettings.add(mCSVFolder);
 
 		mCleanLogFileFolder = new SettingEntry("Saved cleaned log file folder",
-				"The default folder for saved cleaned log file.", LogToolSettings.getCleanedLogsFolder(),
+				"The default folder for saved cleaned log file.", LogToolSettingsHandler.getCleanedLogsFolder(),
 				e -> updateFolder(SAVED_CLEANED_LOGS_FOLDER), true);
 		genericSettings.add(mCleanLogFileFolder);
 
@@ -85,16 +85,16 @@ public class SettingsTab extends MyCustomTab {
 
 		logSettings.add(new JLabel(configuration().getJSONObject("settings_description").getString("logtool")));
 
-		mLogFolder = new SettingEntry("Log folder", "The folder with log files.", LogToolSettings.getLogToolLogFolder(),
+		mLogFolder = new SettingEntry("Log folder", "The folder with log files.", LogToolSettingsHandler.getLogToolLogFolder(),
 				e -> updateFolder(LOG_TOOL_LOG_FOLDER), true);
 		logSettings.add(mLogFolder);
 
 		mLogFile = new SettingEntry("Generic logs file", "The file where logs are gathered.",
-				LogToolSettings.getGenericLogFilename(), e -> updateFile(LOG), true);
+				LogToolSettingsHandler.getGenericLogFilename(), e -> updateFile(LOG), true);
 		logSettings.add(mLogFile);
 
 		mLogErrorFile = new SettingEntry("Error logs file", "The file where error logs are gathered.",
-				LogToolSettings.getErrorLogFilename(), e -> updateFile(ERROR_LOG), true);
+				LogToolSettingsHandler.getErrorLogFilename(), e -> updateFile(ERROR_LOG), true);
 		logSettings.add(mLogErrorFile);
 
 		return CustomComponent.addEmptyBorder(logSettings, 5);
@@ -108,12 +108,12 @@ public class SettingsTab extends MyCustomTab {
 				.add(new JLabel(configuration().getJSONObject("settings_description").getString("participant")));
 
 		mParticipantLogFolder = new SettingEntry("Participant logs folder",
-				"The folder that contains participant logs.", LogToolSettings.getParticipantLogsFolder(),
+				"The folder that contains participant logs.", LogToolSettingsHandler.getParticipantLogsFolder(),
 				e -> updateFolder(PARTICIPANT_LOGS_FOLDER), true);
 		participantSettings.add(mParticipantLogFolder);
 
 		mParticipantFile = new SettingEntry("Participant routine file",
-				"The file that contains participant's routine data.", LogToolSettings.getParticipantRoutineFile(),
+				"The file that contains participant's routine data.", LogToolSettingsHandler.getParticipantRoutineFile(),
 				e -> updateFile(ROUTINE_FILE), true);
 		participantSettings.add(mParticipantFile);
 
@@ -124,10 +124,10 @@ public class SettingsTab extends MyCustomTab {
 		File selectedFile = null;
 		switch (pFileToUpdate) {
 		case ERROR_LOG:
-			selectedFile = chooseFile(LogToolSettings.getLogToolLogFolder(), "Pick a log error file");
+			selectedFile = chooseFile(LogToolSettingsHandler.getLogToolLogFolder(), "Pick a log error file");
 			break;
 		case LOG:
-			selectedFile = chooseFile(LogToolSettings.getLogToolLogFolder(), "Pick a log file");
+			selectedFile = chooseFile(LogToolSettingsHandler.getLogToolLogFolder(), "Pick a log file");
 			break;
 		case ROUTINE_FILE:
 			selectedFile = chooseFile(Configuration.PARTICIPANT_FOLDER.getPath(), "Pick the routine file");
@@ -154,15 +154,15 @@ public class SettingsTab extends MyCustomTab {
 
 			switch (pFileToUpdate) {
 			case LOG:
-				LogToolSettings.setGenericLogFile(selectedFile.getName());
+				LogToolSettingsHandler.setGenericLogFile(selectedFile.getName());
 				mLogFile.updateProperty(selectedFile.getName());
 				break;
 			case ERROR_LOG:
-				LogToolSettings.setErrorLogFile(selectedFile.getName());
+				LogToolSettingsHandler.setErrorLogFile(selectedFile.getName());
 				mLogErrorFile.updateProperty(selectedFile.getName());
 				break;
 			case ROUTINE_FILE:
-				LogToolSettings.setParticipantRoutineFile(selectedFile);
+				LogToolSettingsHandler.setParticipantRoutineFile(selectedFile);
 				mParticipantFile.updateProperty(selectedFile.getName());
 				break;
 			case PARTICIPANT:
@@ -193,23 +193,23 @@ public class SettingsTab extends MyCustomTab {
 		String currentDirectoryPath, dialogTitle;
 		switch (pFolder) {
 		case LOG_TOOL_LOG_FOLDER:
-			currentDirectoryPath = LogToolSettings.getLogToolLogFolder();
+			currentDirectoryPath = LogToolSettingsHandler.getLogToolLogFolder();
 			dialogTitle = "Select the LogTool log folder";
 			break;
 		case PARTICIPANT_LOGS_FOLDER:
-			currentDirectoryPath = LogToolSettings.getParticipantLogsFolder();
+			currentDirectoryPath = LogToolSettingsHandler.getParticipantLogsFolder();
 			dialogTitle = "Select the participant logs folder";
 			break;
 		case SAVED_HISTOGRAMS_FOLDER:
-			currentDirectoryPath = LogToolSettings.getSavedHistogramsFolder();
+			currentDirectoryPath = LogToolSettingsHandler.getSavedHistogramsFolder();
 			dialogTitle = "Select the saved histograms folder";
 			break;
 		case SAVED_CSV_FOLDER:
-			currentDirectoryPath = LogToolSettings.getSavedCSVFolder();
+			currentDirectoryPath = LogToolSettingsHandler.getSavedCSVFolder();
 			dialogTitle = "Select the saved CSV folder";
 			break;
 		case SAVED_CLEANED_LOGS_FOLDER:
-			currentDirectoryPath = LogToolSettings.getCleanedLogsFolder();
+			currentDirectoryPath = LogToolSettingsHandler.getCleanedLogsFolder();
 			dialogTitle = "Select the saved cleand logs folder";
 			break;
 		default:
@@ -236,23 +236,23 @@ public class SettingsTab extends MyCustomTab {
 
 			switch (pFolder) {
 			case LOG_TOOL_LOG_FOLDER:
-				LogToolSettings.setLogToolLogFolder(selectedFile);
+				LogToolSettingsHandler.setLogToolLogFolder(selectedFile);
 				mLogFolder.updateProperty(selectedFile.getPath());
 				break;
 			case PARTICIPANT_LOGS_FOLDER:
-				LogToolSettings.setParticipantLogsFolder(selectedFile);
+				LogToolSettingsHandler.setParticipantLogsFolder(selectedFile);
 				mParticipantLogFolder.updateProperty(selectedFile.getPath());
 				break;
 			case SAVED_HISTOGRAMS_FOLDER:
-				LogToolSettings.setSavedHistogramsFolder(selectedFile);
+				LogToolSettingsHandler.setSavedHistogramsFolder(selectedFile);
 				mHistogramFolder.updateProperty(selectedFile.getPath());
 				break;
 			case SAVED_CSV_FOLDER:
-				LogToolSettings.setSavedCSVFolder(selectedFile);
+				LogToolSettingsHandler.setSavedCSVFolder(selectedFile);
 				mCSVFolder.updateProperty(selectedFile.getPath());
 				break;
 			case SAVED_CLEANED_LOGS_FOLDER:
-				LogToolSettings.setSavedCleanedLogsFolder(selectedFile);
+				LogToolSettingsHandler.setSavedCleanedLogsFolder(selectedFile);
 				mCleanLogFileFolder.updateProperty(selectedFile.getPath());
 				break;
 			default:

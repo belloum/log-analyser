@@ -32,9 +32,9 @@ import loganalyser.utils.Configuration;
 //FIXME use log file
 //TODO add ParticipantTab implementation
 //TODO add a loading for configuration
-public class LogHandler extends JFrame implements MenuSelector, FileSelector {
+public class LogTool extends JFrame implements MenuSelector, FileSelector {
 
-	private static final Logger log = LoggerFactory.getLogger(LogHandler.class);
+	private static final Logger log = LoggerFactory.getLogger(LogTool.class);
 	private static final long serialVersionUID = 1L;
 
 	private JPanel mRightContent;
@@ -50,7 +50,7 @@ public class LogHandler extends JFrame implements MenuSelector, FileSelector {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					new LogHandler();
+					new LogTool();
 				} catch (final Exception e) {
 					log.error("Unable to start application: {}", e.getMessage(), e);
 				}
@@ -63,8 +63,8 @@ public class LogHandler extends JFrame implements MenuSelector, FileSelector {
 	 * 
 	 * @throws Exception
 	 */
-	public LogHandler() throws Exception {
-		super("Log Handler");
+	public LogTool() throws Exception {
+		super("LogTool");
 		log.info("Start application-info");
 		init();
 	}

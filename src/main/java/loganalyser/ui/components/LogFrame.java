@@ -26,9 +26,9 @@ import loganalyser.old.ui.MyButton;
 import loganalyser.operators.FileSelector;
 import loganalyser.operators.LogExtractorListener;
 import loganalyser.operators.SoftLogExtractor;
+import loganalyser.settings.ParticipantSettingsListener;
+import loganalyser.settings.LogToolSettingsHandler;
 import loganalyser.utils.Configuration;
-import loganalyser.utils.LogToolSettings;
-import loganalyser.utils.LogToolSettings.ParticipantSettingsListener;
 import loganalyser.utils.Utils;
 
 public class LogFrame extends JPanel implements LogExtractorListener, ParticipantSettingsListener {
@@ -52,7 +52,7 @@ public class LogFrame extends JPanel implements LogExtractorListener, Participan
 	}
 
 	private void init() {
-		LogToolSettings.addParticipantSettingsListener(this);
+		LogToolSettingsHandler.addParticipantSettingsListener(this);
 		setBorder(BorderFactory.createTitledBorder("Current file"));
 
 		try {
@@ -66,7 +66,7 @@ public class LogFrame extends JPanel implements LogExtractorListener, Participan
 		info.add(mFileName);
 		info.add(mLogCount);
 
-		mFileChooser = new FileChooser(new File(LogToolSettings.getParticipantLogsFolder()), "Select a log file",
+		mFileChooser = new FileChooser(new File(LogToolSettingsHandler.getParticipantLogsFolder()), "Select a log file",
 				Arrays.asList(new FileNameExtensionFilter("Log file", "json")));
 
 		// button
