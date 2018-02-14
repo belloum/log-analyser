@@ -2,6 +2,7 @@ package loganalyser.ui.tabs;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.io.File;
 
 import javax.swing.JPanel;
 
@@ -12,7 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import loganalyser.ui.components.ErrorLabel;
 import loganalyser.ui.components.TabHeader;
-import loganalyser.utils.Utils;
+import loganalyser.utils.Configuration;
 
 /**
  * Force tabs to have a header
@@ -49,7 +50,7 @@ public abstract class MyCustomTab extends JPanel implements Configurable {
 
 	protected TabHeader header() {
 		return new TabHeader(settings().getString("title"), settings().getString("description"),
-				Utils.getImg(settings().getString("img")));
+				new File(Configuration.IMG_FOLDER, settings().getString("img")));
 	}
 
 	protected void error(final String pErrorMsg) {

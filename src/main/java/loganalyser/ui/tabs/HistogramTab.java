@@ -37,8 +37,8 @@ import loganalyser.operators.SoftLogExtractor;
 import loganalyser.ui.components.ErrorLabel;
 import loganalyser.ui.components.FileChooser;
 import loganalyser.ui.components.TabHeaderWithProgress;
+import loganalyser.utils.Configuration;
 import loganalyser.utils.LogToolSettings;
-import loganalyser.utils.Utils;
 
 //TODO see the best way to handle progress, top bar or top histogram
 public class HistogramTab extends LogTab implements ItemListener, HistogramProgressListener {
@@ -277,7 +277,7 @@ public class HistogramTab extends LogTab implements ItemListener, HistogramProgr
 	@Override
 	protected TabHeaderWithProgress header() {
 		return new TabHeaderWithProgress(settings().getString("title"), settings().getString("description"),
-				Utils.getImg(settings().getString("img")));
+				new File(Configuration.IMG_FOLDER, settings().getString("img")));
 	}
 
 	@Override

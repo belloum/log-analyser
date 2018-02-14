@@ -466,10 +466,22 @@ public class LogToolSettings {
 	 * INTERFACES
 	 */
 
+	/**
+	 * Register a listener for Participant-settings updates
+	 * 
+	 * @param pListener
+	 *            the listener
+	 */
 	public static void addParticipantSettingsListener(final ParticipantSettingsListener pListener) {
 		mLogSettingsListener = pListener;
 	}
 
+	/**
+	 * Interface which notifies Participant-settings updates
+	 * 
+	 * @author ariche
+	 *
+	 */
 	public interface ParticipantSettingsListener {
 		void participantLogsFolderUpdated(File participantLogFolder);
 

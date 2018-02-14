@@ -7,34 +7,33 @@ import java.nio.file.Paths;
 public class Configuration {
 
 	public static final File ROOT_FOLDER = Paths.get("").toFile().getParentFile();
-	public static final File RESOURCES = new File(ROOT_FOLDER, "res");
-	public static final File SCRIPTS_FOLDER = new File(RESOURCES, "scripts");
+	public static final File RESOURCES_FOLDER = new File(ROOT_FOLDER, "res");
 	public static final File CONFIG_FOLDER = new File(ROOT_FOLDER, "config");
 	public static final File TEMP_FOLDER = new File(ROOT_FOLDER, "temp");
 
-	public static final File PARTICIPANT_FOLDER = new File(RESOURCES, "participants");
+	public static final File SCRIPTS_FOLDER = new File(RESOURCES_FOLDER, "scripts");
+	public static final File PARTICIPANT_FOLDER = new File(RESOURCES_FOLDER, "participants");
 
-	public static final File LOG_FOLDER = new File(ROOT_FOLDER, "logs");
 	public static final File LOG_PROPERTIES = new File(ROOT_FOLDER, "src/main/resources/log4j.properties");
 
-	public static final File IMG_FOLDER = new File(RESOURCES, "img/");
-	public static final File IMAGE_AVATAR = Utils.getImg("avatar.png");
-	public static final File IMAGE_CALENDAR = Utils.getImg("calendar.png");
-	public static final File IMAGE_COLD = Utils.getImg("cold.png");
-	public static final File IMAGE_FILE = Utils.getImg("file.png");
-	public static final File IMAGE_HISTO = Utils.getImg("histo.png");
-	public static final File IMAGE_LOG_FILE = Utils.getImg("log.png");
-	public static final File IMAGE_PODIUM = Utils.getImg("podium.png");
-	public static final File IMAGE_ROUTINE = Utils.getImg("routine.png");
-	public static final File IMAGE_SENSOR = Utils.getImg("sensors.png");
-	public static final File IMAGE_SERVER = Utils.getImg("sensors.png");
-	public static final File IMAGE_VERA = Utils.getImg("vera.png");
-	public static final File IMAGE_WARM = Utils.getImg("warm.png");
+	/*
+	 * IMAGES
+	 */
+	public static final File IMG_FOLDER = new File(RESOURCES_FOLDER, "img/");
+	public static final File IMAGE_AVATAR = new File(IMG_FOLDER, "avatar.png");
+	public static final File IMAGE_CALENDAR = new File(IMG_FOLDER, "calendar.png");
+	public static final File IMAGE_COLD = new File(IMG_FOLDER, "cold.png");
+	public static final File IMAGE_FILE = new File(IMG_FOLDER, "file.png");
+	public static final File IMAGE_HISTO = new File(IMG_FOLDER, "histo.png");
+	public static final File IMAGE_LOG_FILE = new File(IMG_FOLDER, "log.png");
+	public static final File IMAGE_PODIUM = new File(IMG_FOLDER, "podium.png");
+	public static final File IMAGE_ROUTINE = new File(IMG_FOLDER, "routine.png");
+	public static final File IMAGE_SENSOR = new File(IMG_FOLDER, "sensors.png");
+	public static final File IMAGE_SERVER = new File(IMG_FOLDER, "server.png");
+	public static final File IMAGE_VERA = new File(IMG_FOLDER, "vera.png");
+	public static final File IMAGE_WARM = new File(IMG_FOLDER, "warm.png");
 
 	public static final File TEMP_LOG_FILE = Utils.getTmpFile("temp.json");
-
-	public static final File LOG_FILE = new File(LOG_FOLDER, "storyboard.log");
-	public static final File LOG_ERROR_FILE = new File(LOG_FOLDER, "error.log");
 
 	public static final Color RED_COLOR = Color.decode("#F44336");
 
