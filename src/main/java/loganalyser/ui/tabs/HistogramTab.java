@@ -29,14 +29,14 @@ import beans.Histogram;
 import beans.Histogram.HistogramProgressListener;
 import loganalyser.beans.SoftLog;
 import loganalyser.beans.devices.Device;
-import loganalyser.old.ui.CustomComponent;
-import loganalyser.old.ui.InputValue;
-import loganalyser.old.ui.MyButton;
 import loganalyser.operators.FileSelector;
 import loganalyser.operators.SoftLogExtractor;
 import loganalyser.settings.LogToolSettingsHandler;
+import loganalyser.ui.components.ComponentUtils;
 import loganalyser.ui.components.ErrorLabel;
 import loganalyser.ui.components.FileChooser;
+import loganalyser.ui.components.InputValue;
+import loganalyser.ui.components.MyButton;
 import loganalyser.ui.components.TabHeaderWithProgress;
 import loganalyser.utils.Configuration;
 
@@ -224,7 +224,7 @@ public class HistogramTab extends LogTab implements ItemListener, HistogramProgr
 		// Top Settings
 		final JPanel topSettings = new JPanel(new GridLayout(5, 1));
 
-		mJLTotalLogs = CustomComponent.boldLabel(new JLabel(String.format("%d", getLogFile().getSoftLogs().size())));
+		mJLTotalLogs = ComponentUtils.boldLabel(new JLabel(String.format("%d", getLogFile().getSoftLogs().size())));
 		mJLTotalLogs.setBorder(BorderFactory.createTitledBorder("Logs"));
 		topSettings.add(mJLTotalLogs);
 

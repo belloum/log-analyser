@@ -17,10 +17,10 @@ import loganalyser.beans.activityresults.ActivityResult;
 import loganalyser.beans.activityresults.MealResult;
 import loganalyser.beans.devices.Device;
 import loganalyser.beans.devices.Device.DeviceType;
-import loganalyser.old.ui.CustomComponent;
-import loganalyser.old.ui.MyButton;
 import loganalyser.operators.settings.MealSettings;
 import loganalyser.operators.settings.RoutineSettings;
+import loganalyser.ui.components.ComponentUtils;
+import loganalyser.ui.components.MyButton;
 import loganalyser.ui.dialogs.MarkerDialog;
 import loganalyser.ui.dialogs.MarkerDialog.MarkerSelectionListener;
 
@@ -64,8 +64,8 @@ public class MealParametersPanel extends RoutineParameterPanel implements Marker
 		mMarkersII = new JLabel();
 
 		JPanel labels = new JPanel(new GridLayout(2, 1));
-		labels.add(CustomComponent.boldLabel("Markers I\t"));
-		labels.add(CustomComponent.boldLabel("Markers II\t"));
+		labels.add(ComponentUtils.boldLabel("Markers I\t"));
+		labels.add(ComponentUtils.boldLabel("Markers II\t"));
 
 		JPanel markers = new JPanel(new GridLayout(2, 1));
 		markers.add(mMarkersI);

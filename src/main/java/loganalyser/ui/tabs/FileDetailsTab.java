@@ -13,9 +13,9 @@ import javax.swing.JProgressBar;
 import org.apache.commons.io.FileUtils;
 
 import loganalyser.beans.devices.Device;
-import loganalyser.old.ui.CustomComponent;
 import loganalyser.operators.FileSelector;
 import loganalyser.operators.SoftLogExtractor;
+import loganalyser.ui.components.ComponentUtils;
 import loganalyser.ui.components.ComponentWithImage;
 import loganalyser.ui.components.ProgressPanel;
 import loganalyser.utils.Configuration;
@@ -51,17 +51,17 @@ public class FileDetailsTab extends LogTab {
 		final JPanel info = new JPanel(new GridLayout(3, 2));
 
 		// Name
-		info.add(CustomComponent.boldLabel("Name"));
+		info.add(ComponentUtils.boldLabel("Name"));
 		info.add(new JLabel(getLogFile().getName()));
 		pProgressBar.setValue(100 / 3);
 
 		// Size
-		info.add(CustomComponent.boldLabel("Size"));
+		info.add(ComponentUtils.boldLabel("Size"));
 		info.add(new JLabel(FileUtils.byteCountToDisplaySize(getLogFile().length())));
 		pProgressBar.setValue(200 / 3);
 
 		// Location
-		info.add(CustomComponent.boldLabel("Location"));
+		info.add(ComponentUtils.boldLabel("Location"));
 		info.add(new JLabel(getLogFile().getPath()));
 		pProgressBar.setValue(100);
 
@@ -71,7 +71,7 @@ public class FileDetailsTab extends LogTab {
 	private JPanel fillVeraInfo(final JProgressBar pProgressBar) {
 
 		final JPanel info = new JPanel(new GridLayout(1, 2));
-		info.add(CustomComponent.boldLabel("Vera"));
+		info.add(ComponentUtils.boldLabel("Vera"));
 		info.add(new JLabel(getLogFile().getVeraId()));
 		pProgressBar.setValue(100);
 
@@ -81,7 +81,7 @@ public class FileDetailsTab extends LogTab {
 	private JPanel fillUserInfo(final JProgressBar pProgressBar) {
 
 		final JPanel info = new JPanel(new GridLayout(1, 2));
-		info.add(CustomComponent.boldLabel("User"));
+		info.add(ComponentUtils.boldLabel("User"));
 		info.add(new JLabel(getLogFile().getUserId()));
 		pProgressBar.setValue(100);
 
@@ -91,12 +91,12 @@ public class FileDetailsTab extends LogTab {
 	private JPanel fillDeviceInfo(final JProgressBar pProgressBar) {
 
 		final JPanel info = new JPanel(new GridLayout(getLogFile().getDeviceTypeCount() + 1, 3));
-		info.add(CustomComponent.boldLabel("Device type"));
-		info.add(CustomComponent.boldLabel("Device"));
-		info.add(CustomComponent.boldLabel("Logs"));
+		info.add(ComponentUtils.boldLabel("Device type"));
+		info.add(ComponentUtils.boldLabel("Device"));
+		info.add(ComponentUtils.boldLabel("Logs"));
 
 		getLogFile().getDeviceTypes().forEach(type -> {
-			info.add(CustomComponent.boldLabel(type.name()));
+			info.add(ComponentUtils.boldLabel(type.name()));
 			info.add(new JLabel(String.format("%d",
 					SoftLogExtractor.getDeviceIdsWithType(getLogFile().getSoftLogs(), type).size())));
 			info.add(new JLabel(String.format("%d", SoftLogExtractor
@@ -117,17 +117,17 @@ public class FileDetailsTab extends LogTab {
 		final String extremHour = pExtremum == TOP ? getLogFile().getTopHour() : getLogFile().getFlopHour();
 
 		// Device
-		info.add(CustomComponent.boldLabel("Device"));
+		info.add(ComponentUtils.boldLabel("Device"));
 		info.add(new JLabel(extremSender.getId()));
 		info.add(new JLabel(String.format("%d", getLogFile().getLogByDevice(extremSender.getId()).size())));
 
 		// Day
-		info.add(CustomComponent.boldLabel("Day"));
+		info.add(ComponentUtils.boldLabel("Day"));
 		info.add(new JLabel(extremDay));
 		info.add(new JLabel(String.format("%d", getLogFile().getLogByDay(extremDay).size())));
 
 		// Hour
-		info.add(CustomComponent.boldLabel("Hour"));
+		info.add(ComponentUtils.boldLabel("Hour"));
 		info.add(new JLabel(extremHour));
 		info.add(new JLabel(String.format("%d", getLogFile().getLogByHour(extremHour).size())));
 
@@ -138,15 +138,15 @@ public class FileDetailsTab extends LogTab {
 
 		final JPanel info = new JPanel(new GridLayout(3, 2));
 
-		info.add(CustomComponent.boldLabel("Period"));
+		info.add(ComponentUtils.boldLabel("Period"));
 		info.add(new JLabel(getLogFile().getPeriod()));
 		pProgressBar.setValue(100 / 3);
 
-		info.add(CustomComponent.boldLabel("Day count"));
+		info.add(ComponentUtils.boldLabel("Day count"));
 		info.add(new JLabel(String.format("%d", getLogFile().getDayCount())));
 		pProgressBar.setValue(2 * 100 / 3);
 
-		info.add(CustomComponent.boldLabel("Logs by day"));
+		info.add(ComponentUtils.boldLabel("Logs by day"));
 		info.add(new JLabel(String.format("%.2f", getLogFile().getMeanLogByDay())));
 		pProgressBar.setValue(100 / 3);
 

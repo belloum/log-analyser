@@ -5,8 +5,6 @@ import java.awt.BorderLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import loganalyser.old.ui.CustomComponent;
-
 public class LegendValueLabel extends JPanel {
 
 	private static Integer DEFAULT_PADDING = 5;
@@ -17,7 +15,7 @@ public class LegendValueLabel extends JPanel {
 
 	public LegendValueLabel(String pLabel, String pValue) {
 		setLayout(new BorderLayout(DEFAULT_PADDING, 0));
-		mLegend = CustomComponent.boldLabel();
+		mLegend = ComponentUtils.boldLabel();
 		mValue = new JLabel();
 		setLegend(pLabel);
 		setValue(pValue);

@@ -10,7 +10,7 @@ import javax.swing.JTable;
 
 import loganalyser.beans.activityresults.ActivityResult;
 import loganalyser.beans.activityresults.MealResult;
-import loganalyser.old.ui.CustomComponent;
+import loganalyser.ui.components.ComponentUtils;
 import loganalyser.ui.components.LegendValueLabel;
 import loganalyser.ui.components.MyTable;
 
@@ -31,7 +31,7 @@ public class MealResultPanel extends ActivityResultPanel {
 		JPanel headResult = new JPanel(new GridLayout(2, 5, 0, 0));
 
 		// Line 1
-		headResult.add(CustomComponent.boldLabel("Scores"));
+		headResult.add(ComponentUtils.boldLabel("Scores"));
 		headResult.add(new LegendValueLabel("0 %",
 				String.format("%d", (int) pActivityResults.stream().filter(m -> m.getScore() < 0.2f).count())));
 

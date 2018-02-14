@@ -18,10 +18,10 @@ import org.jdesktop.swingx.JXLabel;
 import org.json.JSONObject;
 
 import loganalyser.exceptions.RequestException;
-import loganalyser.old.ui.CustomComponent;
-import loganalyser.old.ui.InputValue;
-import loganalyser.old.ui.MyButton;
 import loganalyser.operators.RequestExtractor;
+import loganalyser.ui.components.ComponentUtils;
+import loganalyser.ui.components.InputValue;
+import loganalyser.ui.components.MyButton;
 import loganalyser.utils.Configuration;
 import loganalyser.utils.Utils;
 
@@ -105,10 +105,10 @@ public class RequestTab extends MyCustomTab {
 		final JPanel neoSettings = new JPanel(new BorderLayout(5, 5));
 
 		final JPanel settingsLabel = new JPanel(new GridLayout(4, 1));
-		settingsLabel.add(CustomComponent.boldLabel("Start date"));
-		settingsLabel.add(CustomComponent.boldLabel("End date"));
-		settingsLabel.add(CustomComponent.boldLabel("Vera id"));
-		settingsLabel.add(CustomComponent.boldLabel("Output file"));
+		settingsLabel.add(ComponentUtils.boldLabel("Start date"));
+		settingsLabel.add(ComponentUtils.boldLabel("End date"));
+		settingsLabel.add(ComponentUtils.boldLabel("Vera id"));
+		settingsLabel.add(ComponentUtils.boldLabel("Output file"));
 
 		final InputValue mStartDate = new InputValue(mSDate);
 		mStartDate.getDocument().addDocumentListener(new DocumentListener() {
@@ -216,7 +216,7 @@ public class RequestTab extends MyCustomTab {
 		final JPanel values = new JPanel(new GridLayout(steps.length(), 1));
 
 		for (int i = 1; i <= steps.length(); i++) {
-			indexes.add(CustomComponent.boldLabel(String.format("%d\t\t", i)));
+			indexes.add(ComponentUtils.boldLabel(String.format("%d\t\t", i)));
 			final JXLabel instruct = new JXLabel(steps.getString(String.valueOf(i)));
 			instruct.setLineWrap(true);
 			values.add(instruct);

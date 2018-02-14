@@ -21,9 +21,9 @@ import org.apache.commons.lang3.StringUtils;
 
 import loganalyser.beans.SoftLog;
 import loganalyser.beans.devices.Device;
-import loganalyser.old.ui.CustomComponent;
 import loganalyser.operators.FileSelector;
 import loganalyser.operators.SoftLogExtractor;
+import loganalyser.ui.components.ComponentUtils;
 import loganalyser.ui.components.ComponentWithImage;
 import loganalyser.ui.components.MyTable;
 import loganalyser.utils.Configuration;
@@ -51,8 +51,8 @@ public class DeviceTab extends LogTab {
 
 	private JPanel createRepartitionTops(final String[] pHoursTop, final String[] pDaysTop) {
 		final JPanel repartitionTops = new JPanel(new GridLayout(4, 2));
-		repartitionTops.add(CustomComponent.boldLabel("Hourly top"));
-		repartitionTops.add(CustomComponent.boldLabel("Daily top"));
+		repartitionTops.add(ComponentUtils.boldLabel("Hourly top"));
+		repartitionTops.add(ComponentUtils.boldLabel("Daily top"));
 		for (int i = 0; i < pHoursTop.length; i++) {
 			repartitionTops.add(new JLabel(pHoursTop[i]));
 			repartitionTops.add(new JLabel(pDaysTop[i]));

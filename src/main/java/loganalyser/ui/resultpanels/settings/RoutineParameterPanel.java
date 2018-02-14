@@ -12,10 +12,10 @@ import javax.swing.event.DocumentListener;
 
 import loganalyser.beans.Routine;
 import loganalyser.beans.devices.Device;
-import loganalyser.old.ui.CustomComponent;
-import loganalyser.old.ui.InputValue;
 import loganalyser.operators.settings.Executable;
 import loganalyser.operators.settings.RoutineSettings;
+import loganalyser.ui.components.ComponentUtils;
+import loganalyser.ui.components.InputValue;
 
 public abstract class RoutineParameterPanel extends JPanel implements Executable {
 
@@ -86,11 +86,11 @@ public abstract class RoutineParameterPanel extends JPanel implements Executable
 		});
 
 		JPanel start = new JPanel(new BorderLayout());
-		start.add(CustomComponent.boldLabel("Start hour"), BorderLayout.WEST);
+		start.add(ComponentUtils.boldLabel("Start hour"), BorderLayout.WEST);
 		start.add(mStartHour, BorderLayout.CENTER);
 
 		JPanel end = new JPanel(new BorderLayout());
-		end.add(CustomComponent.boldLabel("End hour"), BorderLayout.WEST);
+		end.add(ComponentUtils.boldLabel("End hour"), BorderLayout.WEST);
 		end.add(mEndHour, BorderLayout.CENTER);
 
 		JPanel hour = new JPanel(new GridLayout(1, 2));

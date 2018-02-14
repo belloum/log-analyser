@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 
 import loganalyser.beans.activityresults.ActivityResult;
-import loganalyser.old.ui.CustomComponent;
+import loganalyser.ui.components.ComponentUtils;
 import loganalyser.ui.components.LegendValueLabel;
 import loganalyser.ui.components.MyTable;
 
@@ -27,7 +27,7 @@ public class WakeAndGoBedResultPanel extends ActivityResultPanel {
 
 		JPanel headResult = new JPanel(new GridLayout(2, 3, 0, 0));
 		// Line 1
-		headResult.add(CustomComponent.boldLabel("Scores"));
+		headResult.add(ComponentUtils.boldLabel("Scores"));
 		headResult.add(new LegendValueLabel("0 %",
 				String.format("%d", (int) pActivityResults.stream().filter(m -> m.getScore() < 0.8f).count())));
 		headResult.add(new LegendValueLabel("100 %",

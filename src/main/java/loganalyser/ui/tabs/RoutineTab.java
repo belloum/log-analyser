@@ -21,8 +21,8 @@ import org.json.JSONException;
 
 import loganalyser.beans.Routine;
 import loganalyser.beans.activityresults.ActivityResult;
-import loganalyser.old.ui.MyButton;
 import loganalyser.operators.FileSelector;
+import loganalyser.ui.components.MyButton;
 import loganalyser.ui.resultpanels.MealResultPanel;
 import loganalyser.ui.resultpanels.WakeAndGoBedResultPanel;
 import loganalyser.ui.resultpanels.settings.MealParametersPanel;

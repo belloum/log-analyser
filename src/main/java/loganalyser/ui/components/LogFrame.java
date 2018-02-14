@@ -22,7 +22,6 @@ import loganalyser.beans.SoftLog;
 import loganalyser.beans.devices.Device;
 import loganalyser.beans.devices.Device.DeviceType;
 import loganalyser.exceptions.RawLogException;
-import loganalyser.old.ui.MyButton;
 import loganalyser.operators.FileSelector;
 import loganalyser.operators.LogExtractorListener;
 import loganalyser.operators.SoftLogExtractor;

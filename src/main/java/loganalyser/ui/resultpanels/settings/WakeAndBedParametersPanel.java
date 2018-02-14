@@ -17,10 +17,10 @@ import loganalyser.beans.Routine;
 import loganalyser.beans.activityresults.ActivityResult;
 import loganalyser.beans.devices.Device;
 import loganalyser.beans.devices.Device.DeviceType;
-import loganalyser.old.ui.CustomComponent;
-import loganalyser.old.ui.InputValue;
 import loganalyser.operators.settings.RoutineSettings;
 import loganalyser.operators.settings.WakeUpAndGoBedSettings;
+import loganalyser.ui.components.ComponentUtils;
+import loganalyser.ui.components.InputValue;
 
 public class WakeAndBedParametersPanel extends RoutineParameterPanel {
 
@@ -88,13 +88,13 @@ public class WakeAndBedParametersPanel extends RoutineParameterPanel {
 				getRoutineSettings().setBedroomMarker(e.getItem().toString());
 			}
 		});
-		bedroom.add(CustomComponent.boldLabel("MotionD Bedroom"), BorderLayout.WEST);
+		bedroom.add(ComponentUtils.boldLabel("MotionD Bedroom"), BorderLayout.WEST);
 		bedroom.add(bed, BorderLayout.CENTER);
 
 		JPanel routine = new JPanel(new BorderLayout());
 		JComboBox<String> rout = new JComboBox<>();
 		getRoutineDevices().forEach(device -> rout.addItem(device.getId()));
-		routine.add(CustomComponent.boldLabel("MotionD Routine"), BorderLayout.WEST);
+		routine.add(ComponentUtils.boldLabel("MotionD Routine"), BorderLayout.WEST);
 		routine.add(rout, BorderLayout.CENTER);
 
 		JPanel time = new JPanel(new BorderLayout());
@@ -122,7 +122,7 @@ public class WakeAndBedParametersPanel extends RoutineParameterPanel {
 				}
 			}
 		});
-		time.add(CustomComponent.boldLabel("Time between markers"), BorderLayout.WEST);
+		time.add(ComponentUtils.boldLabel("Time between markers"), BorderLayout.WEST);
 		time.add(delay, BorderLayout.CENTER);
 
 		JPanel mark = new JPanel(new GridLayout(1, 3));

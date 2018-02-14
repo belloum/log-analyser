@@ -16,9 +16,9 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import loganalyser.old.ui.CustomComponent;
 import loganalyser.operators.FileExtractor;
 import loganalyser.settings.LogToolSettingsHandler;
+import loganalyser.ui.components.ComponentUtils;
 import loganalyser.ui.components.FileChooser;
 import loganalyser.ui.components.SettingEntry;
 import loganalyser.utils.Configuration;
@@ -77,7 +77,7 @@ public class SettingsTab extends MyCustomTab {
 				e -> updateFolder(SAVED_CLEANED_LOGS_FOLDER), true);
 		genericSettings.add(mCleanLogFileFolder);
 
-		return CustomComponent.addEmptyBorder(genericSettings, 5);
+		return ComponentUtils.addEmptyBorder(genericSettings, 5);
 	}
 
 	private JPanel logToolLogsSettings() {
@@ -97,7 +97,7 @@ public class SettingsTab extends MyCustomTab {
 				LogToolSettingsHandler.getErrorLogFilename(), e -> updateFile(ERROR_LOG), true);
 		logSettings.add(mLogErrorFile);
 
-		return CustomComponent.addEmptyBorder(logSettings, 5);
+		return ComponentUtils.addEmptyBorder(logSettings, 5);
 	}
 
 	private JPanel participantSettings() {
@@ -117,7 +117,7 @@ public class SettingsTab extends MyCustomTab {
 				e -> updateFile(ROUTINE_FILE), true);
 		participantSettings.add(mParticipantFile);
 
-		return CustomComponent.addEmptyBorder(participantSettings, 5);
+		return ComponentUtils.addEmptyBorder(participantSettings, 5);
 	}
 
 	private void updateFile(final String pFileToUpdate) {

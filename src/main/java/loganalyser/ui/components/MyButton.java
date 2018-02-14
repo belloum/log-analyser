@@ -1,4 +1,4 @@
-package loganalyser.old.ui;
+package loganalyser.ui.components;
 
 import java.awt.event.ActionListener;
 

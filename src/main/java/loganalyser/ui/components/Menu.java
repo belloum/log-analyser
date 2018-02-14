@@ -8,7 +8,6 @@ import javax.swing.JPanel;
 
 import org.json.JSONObject;
 
-import loganalyser.old.ui.MyButton;
 import loganalyser.operators.FileSelector;
 import loganalyser.ui.tabs.Configurable;
 

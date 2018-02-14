@@ -11,8 +11,6 @@ import javax.swing.border.EmptyBorder;
 
 import org.jdesktop.swingx.JXLabel;
 
-import loganalyser.old.ui.CustomComponent;
-
 public class TabHeader extends JPanel {
 
 	private static final long serialVersionUID = 1L;
@@ -23,7 +21,7 @@ public class TabHeader extends JPanel {
 
 	public TabHeader(final String pTitle, final String pDescription, final File pImage) {
 		this.mImage = pImage;
-		this.mTitle = CustomComponent.boldLabel(pTitle);
+		this.mTitle = ComponentUtils.boldLabel(pTitle);
 		this.mDescription = new JXLabel(pDescription) {
 			/**
 			 * 

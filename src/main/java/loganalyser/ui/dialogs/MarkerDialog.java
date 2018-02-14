@@ -24,8 +24,8 @@ import javax.swing.JRootPane;
 import javax.swing.KeyStroke;
 
 import loganalyser.beans.devices.Device;
-import loganalyser.old.ui.CustomComponent;
-import loganalyser.old.ui.MyButton;
+import loganalyser.ui.components.ComponentUtils;
+import loganalyser.ui.components.MyButton;
 
 public class MarkerDialog extends JDialog {
 
@@ -52,13 +52,13 @@ public class MarkerDialog extends JDialog {
 		JPanel content = new JPanel(new BorderLayout());
 
 		JPanel devList = new JPanel(new GridLayout(pDevices.size() + 1, 1));
-		devList.add(CustomComponent.boldLabel("Device"));
+		devList.add(ComponentUtils.boldLabel("Device"));
 		pDevices.forEach(device -> devList.add(new JLabel(device.getId())));
 
 		JPanel selectors = new JPanel(new GridLayout(pDevices.size() + 1, 1));
-		selectors.add(CustomComponent.boldLabel("Marker I\t"));
-		selectors.add(CustomComponent.boldLabel("Marker II\t"));
-		selectors.add(CustomComponent.boldLabel("Ignored\t"));
+		selectors.add(ComponentUtils.boldLabel("Marker I\t"));
+		selectors.add(ComponentUtils.boldLabel("Marker II\t"));
+		selectors.add(ComponentUtils.boldLabel("Ignored\t"));
 
 		pDevices.forEach(d -> {
 

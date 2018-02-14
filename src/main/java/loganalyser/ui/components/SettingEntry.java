@@ -11,8 +11,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import loganalyser.old.ui.CustomComponent;
-
 public class SettingEntry extends JPanel {
 
 	private final JButton mButton;
@@ -39,7 +37,7 @@ public class SettingEntry extends JPanel {
 		JPanel content = new JPanel(new BorderLayout());
 
 		final JPanel pan = new JPanel(new BorderLayout());
-		pan.add(CustomComponent.boldLabel(pName), BorderLayout.PAGE_START);
+		pan.add(ComponentUtils.boldLabel(pName), BorderLayout.PAGE_START);
 
 		mTextField.setText(pValue.toString());
 		mTextField.setEditable(false);
@@ -52,8 +50,8 @@ public class SettingEntry extends JPanel {
 		content.add(new JLabel(pDescription), BorderLayout.CENTER);
 
 		if (pBordered) {
-			JPanel container = CustomComponent.addLineBorder(new JPanel(), Color.GRAY, 1);
-			container.add(CustomComponent.addEmptyBorder(content, 3));
+			JPanel container = ComponentUtils.addLineBorder(new JPanel(), Color.GRAY, 1);
+			container.add(ComponentUtils.addEmptyBorder(content, 3));
 			add(container, BorderLayout.CENTER);
 		} else {
 			add(content, BorderLayout.CENTER);
