@@ -1,6 +1,5 @@
 package logtool.ui.tabs;
 
-import java.awt.Component;
 import java.awt.GridLayout;
 import java.io.File;
 import java.util.Collections;
@@ -37,13 +36,6 @@ public class FileDetailsTab extends LogTab {
 
 	public FileDetailsTab(final FileSelector pFileSelector) {
 		super(pFileSelector);
-		fileInfo.start();
-		userInfo.start();
-		deviceInfo.start();
-		periodInfo.start();
-		topInfo.start();
-		flopInfo.start();
-		veraInfo.start();
 	}
 
 	private JPanel fillGeneralFileInfo(final JProgressBar pProgressBar) {
@@ -154,7 +146,7 @@ public class FileDetailsTab extends LogTab {
 	}
 
 	@Override
-	protected Component content() {
+	protected JPanel content() {
 		final JPanel content = new JPanel(new GridLayout(2, 1));
 
 		// FILE
@@ -183,8 +175,8 @@ public class FileDetailsTab extends LogTab {
 	}
 
 	@Override
-	protected void init() {
-		super.init();
+	protected void init(final Object... params) {
+		super.init(params);
 
 		ComponentWithImage info = new ComponentWithImage(Configuration.IMAGE_FILE,
 				new JLabel("Extract file information"));
@@ -256,12 +248,22 @@ public class FileDetailsTab extends LogTab {
 				flopInfo.updateContent(fillExtremInfo(FLOP, flopInfo.getProgressBar()));
 			}
 		});
-
 	}
 
 	@Override
 	public String configurationSection() {
 		return "file_details";
+	}
+
+	@Override
+	protected void postInit() {
+		fileInfo.start();
+		userInfo.start();
+		deviceInfo.start();
+		periodInfo.start();
+		topInfo.start();
+		flopInfo.start();
+		veraInfo.start();
 	}
 
 }

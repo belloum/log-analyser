@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 
 import logtool.beans.devices.Device;
 import logtool.beans.devices.Device.DeviceType;
@@ -28,7 +29,7 @@ public class LogFile extends File {
 		this(pFile, null);
 	}
 
-	public LogFile(final File pFile, final LogExtractorListener pListener) throws LogExtractorException {
+	public LogFile(final File pFile, final LogExtractorListener pListener) throws LogExtractorException, JSONException {
 		super(pFile.getPath());
 
 		if (pListener != null) {

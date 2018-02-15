@@ -1,11 +1,10 @@
 package logtool.ui.tabs;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.GridLayout;
 import java.io.File;
 import java.io.IOException;
 
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -44,11 +43,10 @@ public class SettingsTab extends MyCustomTab {
 
 	public SettingsTab() {
 		super();
-		add(content(), BorderLayout.CENTER);
 	}
 
 	@Override
-	protected Component content() {
+	protected JComponent content() {
 
 		final JTabbedPane tabbedPane = new JTabbedPane();
 
@@ -190,7 +188,7 @@ public class SettingsTab extends MyCustomTab {
 		}
 	}
 
-	private void updateFolder(String pFolder) {
+	private void updateFolder(final String pFolder) {
 		String currentDirectoryPath, dialogTitle;
 		switch (pFolder) {
 		case LOG_TOOL_LOG_FOLDER:
@@ -218,7 +216,7 @@ public class SettingsTab extends MyCustomTab {
 			return;
 		}
 
-		FileChooser folderPicker = new FileChooser(new File(currentDirectoryPath), dialogTitle);
+		final FileChooser folderPicker = new FileChooser(new File(currentDirectoryPath), dialogTitle);
 		folderPicker.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
 		if (folderPicker.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
@@ -228,7 +226,7 @@ public class SettingsTab extends MyCustomTab {
 				selectedFile.mkdirs();
 				try {
 					selectedFile.createNewFile();
-				} catch (IOException e) {
+				} catch (final IOException e) {
 					log.error("{} could not have been created because of: {}", selectedFile.getPath(), e.getMessage(),
 							e);
 					return;
@@ -265,5 +263,10 @@ public class SettingsTab extends MyCustomTab {
 	@Override
 	public String configurationSection() {
 		return "settings";
+	}
+
+	@Override
+	protected void init(final Object... params) {
+		
 	}
 }

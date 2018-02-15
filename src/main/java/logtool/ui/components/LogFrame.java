@@ -93,7 +93,7 @@ public class LogFrame extends JPanel implements LogExtractorListener, Participan
 				LogFrame.this.mProgressBar.showProgress();
 				try {
 					validFile(new LogFile(pSelectedFile, LogFrame.this));
-				} catch (final LogExtractorException e) {
+				} catch (LogExtractorException | JSONException e) {
 					System.err.println(e.getMessage());
 					invalidFile(pSelectedFile, e.getMessage());
 				} finally {
@@ -208,7 +208,7 @@ public class LogFrame extends JPanel implements LogExtractorListener, Participan
 	}
 
 	@Override
-	public void participantRoutineFileUpdated(File participantRoutineFile) {
+	public void participantRoutineFileUpdated(final File participantRoutineFile) {
 	}
 
 	@Override

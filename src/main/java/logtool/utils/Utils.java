@@ -101,4 +101,17 @@ public class Utils {
 		return new File(Configuration.CONFIG_FOLDER, pConfigName);
 	}
 
+	/**
+	 * Add the correct extension after the given filename if it does not end with
+	 * the good one
+	 * 
+	 * @param pFilename
+	 *            the filename
+	 * @return the formated filename
+	 */
+	public static String addFileExtension(final String pFilename, final String pFileExtension) {
+		final String extension = String.format(".%s", pFileExtension);
+		return pFilename.endsWith(extension) ? pFilename : pFilename.concat(extension);
+	}
+
 }

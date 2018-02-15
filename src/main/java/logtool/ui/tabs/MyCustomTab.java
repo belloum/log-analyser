@@ -1,9 +1,9 @@
 package logtool.ui.tabs;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.io.File;
 
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import org.apache.commons.lang3.StringUtils;
@@ -27,26 +27,30 @@ public abstract class MyCustomTab extends JPanel implements Configurable {
 	private final ErrorLabel mError;
 	private JSONObject mSettings;
 
-	public MyCustomTab() {
+	public MyCustomTab(final Object... params) {
 		setLayout(new BorderLayout());
-
+		log.debug("{} constructor", this.getClass().getSimpleName());
 		try {
 			mSettings = configuration();
 		} catch (final Exception e) {
 			final String error = String.format("Unable to find configuration file (%s): %s", this.getClass().getName(),
 					e.getMessage());
-			// Utils.errorLog(error, this.getClass());
 			System.err.println(error);
 		}
 
 		mHeader = header();
-
 		add(mHeader, BorderLayout.PAGE_START);
 		mError = new ErrorLabel();
 		add(getError(), BorderLayout.PAGE_END);
+		log.debug("Before init in {}", this.getClass().getSimpleName());
+		init(params);
+		log.debug("After init in {}", this.getClass().getSimpleName());
+		add(content(), BorderLayout.CENTER);
 	}
 
-	protected abstract Component content();
+	protected abstract JComponent content();
+
+	protected abstract void init(final Object... params);
 
 	protected TabHeader header() {
 		return new TabHeader(settings().getString("title"), settings().getString("description"),

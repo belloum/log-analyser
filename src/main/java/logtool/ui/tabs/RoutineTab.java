@@ -1,7 +1,6 @@
 package logtool.ui.tabs;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ItemEvent;
 import java.io.File;
@@ -18,6 +17,8 @@ import javax.swing.JTextArea;
 import javax.swing.border.BevelBorder;
 
 import org.json.JSONException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import logtool.beans.Routine;
 import logtool.beans.activityresults.ActivityResult;
@@ -33,8 +34,12 @@ import logtool.utils.Utils;
 
 public class RoutineTab extends LogTab {
 
+	private static final Logger log = LoggerFactory.getLogger(RoutineTab.class);
+
 	// TODO helper for decision, show the biggest sender
 	// TODO Progress
+	// TODO Save best configurations in participant routine file, which can be seen
+	// in ParticipantTab
 
 	private static final long serialVersionUID = 1L;
 
@@ -50,16 +55,12 @@ public class RoutineTab extends LogTab {
 
 	public RoutineTab(final FileSelector pFileSelector) {
 		super(pFileSelector);
-		try {
-			mCleanFile = Utils.tempLogFile();
-			updateRoutineFrame(Routine.WakeUp);
-		} catch (JSONException | IOException e) {
-			System.out.println("Unable to find temp file");
-		}
 	}
 
 	@Override
-	protected void init() {
+	protected void init(final Object... params) {
+		super.init(params);
+
 		mResultsPanel = new JPanel(new BorderLayout());
 		mRightPanel = new JPanel(new BorderLayout());
 		mRoutineDesc = new JTextArea() {
@@ -147,7 +148,7 @@ public class RoutineTab extends LogTab {
 	}
 
 	@Override
-	protected Component content() {
+	protected JPanel content() {
 		final JPanel content = new JPanel(new BorderLayout());
 
 		final int histoWidth = 1 * (Configuration.MAX_WIDTH - Configuration.LEFT_MENU_WIDTH) / 4;
@@ -187,16 +188,18 @@ public class RoutineTab extends LogTab {
 	}
 
 	@Override
-	protected void error(String pErrorMsg) {
-		super.error(pErrorMsg);
-		// mRightPanel.add(getError(), BorderLayout.PAGE_END);
-	}
-
-	@Override
 	public String configurationSection() {
 		return "routine";
 	}
+
+	@Override
+	protected void postInit() {
+		try {
+			mCleanFile = Utils.tempLogFile();
+		} catch (JSONException | IOException e) {
+			log.error("Exception in postInit: {}", e.getMessage(), e);
+			System.err.println("Unable to find temp file");
+		}
+		updateRoutineFrame(Routine.WakeUp);
+	}
 }
-// 245 - 4:44
-// 294 - 4:52
-// 232 - 5:04

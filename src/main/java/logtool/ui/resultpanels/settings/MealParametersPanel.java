@@ -50,7 +50,7 @@ public class MealParametersPanel extends RoutineParameterPanel implements Marker
 
 	@Override
 	public String getScriptName() {
-		// TODO make it configurable
+		// TODO Make scripts configurable
 		return "./meal.pl";
 	}
 

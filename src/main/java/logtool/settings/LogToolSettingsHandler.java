@@ -220,7 +220,8 @@ public class LogToolSettingsHandler {
 	 */
 	private static void setLogFile(final String pSL4JPropertyKey, final String pJSONPropertyKey,
 			final String pLogFilename) {
-		final String logFile = getLogToolLogFolder().concat(File.separator).concat(formatLogFilename(pLogFilename));
+		final String logFile = getLogToolLogFolder().concat(File.separator)
+				.concat(Utils.addFileExtension(pLogFilename, "log"));
 		updateLOG4JProperty(pSL4JPropertyKey, logFile);
 		updateLogToolLogProperty(pJSONPropertyKey, new File(logFile).getName());
 		return;
@@ -275,18 +276,6 @@ public class LogToolSettingsHandler {
 	public static void setErrorLogFile(final String pLogFilename) {
 		setLogFile(LOG4J_APPENDER_ERR_FILE, JSON_ERROR_LOG_FILE, pLogFilename);
 		return;
-	}
-
-	/**
-	 * Add the correct extension of the given log filename if it does not end with
-	 * the good one
-	 * 
-	 * @param pLogFilename
-	 *            the log filename
-	 * @return the formated filename
-	 */
-	private static String formatLogFilename(final String pLogFilename) {
-		return pLogFilename.endsWith(".log") ? pLogFilename : pLogFilename.concat(".log");
 	}
 
 	/*

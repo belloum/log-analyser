@@ -48,7 +48,6 @@ public class ReportExtractor extends FileExtractor {
 			return String.format(Locale.FRANCE,
 					"elasticdump --input=http://localhost:9200/logstash-%s --sourceOnly --output=%s --searchBody '{\"query\":{\"term\":{\"report_type\":\"%s\"}}}'%s",
 					formattedPeriod, outputFile, report, silentMod);
-
 		}
 	}
 

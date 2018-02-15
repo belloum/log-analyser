@@ -1,12 +1,14 @@
 package logtool.ui.tabs;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.GridLayout;
+import java.awt.event.ItemEvent;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.swing.BorderFactory;
+import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -16,7 +18,10 @@ import javax.swing.event.DocumentListener;
 import org.apache.commons.lang3.StringUtils;
 import org.jdesktop.swingx.JXLabel;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import logtool.beans.RequestType;
 import logtool.exceptions.RequestException;
 import logtool.operators.RequestExtractor;
 import logtool.ui.components.ComponentUtils;
@@ -27,30 +32,27 @@ import logtool.utils.Utils;
 
 public class RequestTab extends MyCustomTab {
 
+	private static final Logger log = LoggerFactory.getLogger(RequestTab.class);
+
 	private static final long serialVersionUID = 1L;
 
 	// "45109548"
-	// TODO Request report
 	private static final SimpleDateFormat DAY_FORMAT = new SimpleDateFormat("yyyy.MM.dd");
 
 	private String mVeraId;
-	private String mSDate = DAY_FORMAT.format(new Date());
-	private String mEDate = mSDate;
-	private String mOutputFilename = Configuration.DEFAULT_OUTPUT_FILENAME;
-
-	private enum RequestType {
-		LogRequest, ReportRequest
-	}
+	private RequestType mRequestType;
+	private String mSDate;
+	private String mEDate;
+	private String mOutputFilename;
 
 	private JTextArea mRequestArea;
 
 	public RequestTab() {
 		super();
-		add(content(), BorderLayout.CENTER);
 	}
 
 	@Override
-	protected Component content() {
+	protected JPanel content() {
 
 		final JPanel content = new JPanel(new BorderLayout());
 
@@ -74,17 +76,21 @@ public class RequestTab extends MyCustomTab {
 			case LogRequest:
 				mRequestArea.setText(RequestExtractor.logRequests(mOutputFilename, mVeraId, mSDate, mEDate));
 				break;
-			case ReportRequest:
-				mRequestArea.setText(RequestExtractor.reportRequests(mOutputFilename, mVeraId, mSDate, mEDate));
+			case DailyReportRequest:
+				mRequestArea.setText(RequestExtractor.dailyReportRequests(mOutputFilename, mVeraId, mSDate, mEDate));
+				break;
+			case WeeklyReportRequest:
+				mRequestArea.setText(RequestExtractor.weeklyReportRequests(mOutputFilename, mVeraId, mSDate, mEDate));
 				break;
 			}
 
 		} catch (final Exception e) {
+			log.error("Exctracting request exception: {}", e.getMessage(), e);
 			error(e.getMessage());
 		}
 	}
 
-	private void validParameters() throws Exception {
+	private void validParameters() throws RequestException {
 		if (StringUtils.isEmpty(mVeraId)) {
 			throw new RequestException(RequestException.VERA_DOES_NOT_MATCH_PATERN);
 		} else if (StringUtils.isEmpty(mOutputFilename)) {
@@ -93,20 +99,51 @@ public class RequestTab extends MyCustomTab {
 			throw new RequestException(RequestException.INVALID_START_DAY_FORMAT);
 		} else if (StringUtils.isEmpty(mEDate)) {
 			throw new RequestException(RequestException.INVALID_END_DAY_FORMAT);
-		} else if (DAY_FORMAT.parse(mSDate).after(DAY_FORMAT.parse(mEDate))) {
-			throw new RequestException(RequestException.INVALID_PERIOD);
+		} else {
+			Date start = new Date();
+			Date end = start;
+			try {
+				start = DAY_FORMAT.parse(mSDate);
+			} catch (ParseException e) {
+				throw new RequestException(RequestException.INVALID_START_DAY_FORMAT);
+			}
+
+			try {
+				end = DAY_FORMAT.parse(mEDate);
+			} catch (ParseException e) {
+				throw new RequestException(RequestException.INVALID_END_DAY_FORMAT);
+			}
+
+			if (start.after(end)) {
+				throw new RequestException(RequestException.INVALID_PERIOD);
+			}
 		}
+
 	}
 
 	private JPanel settingsPanel() {
 
 		final JPanel neoSettings = new JPanel(new BorderLayout(5, 5));
 
-		final JPanel settingsLabel = new JPanel(new GridLayout(4, 1));
+		final GridLayout layoutParams = new GridLayout(5, 1);
+
+		final JPanel settingsLabel = new JPanel(layoutParams);
+		settingsLabel.add(ComponentUtils.boldLabel("Request type"));
 		settingsLabel.add(ComponentUtils.boldLabel("Start date"));
 		settingsLabel.add(ComponentUtils.boldLabel("End date"));
 		settingsLabel.add(ComponentUtils.boldLabel("Vera id"));
 		settingsLabel.add(ComponentUtils.boldLabel("Output file"));
+
+		final JComboBox<RequestType> requestTypeSelector = new JComboBox<>(new RequestType[] { RequestType.LogRequest,
+				RequestType.DailyReportRequest, RequestType.WeeklyReportRequest });
+		requestTypeSelector.setSelectedItem(mRequestType);
+		requestTypeSelector.addItemListener(e -> {
+			if (e.getStateChange() == ItemEvent.SELECTED) {
+				mRequestType = RequestType.valueOf(e.getItem().toString());
+				hideError();
+				log.debug("Switch to {} request", mRequestType);
+			}
+		});
 
 		final InputValue mStartDate = new InputValue(mSDate);
 		mStartDate.getDocument().addDocumentListener(new DocumentListener() {
@@ -146,7 +183,7 @@ public class RequestTab extends MyCustomTab {
 			}
 		});
 
-		final InputValue mVera = new InputValue();
+		final InputValue mVera = new InputValue(mVeraId);
 		mVera.getDocument().addDocumentListener(new DocumentListener() {
 
 			@Override
@@ -184,9 +221,8 @@ public class RequestTab extends MyCustomTab {
 			}
 		});
 
-		// TODO Select a report type (daily, weekly)
-
-		final JPanel settingsValue = new JPanel(new GridLayout(4, 1));
+		final JPanel settingsValue = new JPanel(layoutParams);
+		settingsValue.add(requestTypeSelector);
 		settingsValue.add(mStartDate);
 		settingsValue.add(mEndDate);
 		settingsValue.add(mVera);
@@ -194,12 +230,7 @@ public class RequestTab extends MyCustomTab {
 
 		neoSettings.add(settingsLabel, BorderLayout.WEST);
 		neoSettings.add(settingsValue, BorderLayout.CENTER);
-
-		final JPanel btns = new JPanel(new GridLayout(1, 2, 5, 0));
-		btns.add(new MyButton("Log extraction request", event -> extractRequest(RequestType.LogRequest)));
-		btns.add(new MyButton("Report extraction request", event -> extractRequest(RequestType.ReportRequest)));
-
-		neoSettings.add(btns, BorderLayout.PAGE_END);
+		neoSettings.add(new MyButton("Get request", event -> extractRequest(mRequestType)), BorderLayout.PAGE_END);
 
 		neoSettings.setBorder(BorderFactory.createTitledBorder("Settings"));
 		return neoSettings;
@@ -264,5 +295,12 @@ public class RequestTab extends MyCustomTab {
 	@Override
 	public String configurationSection() {
 		return "request";
+	}
+
+	@Override
+	protected void init(final Object... params) {
+		mSDate = mEDate = DAY_FORMAT.format(new Date());
+		mOutputFilename = Configuration.DEFAULT_OUTPUT_FILENAME;
+		mRequestType = RequestType.LogRequest;
 	}
 }

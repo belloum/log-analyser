@@ -1,7 +1,6 @@
 package logtool.ui.tabs;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.event.ItemEvent;
 import java.util.ArrayList;
@@ -41,12 +40,10 @@ public class DeviceTab extends LogTab {
 	private ComponentWithImage mRepartitionTop;
 
 	private String mDevice;
-	private SplitMod mCurrentSplittingMod = SplitMod.DAY;
+	private SplitMod mCurrentSplittingMod;
 
 	public DeviceTab(final FileSelector pFileSelector) {
 		super(pFileSelector);
-		mDevice = "All";
-		updateSplittedView();
 	}
 
 	private JPanel createRepartitionTops(final String[] pHoursTop, final String[] pDaysTop) {
@@ -95,7 +92,7 @@ public class DeviceTab extends LogTab {
 	}
 
 	@Override
-	protected Component content() {
+	protected JPanel content() {
 
 		final JPanel content = new JPanel(new GridLayout(1, 2));
 
@@ -188,6 +185,18 @@ public class DeviceTab extends LogTab {
 		}
 
 		return tops;
+	}
+
+	@Override
+	protected void init(Object... params) {
+		super.init(params);
+		mDevice = "All";
+		mCurrentSplittingMod = SplitMod.DAY;
+	}
+
+	@Override
+	protected void postInit() {
+		updateSplittedView();
 	}
 
 }

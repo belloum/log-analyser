@@ -2,7 +2,6 @@ package logtool.ui.tabs;
 
 import java.awt.BorderLayout;
 import java.awt.Checkbox;
-import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -65,12 +64,11 @@ public class HistogramTab extends LogTab implements ItemListener, HistogramProgr
 
 	public HistogramTab(final FileSelector pFileSelector) {
 		super(pFileSelector);
-		draws();
 	}
 
 	@Override
-	protected void init() {
-		super.init();
+	protected void init(Object... params) {
+		super.init(params);
 		mSelectedDevice = new ArrayList<>();
 		mCheckBoxes = new HashMap<>();
 		mJPB = new JProgressBar(0, 100);
@@ -196,7 +194,7 @@ public class HistogramTab extends LogTab implements ItemListener, HistogramProgr
 	}
 
 	@Override
-	protected Component content() {
+	protected JPanel content() {
 		final JPanel content = new JPanel(new BorderLayout());
 
 		/*
@@ -338,6 +336,11 @@ public class HistogramTab extends LogTab implements ItemListener, HistogramProgr
 	@Override
 	public String configurationSection() {
 		return "histogram";
+	}
+
+	@Override
+	protected void postInit() {
+		draws();
 	}
 
 }
