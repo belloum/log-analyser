@@ -7,6 +7,8 @@ public class RequestException extends Exception {
 	public static final String INVALID_REQUEST = "Invalid request";
 	public static final String VERA_DOES_NOT_MATCH_PATERN = String
 			.format("%s: Vera id must be a string of eight integers", INVALID_REQUEST);
+	public static final String USER_DOES_NOT_MATCH_PATERN = String.format(
+			"%s: User id must begin with `domassist` followed by a 1-to-5 alphanumeric characters", INVALID_REQUEST);
 	public static final String NO_OUTPUT_FILE = String.format("%s: Please provide an output file name",
 			INVALID_REQUEST);
 	public static final String PERIOD_DOES_NOT_MATCH_PATERN = String

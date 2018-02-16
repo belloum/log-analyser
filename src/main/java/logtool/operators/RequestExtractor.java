@@ -31,20 +31,20 @@ public class RequestExtractor {
 	private static final String TEMP_FILE = "temp";
 	private static final SimpleDateFormat DAY_FORMAT = new SimpleDateFormat("yyyy.MM.dd");
 
-	private static String logRequest(final String pOutputFile, final String pVeraId, final String pDay) {
-		return request(RequestType.LogRequest, pOutputFile, pVeraId, pDay);
+	private static String logRequest(final String pOutputFile, final String pRequestId, final String pDay) {
+		return request(RequestType.LogRequest, pOutputFile, pRequestId, pDay);
 	}
 
-	private static String reportRequest(final RequestType pRequestType, final String pOutputFile, final String pVeraId,
+	private static String reportRequest(final RequestType pRequestType, final String pOutputFile, final String pRequestId,
 			final String pDay) {
-		return request(pRequestType, pOutputFile, pVeraId, pDay);
+		return request(pRequestType, pOutputFile, pRequestId, pDay);
 	}
 
-	private static String request(final RequestType pRequestType, String pOutputFile, final String pVeraId,
+	private static String request(final RequestType pRequestType, String pOutputFile, final String pRequestId,
 			final String pDay) {
 		String request = null;
 		pOutputFile = Utils.addFileExtension(pOutputFile, "json");
-		final String identifier = pVeraId.toLowerCase();
+		final String identifier = pRequestId.toLowerCase();
 		switch (pRequestType) {
 		case LogRequest:
 			request = String.format(REQUEST_LOG_FORMAT, pDay, pOutputFile, identifier);
@@ -60,7 +60,7 @@ public class RequestExtractor {
 	}
 
 	private static String iterateOverPeriod(final RequestType pRequestType, final String pOutputFile,
-			final String pVeraId, final String pStartDay, final String pEndDay) throws ParseException {
+			final String pRequestId, final String pStartDay, final String pEndDay) throws ParseException {
 
 		final Date date = DAY_FORMAT.parse(pStartDay);
 		final Date endDate = DAY_FORMAT.parse(pEndDay);
@@ -69,8 +69,8 @@ public class RequestExtractor {
 		if (date.equals(endDate)) {
 			requests.add(removeFile(pOutputFile));
 			requests.add(
-					pRequestType == RequestType.LogRequest ? logRequest(pOutputFile, pVeraId, DAY_FORMAT.format(date))
-							: reportRequest(pRequestType, pOutputFile, pVeraId, DAY_FORMAT.format(date)));
+					pRequestType == RequestType.LogRequest ? logRequest(pOutputFile, pRequestId, DAY_FORMAT.format(date))
+							: reportRequest(pRequestType, pOutputFile, pRequestId, DAY_FORMAT.format(date)));
 		}
 
 		else {
@@ -85,8 +85,8 @@ public class RequestExtractor {
 			while (calendar.getTime().before(endDate) || calendar.getTime().equals(endDate)) {
 				requests.add(removeFile(pOutputFile));
 				requests.add(pRequestType == RequestType.LogRequest
-						? logRequest(pOutputFile, pVeraId, DAY_FORMAT.format(calendar.getTime()))
-						: reportRequest(pRequestType, pOutputFile, pVeraId, DAY_FORMAT.format(calendar.getTime())));
+						? logRequest(pOutputFile, pRequestId, DAY_FORMAT.format(calendar.getTime()))
+						: reportRequest(pRequestType, pOutputFile, pRequestId, DAY_FORMAT.format(calendar.getTime())));
 				requests.add(copyFileContentToDestFile(pOutputFile, TEMP_FILE));
 				calendar.add(Calendar.DATE, 1);
 			}
@@ -98,19 +98,19 @@ public class RequestExtractor {
 
 	}
 
-	public static String logRequests(final String pOutputFile, final String pVeraId, final String pStartDay,
+	public static String logRequests(final String pOutputFile, final String pRequestId, final String pStartDay,
 			final String pEndDay) throws ParseException {
-		return iterateOverPeriod(RequestType.LogRequest, pOutputFile, pVeraId, pStartDay, pEndDay);
+		return iterateOverPeriod(RequestType.LogRequest, pOutputFile, pRequestId, pStartDay, pEndDay);
 	}
 
-	public static String dailyReportRequests(final String pOutputFile, final String pVeraId, final String pStartDay,
+	public static String dailyReportRequests(final String pOutputFile, final String pRequestId, final String pStartDay,
 			final String pEndDay) throws ParseException {
-		return iterateOverPeriod(RequestType.DailyReportRequest, pOutputFile, pVeraId, pStartDay, pEndDay);
+		return iterateOverPeriod(RequestType.DailyReportRequest, pOutputFile, pRequestId, pStartDay, pEndDay);
 	}
 
-	public static String weeklyReportRequests(final String pOutputFile, final String pVeraId, final String pStartDay,
+	public static String weeklyReportRequests(final String pOutputFile, final String pRequestId, final String pStartDay,
 			final String pEndDay) throws ParseException {
-		return iterateOverPeriod(RequestType.WeeklyReportRequest, pOutputFile, pVeraId, pStartDay, pEndDay);
+		return iterateOverPeriod(RequestType.WeeklyReportRequest, pOutputFile, pRequestId, pStartDay, pEndDay);
 	}
 
 	private static String removeFile(final String pFile) {

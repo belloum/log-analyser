@@ -41,7 +41,7 @@ public class RequestTab extends MyCustomTab {
 	// "45109548"
 	private static final SimpleDateFormat DAY_FORMAT = new SimpleDateFormat("yyyy.MM.dd");
 
-	private String mVeraId;
+	private String mRequestId;
 	private RequestType mRequestType;
 	private String mSDate;
 	private String mEDate;
@@ -72,29 +72,33 @@ public class RequestTab extends MyCustomTab {
 
 	private void extractRequest(final RequestType pRequestType) {
 		try {
-			validParameters();
 			hideError();
+			validParameters();
 			switch (pRequestType) {
 			case LogRequest:
-				mRequestArea.setText(RequestExtractor.logRequests(mOutputFilename, mVeraId, mSDate, mEDate));
+				mRequestArea.setText(RequestExtractor.logRequests(mOutputFilename, mRequestId, mSDate, mEDate));
 				break;
 			case DailyReportRequest:
-				mRequestArea.setText(RequestExtractor.dailyReportRequests(mOutputFilename, mVeraId, mSDate, mEDate));
+				mRequestArea.setText(RequestExtractor.dailyReportRequests(mOutputFilename, mRequestId, mSDate, mEDate));
 				break;
 			case WeeklyReportRequest:
-				mRequestArea.setText(RequestExtractor.weeklyReportRequests(mOutputFilename, mVeraId, mSDate, mEDate));
+				mRequestArea.setText(RequestExtractor.weeklyReportRequests(mOutputFilename, mRequestId, mSDate, mEDate));
 				break;
 			}
 
 		} catch (final Exception e) {
 			log.error("Exctracting request exception: {}", e.getMessage(), e);
 			error(e.getMessage());
+			mRequestArea.setText("");
 		}
 	}
 
 	private void validParameters() throws RequestException {
-		if (!validVera(mVeraId)) {
-			throw new RequestException(RequestException.VERA_DOES_NOT_MATCH_PATERN);
+		if (!validRequestIdentifier(mRequestId)) {
+			final String pMsg = this.mRequestType == RequestType.LogRequest
+					? RequestException.VERA_DOES_NOT_MATCH_PATERN
+					: RequestException.USER_DOES_NOT_MATCH_PATERN;
+			throw new RequestException(pMsg);
 		} else if (StringUtils.isEmpty(mOutputFilename)) {
 			throw new RequestException(RequestException.NO_OUTPUT_FILE);
 		} else if (StringUtils.isEmpty(mSDate)) {
@@ -106,13 +110,13 @@ public class RequestTab extends MyCustomTab {
 			Date end = start;
 			try {
 				start = DAY_FORMAT.parse(mSDate);
-			} catch (ParseException e) {
+			} catch (final ParseException e) {
 				throw new RequestException(RequestException.INVALID_START_DAY_FORMAT);
 			}
 
 			try {
 				end = DAY_FORMAT.parse(mEDate);
-			} catch (ParseException e) {
+			} catch (final ParseException e) {
 				throw new RequestException(RequestException.INVALID_END_DAY_FORMAT);
 			}
 
@@ -142,9 +146,9 @@ public class RequestTab extends MyCustomTab {
 		requestTypeSelector.addItemListener(e -> {
 			if (e.getStateChange() == ItemEvent.SELECTED) {
 				mRequestType = RequestType.valueOf(e.getItem().toString());
-				mVeraId = validVera(mVeraId) ? mVeraId.toLowerCase() : null;
-				hideError();
 				log.debug("Switch to {} request", mRequestType);
+				mRequestId = validRequestIdentifier(mRequestId) ? mRequestId : null;
+				hideError();
 			}
 		});
 
@@ -186,22 +190,22 @@ public class RequestTab extends MyCustomTab {
 			}
 		});
 
-		final InputValue mVera = new InputValue(mVeraId);
+		final InputValue mVera = new InputValue(mRequestId);
 		mVera.getDocument().addDocumentListener(new DocumentListener() {
 
 			@Override
 			public void removeUpdate(final DocumentEvent e) {
-				mVeraId = validVera(mVera.getText()) ? mVera.getText().toLowerCase() : null;
+				mRequestId = validRequestIdentifier(mVera.getText()) ? mVera.getText() : null;
 			}
 
 			@Override
 			public void insertUpdate(final DocumentEvent e) {
-				mVeraId = validVera(mVera.getText()) ? mVera.getText().toLowerCase() : null;
+				mRequestId = validRequestIdentifier(mVera.getText()) ? mVera.getText() : null;
 			}
 
 			@Override
 			public void changedUpdate(final DocumentEvent e) {
-				mVeraId = validVera(mVera.getText()) ? mVera.getText().toLowerCase() : null;
+				mRequestId = validRequestIdentifier(mVera.getText()) ? mVera.getText() : null;
 			}
 		});
 
@@ -282,7 +286,7 @@ public class RequestTab extends MyCustomTab {
 		return requestPanel;
 	}
 
-	private boolean validVera(final String pVeraId) {
+	private boolean validRequestIdentifier(final String pVeraId) {
 		boolean validId = false;
 		if (StringUtils.isEmpty(pVeraId)) {
 			validId = false;
@@ -291,7 +295,6 @@ public class RequestTab extends MyCustomTab {
 		} else {
 			validId = Configuration.USER_PATTERN.matcher(pVeraId).matches();
 		}
-		log.debug("Identifier is {} for {}", validId, mRequestType);
 		return validId;
 	}
 

@@ -15,7 +15,7 @@ public class Configuration {
 	/*
 	 * PATTERNS
 	 */
-	public static final Pattern USER_PATTERN = Pattern.compile("^Domassist[a-zA-Z0-9]{1,5}$");
+	public static final Pattern USER_PATTERN = Pattern.compile("^domassist[a-zA-Z0-9]{1,5}$");
 	public static final Pattern VERA_PATTERN = Pattern.compile("^\\d{8}$");
 	public static final Pattern HOUR_PATTERN = Pattern.compile("^\\d{2}:\\d{2}$");
 
