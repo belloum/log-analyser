@@ -32,6 +32,8 @@ import logtool.utils.Utils;
 
 public class RequestTab extends MyCustomTab {
 
+	// FIXME Check vera validity as changing request type
+
 	private static final Logger log = LoggerFactory.getLogger(RequestTab.class);
 
 	private static final long serialVersionUID = 1L;
@@ -91,7 +93,7 @@ public class RequestTab extends MyCustomTab {
 	}
 
 	private void validParameters() throws RequestException {
-		if (StringUtils.isEmpty(mVeraId)) {
+		if (!validVera(mVeraId)) {
 			throw new RequestException(RequestException.VERA_DOES_NOT_MATCH_PATERN);
 		} else if (StringUtils.isEmpty(mOutputFilename)) {
 			throw new RequestException(RequestException.NO_OUTPUT_FILE);
@@ -131,7 +133,7 @@ public class RequestTab extends MyCustomTab {
 		settingsLabel.add(ComponentUtils.boldLabel("Request type"));
 		settingsLabel.add(ComponentUtils.boldLabel("Start date"));
 		settingsLabel.add(ComponentUtils.boldLabel("End date"));
-		settingsLabel.add(ComponentUtils.boldLabel("Vera id"));
+		settingsLabel.add(ComponentUtils.boldLabel("Vera/User id"));
 		settingsLabel.add(ComponentUtils.boldLabel("Output file"));
 
 		final JComboBox<RequestType> requestTypeSelector = new JComboBox<>(new RequestType[] { RequestType.LogRequest,
@@ -140,6 +142,7 @@ public class RequestTab extends MyCustomTab {
 		requestTypeSelector.addItemListener(e -> {
 			if (e.getStateChange() == ItemEvent.SELECTED) {
 				mRequestType = RequestType.valueOf(e.getItem().toString());
+				mVeraId = validVera(mVeraId) ? mVeraId.toLowerCase() : null;
 				hideError();
 				log.debug("Switch to {} request", mRequestType);
 			}
@@ -188,17 +191,17 @@ public class RequestTab extends MyCustomTab {
 
 			@Override
 			public void removeUpdate(final DocumentEvent e) {
-				mVeraId = validVera(mVera.getText()) ? mVera.getText() : null;
+				mVeraId = validVera(mVera.getText()) ? mVera.getText().toLowerCase() : null;
 			}
 
 			@Override
 			public void insertUpdate(final DocumentEvent e) {
-				mVeraId = validVera(mVera.getText()) ? mVera.getText() : null;
+				mVeraId = validVera(mVera.getText()) ? mVera.getText().toLowerCase() : null;
 			}
 
 			@Override
 			public void changedUpdate(final DocumentEvent e) {
-				mVeraId = validVera(mVera.getText()) ? mVera.getText() : null;
+				mVeraId = validVera(mVera.getText()) ? mVera.getText().toLowerCase() : null;
 			}
 		});
 
@@ -280,7 +283,16 @@ public class RequestTab extends MyCustomTab {
 	}
 
 	private boolean validVera(final String pVeraId) {
-		return Configuration.VERA_PATTERN.matcher(pVeraId).matches();
+		boolean validId = false;
+		if (StringUtils.isEmpty(pVeraId)) {
+			validId = false;
+		} else if (mRequestType == RequestType.LogRequest) {
+			validId = Configuration.VERA_PATTERN.matcher(pVeraId).matches();
+		} else {
+			validId = Configuration.USER_PATTERN.matcher(pVeraId).matches();
+		}
+		log.debug("Identifier is {} for {}", validId, mRequestType);
+		return validId;
 	}
 
 	private boolean validDate(final String pDate) {

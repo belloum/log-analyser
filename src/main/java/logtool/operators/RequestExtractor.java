@@ -10,17 +10,23 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 import logtool.beans.RequestType;
+import logtool.utils.Utils;
 
 public class RequestExtractor {
 
 	private static final String REQUEST_LOG_FORMAT = "elasticdump --input=http://localhost:9200/logstash-%s/event --sourceOnly --output=%s --searchBody \"{\\\"query\\\":{\\\"term\\\":{\\\"vera_serial\\\":\\\"%s\\\"}}}\"";
 
 	/*
-	 * return String.format(Locale.FRANCE,
-	 * "elasticdump --input=http://localhost:9200/logstash-%s --sourceOnly --output=%s --searchBody '{\"query\":{\"term\":{\"report_type\":\"%s\"}}}'%s"
-	 * , formattedPeriod, outputFile, report, silentMod);
+	 * 1: date 2:output 3: report_type 4:user.toLowerCase
 	 */
-	private static final String REQUEST_REPORT_FORMAT = "elasticdump --input=http://localhost:9200/logstash-%s --sourceOnly --output=%s --searchBody \"{\\\"query\\\":{\\\"term\\\":{\\\"report_type\\\":\\\"%s\\\"}}}\"";
+	private static final String REQUEST_REPORT_FORMAT = "elasticdump --input=http://localhost:9200/logstash-%s --sourceOnly "
+			+ "--output=%s --searchBody \"{\\\"query\\\": { \\\"bool\\\":{\\\"must\\\" : [{\\\"term\\\" :{\\\"report_type\\\" : \\\"%s\\\"}},{\\\"term\\\" :{\\\"user\\\" : \\\"%s\\\"}}]}}, \\\"_source\\\":[\\\"json\\\", \\\"user\\\"]}\"";
+
+	// FIXME See all requests with desired sources
+	// --input=http://localhost:9200/logstash-2018.02.15 --sourceOnly
+	// --output=output.json --searchBody
+	// "{\"query\":{\"dis_max\":{\"queries\":[{\"term\":{\"report_type\":\"daily\"}},{\"term\":{\"vera_serial\":\"45108765\"}}]}},
+	// \"_source\":[\"json\", \"device\"]}";
 
 	private static final String TEMP_FILE = "temp";
 	private static final SimpleDateFormat DAY_FORMAT = new SimpleDateFormat("yyyy.MM.dd");
@@ -37,16 +43,17 @@ public class RequestExtractor {
 	private static String request(final RequestType pRequestType, String pOutputFile, final String pVeraId,
 			final String pDay) {
 		String request = null;
-		pOutputFile = pOutputFile.endsWith(".json") ? pOutputFile : String.format("%s.json", pOutputFile);
+		pOutputFile = Utils.addFileExtension(pOutputFile, "json");
+		final String identifier = pVeraId.toLowerCase();
 		switch (pRequestType) {
 		case LogRequest:
-			request = String.format(REQUEST_LOG_FORMAT, pDay, pOutputFile, pVeraId);
+			request = String.format(REQUEST_LOG_FORMAT, pDay, pOutputFile, identifier);
 			break;
 		case DailyReportRequest:
-			request = String.format(REQUEST_REPORT_FORMAT, pDay, pOutputFile, "daily");
+			request = String.format(REQUEST_REPORT_FORMAT, pDay, pOutputFile, "daily", identifier);
 			break;
 		case WeeklyReportRequest:
-			request = String.format(REQUEST_REPORT_FORMAT, pDay, pOutputFile, "weekly");
+			request = String.format(REQUEST_REPORT_FORMAT, pDay, pOutputFile, "weekly", identifier);
 			break;
 		}
 		return request;
@@ -96,13 +103,13 @@ public class RequestExtractor {
 		return iterateOverPeriod(RequestType.LogRequest, pOutputFile, pVeraId, pStartDay, pEndDay);
 	}
 
-	public static String dailyReportRequests(final String pOutputFile, final String pVeraId,
-			final String pStartDay, final String pEndDay) throws ParseException {
+	public static String dailyReportRequests(final String pOutputFile, final String pVeraId, final String pStartDay,
+			final String pEndDay) throws ParseException {
 		return iterateOverPeriod(RequestType.DailyReportRequest, pOutputFile, pVeraId, pStartDay, pEndDay);
 	}
 
-	public static String weeklyReportRequests(final String pOutputFile, final String pVeraId,
-			final String pStartDay, final String pEndDay) throws ParseException {
+	public static String weeklyReportRequests(final String pOutputFile, final String pVeraId, final String pStartDay,
+			final String pEndDay) throws ParseException {
 		return iterateOverPeriod(RequestType.WeeklyReportRequest, pOutputFile, pVeraId, pStartDay, pEndDay);
 	}
 
