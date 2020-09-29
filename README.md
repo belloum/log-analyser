@@ -44,6 +44,3 @@ Contains the source code of the Java application.
 
 > For now, lot's of classes have to be refactored.
 
-## Contact
-
-[Antoine Riché - Phoenix Research Team](mailto:riche.ant@gmail.com) - riche.ant@gmail.com
