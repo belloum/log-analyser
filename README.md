@@ -1,5 +1,5 @@
 # data-analyser
-Tool for data anlysis
+A tool to analyzing sensor data for activity recognition
 
 ## Getting start
 
